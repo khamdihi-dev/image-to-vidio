@@ -2,376 +2,208 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Foto ke Video ✨</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VidioFoto — Foto ke Video HD</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #f4f4f8;
-  --surface: #ffffff;
-  --surface2: #f0f0f5;
-  --border: rgba(0,0,0,.08);
-  --border2: rgba(0,0,0,.13);
-  --accent: #7c3aed;
-  --accent2: #db2777;
-  --accent3: #2563eb;
-  --text: #18181b;
-  --muted: #71717a;
-  --success: #16a34a;
+  --bg:#0a0a0f;--bg2:#111118;--bg3:#18181f;
+  --card:#1c1c26;--card2:#22222e;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.13);
+  --accent:#c084fc;--accent2:#f472b6;--accent3:#38bdf8;
+  --green:#4ade80;--yellow:#fbbf24;
+  --text:#f1f0ff;--muted:#8b8ba7;--muted2:#5a5a72;
+  --r:12px;--rsm:8px;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-header {
-  padding: 1rem 2rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(12px);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-header .logo {
-  font-family: 'Syne', sans-serif;
-  font-weight: 800;
-  font-size: 1.1rem;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-header .hint {
-  font-size: .75rem;
-  color: var(--muted);
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-.workspace {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 280px 1fr 260px;
-  gap: 0;
-  height: calc(100vh - 57px);
-  overflow: hidden;
-}
-.panel {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,.15) transparent;
-}
-.panel:last-child { border-right: none; border-left: 1px solid var(--border); }
-.panel-title {
-  font-family: 'Syne', sans-serif;
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--muted);
-  padding: .9rem 1.1rem .5rem;
-}
-.section { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); }
-.upload-zone {
-  border: 1.5px dashed var(--border2);
-  border-radius: 10px;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s;
-  position: relative;
-  overflow: hidden;
-  background: var(--surface2);
-}
-.upload-zone:hover { border-color: var(--accent); background: rgba(176,106,255,.06); }
-.upload-zone.has-img { padding: 0; height: 110px; }
-.upload-zone.has-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-.upload-zone .overlay-btn {
-  position: absolute; inset: 0; background: rgba(0,0,0,.5);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: .2s; border-radius: 8px; font-size: .8rem; color: #fff;
-}
-.upload-zone.has-img:hover .overlay-btn { opacity: 1; }
-.up-ico { font-size: 1.8rem; margin-bottom: .4rem; }
-.up-txt { font-size: .78rem; color: var(--muted); }
-.lbl { font-size: .72rem; color: var(--muted); margin-bottom: 5px; margin-top: 10px; }
-.lbl:first-child { margin-top: 0; }
-input[type=text], textarea, select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: .8rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  transition: .15s;
-}
-input[type=text]:focus, textarea:focus { border-color: var(--accent); }
-textarea { resize: none; height: 52px; line-height: 1.4; }
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%; height: 3px;
-  background: var(--border2);
-  border-radius: 3px; outline: none; cursor: pointer;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-}
-.sl-row { display: flex; align-items: center; gap: 8px; }
-.sl-row input[type=range] { flex: 1; }
-.sl-val { font-size: .75rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
-input[type=color] {
-  width: 32px; height: 26px;
-  border: 1px solid var(--border2); border-radius: 6px;
-  cursor: pointer; padding: 2px; background: var(--surface2);
-}
-.chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.chip {
-  font-size: .72rem; padding: 4px 10px; border-radius: 20px; cursor: pointer;
-  border: 1px solid var(--border2); background: var(--surface2); color: var(--muted);
-  transition: .15s; user-select: none;
-}
-.chip:hover { border-color: var(--accent); color: var(--text); }
-.chip.on { background: rgba(124,58,237,.1); color: var(--accent); border-color: rgba(124,58,237,.35); }
-.layer-list { display: flex; flex-direction: column; gap: 6px; }
-.layer-item {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 10px;
-  cursor: pointer;
-  transition: .15s;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.layer-item:hover { border-color: var(--border2); }
-.layer-item.active { border-color: rgba(124,58,237,.4); background: rgba(124,58,237,.06); }
-.layer-name { font-size: .78rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.layer-del {
-  width: 20px; height: 20px; border-radius: 4px;
-  background: rgba(255,100,100,.1); color: #ff6464;
-  border: none; cursor: pointer; font-size: .7rem; display: flex; align-items: center; justify-content: center;
-  transition: .15s; flex-shrink: 0;
-}
-.layer-del:hover { background: rgba(255,100,100,.25); }
-.btn {
-  padding: 7px 14px; border-radius: 8px; font-size: .78rem; cursor: pointer;
-  border: 1px solid var(--border2); background: transparent; color: var(--text);
-  transition: .15s; font-family: 'DM Sans', sans-serif; font-weight: 400;
-}
-.btn:hover { background: var(--surface2); border-color: var(--border2); }
-.btn:active { transform: scale(.97); }
-.btn-accent {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-color: transparent; color: #fff; font-weight: 500;
-}
-.btn-accent:hover { opacity: .88; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-.btn-export {
-  background: linear-gradient(135deg, #1a8f52, #0f6b3c);
-  border-color: transparent; color: #fff; font-weight: 500;
-}
-.btn-export:hover { opacity: .88; background: linear-gradient(135deg, #1a8f52, #0f6b3c); }
-.btn-sm { padding: 5px 10px; font-size: .72rem; }
-.btns-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.canvas-area {
-  background: #e8e8f0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  gap: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-.canvas-area::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(124,58,237,.07) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 50%, rgba(219,39,119,.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-.canvas-wrap {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 0 1px var(--border2), 0 20px 60px rgba(0,0,0,.6);
-  flex-shrink: 0;
-}
-canvas { display: block; cursor: default; }
-.canvas-controls {
-  display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
-  z-index: 1;
-}
-.prog-wrap {
-  width: 100%; max-width: 640px; z-index: 1;
-}
-.prog-track {
-  height: 3px; background: var(--border2); border-radius: 3px; overflow: hidden;
-}
-.prog-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 3px; transition: width .08s linear;
-}
-.time-display {
-  font-size: .72rem; color: var(--muted); text-align: center; margin-top: 4px;
-  font-variant-numeric: tabular-nums;
-}
-#status {
-  font-size: .75rem; color: var(--muted);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-}
-.drag-hint {
-  position: absolute;
-  bottom: 8px; left: 50%; transform: translateX(-50%);
-  font-size: .7rem; color: rgba(255,255,255,.4);
-  pointer-events: none;
-  white-space: nowrap;
-}
-.style-btns { display: flex; gap: 4px; }
-.style-btn {
-  width: 28px; height: 26px; border-radius: 6px;
-  border: 1px solid var(--border2); background: var(--surface2);
-  color: var(--text); cursor: pointer; font-size: .72rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: .15s;
-}
-.style-btn.on { background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.45); color: var(--accent); }
-.align-btns { display: flex; gap: 4px; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
-.anim-badge {
-  display: inline-block;
-  font-size: .65rem;
-  padding: 2px 7px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--muted);
-  cursor: pointer;
-  transition: .15s;
-}
-.anim-badge.on { background: rgba(37,99,235,.1); color: var(--accent3); border-color: rgba(37,99,235,.35); }
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{background:var(--bg);color:var(--text);font-family:'Outfit',sans-serif;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
 
-/* Rasio toggle */
-.ratio-toggle {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.ratio-btn {
-  flex: 1;
-  padding: 6px 10px;
-  border: none;
-  background: var(--surface2);
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .75rem;
-  cursor: pointer;
-  transition: .15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-.ratio-btn .ratio-icon {
-  display: block;
-  background: var(--border2);
-  border-radius: 2px;
-}
-.ratio-btn.active {
-  background: rgba(124,58,237,.12);
-  color: var(--accent);
-}
-.ratio-btn:first-child { border-right: 1px solid var(--border2); }
+/* HEADER */
+.hdr{flex-shrink:0;display:flex;align-items:center;justify-content:space-between;padding:.6rem 1rem;background:var(--bg2);border-bottom:1px solid var(--border);gap:.5rem}
+.logo{font-family:'Space Mono',monospace;font-size:.88rem;font-weight:700;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap}
+.badges{display:flex;gap:.35rem;align-items:center}
+.badge{font-size:.58rem;font-weight:600;padding:2px 7px;border-radius:20px;background:rgba(192,132,252,.12);color:var(--accent);border:1px solid rgba(192,132,252,.25);white-space:nowrap}
+.badge.g{background:rgba(74,222,128,.1);color:var(--green);border-color:rgba(74,222,128,.25)}
+.badge.b{background:rgba(56,189,248,.1);color:var(--accent3);border-color:rgba(56,189,248,.25)}
 
-/* HD badge */
-.hd-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: .65rem;
-  background: rgba(37,99,235,.1);
-  color: var(--accent3);
-  border: 1px solid rgba(37,99,235,.25);
-  border-radius: 20px;
-  padding: 2px 8px;
-  font-weight: 600;
+/* APP GRID */
+.app{flex:1;display:grid;grid-template-columns:255px 1fr 245px;min-height:0;overflow:hidden}
+
+/* PANELS */
+.panel{background:var(--bg2);overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent}
+.pl{border-right:1px solid var(--border)}.pr{border-left:1px solid var(--border)}
+.panel::-webkit-scrollbar{width:3px}.panel::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:3px}
+
+.sec{padding:.7rem .85rem;border-bottom:1px solid var(--border)}
+.stitle{font-family:'Space Mono',monospace;font-size:.56rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--muted2);margin-bottom:.55rem}
+
+/* INPUTS */
+.lbl{font-size:.68rem;color:var(--muted);margin-bottom:3px;margin-top:7px}
+.lbl:first-child{margin-top:0}
+input[type=text],textarea,select{width:100%;background:var(--card);border:1px solid var(--border2);border-radius:var(--rsm);padding:6px 9px;font-size:.76rem;color:var(--text);font-family:'Outfit',sans-serif;outline:none;transition:.15s}
+input[type=text]:focus,textarea:focus,select:focus{border-color:var(--accent)}
+textarea{resize:none;height:48px;line-height:1.5}
+input[type=range]{-webkit-appearance:none;width:100%;height:3px;background:var(--card2);border-radius:3px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--accent);cursor:pointer;box-shadow:0 0 7px rgba(192,132,252,.45)}
+.slrow{display:flex;align-items:center;gap:6px}.slrow input[type=range]{flex:1}
+.slval{font-size:.7rem;font-weight:600;color:var(--text);min-width:30px;text-align:right;font-variant-numeric:tabular-nums}
+input[type=color]{width:28px;height:24px;border:1px solid var(--border2);border-radius:5px;cursor:pointer;padding:2px;background:var(--card)}
+
+/* CHIPS */
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{font-size:.66rem;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid var(--border2);background:var(--card);color:var(--muted);transition:.15s;user-select:none}
+.chip:hover{border-color:var(--accent);color:var(--text)}.chip.on{background:rgba(192,132,252,.15);color:var(--accent);border-color:rgba(192,132,252,.4)}
+
+/* RATIO */
+.ratio-row{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.ratio-btn{padding:7px 5px;border-radius:var(--rsm);border:1px solid var(--border2);background:var(--card);color:var(--muted);cursor:pointer;font-family:'Outfit',sans-serif;font-size:.68rem;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.2s}
+.ratio-btn .ri{background:var(--border2);border-radius:2px;flex-shrink:0}
+.ratio-btn.on{border-color:rgba(192,132,252,.5);background:rgba(192,132,252,.1);color:var(--accent)}
+.ratio-btn .rsub{font-size:.58rem;color:var(--muted2)}.ratio-btn.on .rsub{color:var(--accent);opacity:.7}
+
+/* UPLOAD */
+.uz{border:1.5px dashed var(--border2);border-radius:var(--r);padding:1.1rem .7rem;text-align:center;cursor:pointer;transition:.2s;position:relative;overflow:hidden;background:var(--card)}
+.uz:hover,.uz.drag{border-color:var(--accent);background:rgba(192,132,252,.06)}
+.uz.hi{padding:0;height:95px}.uz.hi img{width:100%;height:100%;object-fit:cover;border-radius:10px}
+.uz .oz{position:absolute;inset:0;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;opacity:0;transition:.2s;font-size:.72rem;color:#fff;border-radius:10px}
+.uz.hi:hover .oz{opacity:1}
+.uico{font-size:1.4rem;margin-bottom:.25rem}.utxt{font-size:.68rem;color:var(--muted);line-height:1.4}
+
+/* AUDIO */
+.az{border:1.5px dashed var(--border2);border-radius:var(--r);padding:.8rem .7rem;text-align:center;cursor:pointer;transition:.2s;background:var(--card)}
+.az:hover,.az.drag{border-color:var(--accent3);background:rgba(56,189,248,.05)}.az.ha{border-color:rgba(74,222,128,.4);background:rgba(74,222,128,.05)}
+.aname{font-size:.68rem;color:var(--green);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* EXTRACT */
+.ez{border:1.5px dashed var(--border2);border-radius:var(--r);padding:.8rem .7rem;text-align:center;cursor:pointer;transition:.2s;background:var(--card)}
+.ez:hover,.ez.drag{border-color:var(--yellow);background:rgba(251,191,36,.05)}.ez.hv{border-color:rgba(251,191,36,.4);background:rgba(251,191,36,.05)}
+.ext-btn{margin-top:7px;width:100%;padding:6px;border-radius:var(--rsm);border:1px solid rgba(251,191,36,.4);background:rgba(251,191,36,.1);color:var(--yellow);font-family:'Outfit',sans-serif;font-size:.7rem;cursor:pointer;transition:.15s}
+.ext-btn:hover{background:rgba(251,191,36,.2)}.ext-btn:disabled{opacity:.4;cursor:not-allowed}
+.extprog{margin-top:5px;height:3px;background:var(--card2);border-radius:3px;overflow:hidden;display:none}
+.extprogf{height:100%;width:0%;background:var(--yellow);transition:.1s}
+
+/* TABS */
+.tabs{display:flex;border:1px solid var(--border2);border-radius:var(--rsm);overflow:hidden;margin-bottom:7px}
+.tbtn{flex:1;padding:5px 3px;border:none;background:var(--card);color:var(--muted);font-family:'Outfit',sans-serif;font-size:.65rem;cursor:pointer;transition:.15s;white-space:nowrap}
+.tbtn.on{background:rgba(192,132,252,.15);color:var(--accent)}
+.tpane{display:none}.tpane.on{display:block}
+
+/* BUTTONS */
+.btn{padding:6px 12px;border-radius:var(--rsm);font-size:.73rem;cursor:pointer;border:1px solid var(--border2);background:var(--card);color:var(--text);transition:.15s;font-family:'Outfit',sans-serif;font-weight:500;white-space:nowrap}
+.btn:hover{background:var(--card2)}.btn:active{transform:scale(.96)}
+.btn-p{background:linear-gradient(135deg,#7c3aed,#db2777);border-color:transparent;color:#fff}
+.btn-p:hover{opacity:.88;background:linear-gradient(135deg,#7c3aed,#db2777)}
+.btn-g{background:rgba(74,222,128,.12);border-color:rgba(74,222,128,.3);color:var(--green)}.btn-g:hover{background:rgba(74,222,128,.22)}
+.btnsm{padding:4px 9px;font-size:.66rem}
+.brow{display:flex;gap:5px;flex-wrap:wrap}
+
+/* LAYERS */
+.ll{display:flex;flex-direction:column;gap:4px}
+.li{background:var(--card);border:1px solid var(--border);border-radius:var(--rsm);padding:6px 8px;cursor:pointer;transition:.15s;display:flex;align-items:center;justify-content:space-between;gap:5px}
+.li:hover{border-color:var(--border2)}.li.on{border-color:rgba(192,132,252,.45);background:rgba(192,132,252,.08)}
+.ln{font-size:.73rem;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ldel{width:19px;height:19px;border-radius:4px;background:rgba(255,80,80,.1);color:#ff6464;border:none;cursor:pointer;font-size:.62rem;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0}
+.ldel:hover{background:rgba(255,80,80,.25)}
+
+/* STYLE BTNS */
+.sbtns{display:flex;gap:3px;flex-wrap:wrap}
+.sbtn{min-width:27px;height:25px;border-radius:5px;border:1px solid var(--border2);background:var(--card);color:var(--text);cursor:pointer;font-size:.68rem;display:flex;align-items:center;justify-content:center;transition:.15s;padding:0 3px}
+.sbtn.on{background:rgba(192,132,252,.15);border-color:rgba(192,132,252,.5);color:var(--accent)}
+.abadge{display:inline-block;font-size:.61rem;padding:2px 6px;border-radius:20px;border:1px solid var(--border2);background:var(--card);color:var(--muted);cursor:pointer;transition:.15s}
+.abadge.on{background:rgba(56,189,248,.12);color:var(--accent3);border-color:rgba(56,189,248,.4)}
+
+/* CANVAS CENTER */
+.ca{background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem;gap:.7rem;position:relative;overflow:hidden;min-width:0;min-height:0}
+.ca::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(192,132,252,.05) 0%,transparent 55%),radial-gradient(ellipse at 80% 50%,rgba(244,114,182,.04) 0%,transparent 55%);pointer-events:none}
+.cwrap{position:relative;border-radius:var(--r);overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 20px 70px rgba(0,0,0,.8);flex-shrink:0;max-width:100%}
+canvas{display:block;cursor:default;max-width:100%}
+
+.ctrlbar{display:flex;gap:5px;align-items:center;flex-wrap:wrap;justify-content:center;z-index:1;width:100%}
+.pgwrap{width:100%;max-width:580px;z-index:1}
+.pgtrack{height:2px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden}
+.pgfill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:2px;transition:width .08s linear}
+.tdisp{font-size:.65rem;color:var(--muted);text-align:center;margin-top:3px;font-variant-numeric:tabular-nums;font-family:'Space Mono',monospace}
+.statpill{font-size:.68rem;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:5px;padding:3px 9px;white-space:nowrap}
+.dhint{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);font-size:.6rem;color:rgba(255,255,255,.18);pointer-events:none;white-space:nowrap;font-family:'Space Mono',monospace}
+
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:6px;align-items:start}
+
+/* MOBILE NAV */
+.mnav{display:none;flex-shrink:0;border-bottom:1px solid var(--border);background:var(--bg2)}
+.mnav button{flex:1;padding:.55rem .2rem;border:none;background:transparent;color:var(--muted);font-family:'Outfit',sans-serif;font-size:.62rem;font-weight:500;cursor:pointer;border-bottom:2px solid transparent;transition:.15s}
+.mnav button.on{color:var(--accent);border-bottom-color:var(--accent)}
+
+/* MOBILE PANELS */
+.mpanel{display:none;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}
+.mpanel.on{display:block}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:768px){
+  html,body{overflow:hidden;height:100dvh}
+  .app{display:flex;flex-direction:column;height:100%;overflow:hidden}
+  .panel{display:none}
+  .mnav{display:flex}
+  .ca{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;justify-content:flex-start;padding:.65rem;align-items:stretch}
+  .cwrap{width:100%;align-self:center}
+  canvas{width:100%!important;height:auto!important}
+  .btn{padding:8px 12px;font-size:.74rem}
+  .btnsm{padding:6px 9px;font-size:.68rem}
+  .pgwrap{max-width:100%}
+}
+@media(max-width:380px){
+  .hdr{padding:.45rem .7rem}.logo{font-size:.78rem}
+  .badges .badge:not(:first-child){display:none}
 }
 </style>
 </head>
 <body>
 
-<header>
+<header class="hdr">
   <div class="logo">✦ VidioFoto</div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <span class="hd-badge">HD 1080p</span>
-    <div class="hint">Geser teks langsung di canvas</div>
+  <div class="badges">
+    <span class="badge">HD 1080p</span>
+    <span class="badge g" id="audioBadge" style="display:none">♪ Audio</span>
+    <span class="badge b" id="ratioBadge">16:9</span>
   </div>
 </header>
 
-<div class="workspace">
+<!-- MOBILE NAV -->
+<nav class="mnav" id="mobNav">
+  <button class="on" onclick="switchTab('canvas')">🎬 Canvas</button>
+  <button onclick="switchTab('media')">📷 Media</button>
+  <button onclick="switchTab('audio')">🎵 Audio</button>
+  <button onclick="switchTab('text')">✏️ Teks</button>
+</nav>
+
+<div class="app">
 
   <!-- LEFT PANEL -->
-  <div class="panel">
-    <div class="panel-title">Media & Efek</div>
-
-    <div class="section">
+  <div class="panel pl" id="panelL">
+    <div class="sec">
+      <div class="stitle">Pengaturan</div>
       <div class="lbl">Rasio Aspek</div>
-      <div class="ratio-toggle">
-        <button class="ratio-btn active" id="ratio169" onclick="setRatio('16:9')">
-          <span class="ratio-icon" style="width:28px;height:16px"></span>
-          16:9
-          <span style="font-size:.6rem;color:var(--muted)">YouTube</span>
+      <div class="ratio-row">
+        <button class="ratio-btn on" id="r169D" onclick="setRatio('16:9')">
+          <span class="ri" style="width:24px;height:14px"></span>16:9<span class="rsub">YouTube</span>
         </button>
-        <button class="ratio-btn" id="ratio916" onclick="setRatio('9:16')">
-          <span class="ratio-icon" style="width:16px;height:28px"></span>
-          9:16
-          <span style="font-size:.6rem;color:var(--muted)">Reels</span>
+        <button class="ratio-btn" id="r916D" onclick="setRatio('9:16')">
+          <span class="ri" style="width:14px;height:24px"></span>9:16<span class="rsub">Reels</span>
         </button>
       </div>
-      <div class="lbl" style="margin-top:8px;font-size:.65rem;color:var(--muted);font-style:italic" id="resInfo">Output: 1920 × 1080 px (Full HD)</div>
+      <div style="font-size:.58rem;color:var(--muted2);margin-top:5px" id="resD">Output: 1920×1080 px</div>
     </div>
-
-    <div class="section">
-      <div class="lbl">Foto</div>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fi').click()">
-        <div class="up-ico">📷</div>
-        <div class="up-txt">Klik atau seret foto ke sini</div>
-        <div class="overlay-btn">Ganti Foto</div>
+    <div class="sec">
+      <div class="stitle">Foto</div>
+      <div class="uz" id="uzD" onclick="document.getElementById('fi').click()">
+        <div class="uico">📷</div><div class="utxt">Klik atau seret foto di sini</div>
+        <div class="oz">Ganti Foto</div>
       </div>
       <input type="file" id="fi" accept="image/*" style="display:none">
     </div>
-
-    <div class="section">
-      <div class="lbl">Efek Partikel</div>
-      <div class="chips" id="fxChips">
+    <div class="sec">
+      <div class="stitle">Efek Partikel</div>
+      <div class="chips" id="fxD">
         <span class="chip on" data-fx="flowers">🌸 Bunga</span>
         <span class="chip" data-fx="hearts">❤️ Hati</span>
         <span class="chip" data-fx="stars">✨ Bintang</span>
@@ -381,16 +213,12 @@ canvas { display: block; cursor: default; }
         <span class="chip" data-fx="petals">🍂 Daun</span>
         <span class="chip" data-fx="none">○ Off</span>
       </div>
-      <div class="lbl" style="margin-top:10px">Jumlah Partikel</div>
-      <div class="sl-row">
-        <input type="range" min="5" max="80" value="35" id="pCount" step="1" oninput="sv('pcV',this.value)">
-        <span class="sl-val" id="pcV">35</span>
-      </div>
+      <div class="lbl" style="margin-top:7px">Jumlah Partikel</div>
+      <div class="slrow"><input type="range" min="5" max="80" value="30" id="pCount" step="1" oninput="sv('pcV',this.value);initParts()"><span class="slval" id="pcV">30</span></div>
     </div>
-
-    <div class="section">
-      <div class="lbl">Animasi Foto</div>
-      <div class="chips" id="trChips">
+    <div class="sec">
+      <div class="stitle">Animasi Foto</div>
+      <div class="chips" id="trD">
         <span class="chip on" data-tr="zoom">🔍 Zoom</span>
         <span class="chip" data-tr="slide">→ Slide</span>
         <span class="chip" data-tr="fade">≈ Fade</span>
@@ -398,716 +226,739 @@ canvas { display: block; cursor: default; }
         <span class="chip" data-tr="ken">⬛ Ken Burns</span>
       </div>
     </div>
-
-    <div class="section">
-      <div class="lbl">Durasi Video</div>
-      <div class="sl-row">
-        <input type="range" min="5" max="10" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')">
-        <span class="sl-val" id="durV">7s</span>
-      </div>
-      <div class="lbl" style="margin-top:10px">Warna Latar</div>
-      <input type="color" id="bgCol" value="#f0f0f8">
+    <div class="sec">
+      <div class="stitle">Durasi & Latar</div>
+      <div class="slrow"><input type="range" min="5" max="30" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')"><span class="slval" id="durV">7s</span></div>
+      <div class="lbl" style="margin-top:7px">Warna Latar</div>
+      <input type="color" id="bgCol" value="#0a0a0f">
     </div>
   </div>
 
-  <!-- CENTER: Canvas -->
-  <div class="canvas-area" id="canvasArea">
-    <div class="canvas-wrap" id="canvasWrap">
-      <canvas id="cv"></canvas>
-      <div class="drag-hint" id="dragHint">Klik teks di canvas untuk memilih, lalu seret</div>
+  <!-- CENTER -->
+  <div class="ca" id="caArea">
+
+    <!-- Mobile panels -->
+    <div class="mpanel" id="mpCanvas">
+      <div class="cwrap" id="cwrap">
+        <canvas id="cv"></canvas>
+        <div class="dhint" id="dhint">Ketuk teks di canvas · seret untuk memindah</div>
+      </div>
+      <div class="pgwrap" style="padding:.1rem 0">
+        <div class="pgtrack"><div class="pgfill" id="pgfill"></div></div>
+        <div class="tdisp" id="tdisp">0.0s / 7.0s</div>
+      </div>
+      <div class="ctrlbar">
+        <button class="btn btn-p btnsm" onclick="startPrev()">▶ Preview</button>
+        <button class="btn btnsm" onclick="stopPrev()">■ Stop</button>
+        <button class="btn btnsm" onclick="resetTime()">⏮</button>
+        <div class="statpill" id="status">Upload foto untuk mulai</div>
+        <button class="btn btn-g" onclick="doExport()">⬇ Export HD</button>
+      </div>
     </div>
 
-    <div class="prog-wrap">
-      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
-      <div class="time-display" id="timeDisp">0.0s / 7.0s</div>
+    <div class="mpanel" id="mpMedia">
+      <div class="sec"><div class="stitle">Rasio Aspek</div>
+        <div class="ratio-row">
+          <button class="ratio-btn on" id="r169M" onclick="setRatio('16:9')"><span class="ri" style="width:24px;height:14px"></span>16:9<span class="rsub">YouTube</span></button>
+          <button class="ratio-btn" id="r916M" onclick="setRatio('9:16')"><span class="ri" style="width:14px;height:24px"></span>9:16<span class="rsub">Reels</span></button>
+        </div>
+        <div style="font-size:.58rem;color:var(--muted2);margin-top:5px" id="resM">Output: 1920×1080 px</div>
+      </div>
+      <div class="sec"><div class="stitle">Foto</div>
+        <div class="uz" id="uzM" onclick="document.getElementById('fi').click()"><div class="uico">📷</div><div class="utxt">Ketuk untuk pilih foto</div><div class="oz">Ganti</div></div>
+      </div>
+      <div class="sec"><div class="stitle">Efek Partikel</div>
+        <div class="chips" id="fxM">
+          <span class="chip on" data-fx="flowers">🌸 Bunga</span>
+          <span class="chip" data-fx="hearts">❤️ Hati</span>
+          <span class="chip" data-fx="stars">✨ Bintang</span>
+          <span class="chip" data-fx="bubbles">🫧 Gelembung</span>
+          <span class="chip" data-fx="snow">❄️ Salju</span>
+          <span class="chip" data-fx="confetti">🎊 Confetti</span>
+          <span class="chip" data-fx="petals">🍂 Daun</span>
+          <span class="chip" data-fx="none">○ Off</span>
+        </div>
+        <div class="lbl" style="margin-top:6px">Jumlah Partikel</div>
+        <div class="slrow"><input type="range" min="5" max="80" value="30" id="pCountM" step="1" oninput="el('pCount').value=this.value;sv('pcV',this.value);initParts()"><span class="slval">30</span></div>
+      </div>
+      <div class="sec"><div class="stitle">Animasi Foto</div>
+        <div class="chips" id="trM">
+          <span class="chip on" data-tr="zoom">🔍 Zoom</span>
+          <span class="chip" data-tr="slide">→ Slide</span>
+          <span class="chip" data-tr="fade">≈ Fade</span>
+          <span class="chip" data-tr="rotate">↻ Putar</span>
+          <span class="chip" data-tr="ken">⬛ Ken Burns</span>
+        </div>
+      </div>
+      <div class="sec"><div class="stitle">Durasi & Latar</div>
+        <div class="slrow"><input type="range" min="5" max="30" value="7" step="1" id="durM" oninput="el('dur').value=this.value;sv('durV',this.value+'s')"><span class="slval" id="durVM">7s</span></div>
+        <div class="lbl" style="margin-top:7px">Warna Latar</div>
+        <input type="color" id="bgColM" value="#0a0a0f" oninput="el('bgCol').value=this.value">
+      </div>
     </div>
 
-    <div class="canvas-controls">
-      <button class="btn btn-accent" onclick="startPrev()">▶ Preview</button>
-      <button class="btn" onclick="stopPrev()">■ Stop</button>
-      <button class="btn btn-sm" onclick="resetTime()">⏮ Reset</button>
-      <div id="status">Upload foto untuk mulai</div>
-      <button class="btn btn-export" onclick="doExport()">⬇ Export HD Video</button>
+    <div class="mpanel" id="mpAudio">
+      <div class="sec">
+        <div class="stitle">Audio</div>
+        <div class="tabs" id="atabs">
+          <button class="tbtn on" onclick="switchAudioTab('file',this)">📁 File Audio</button>
+          <button class="tbtn" onclick="switchAudioTab('extract',this)">🎬 Dari Video</button>
+        </div>
+        <div class="tpane on" id="tpFile">
+          <div class="az" id="azEl" onclick="el('audioFi').click()">
+            <div class="uico" style="font-size:1.3rem">🎵</div>
+            <div class="utxt">Ketuk untuk pilih file audio<br><span style="font-size:.6rem;color:var(--muted2)">MP3 · WAV · AAC · OGG · M4A</span></div>
+          </div>
+          <div class="aname" id="aname" style="display:none"></div>
+          <input type="file" id="audioFi" accept="audio/*" style="display:none">
+        </div>
+        <div class="tpane" id="tpExt">
+          <div class="ez" id="ezEl" onclick="el('videoFi').click()">
+            <div class="uico" style="font-size:1.3rem">🎬</div>
+            <div class="utxt">Ketuk untuk pilih video<br><span style="font-size:.6rem;color:var(--muted2)">MP4 · WebM · MOV · AVI</span></div>
+          </div>
+          <div class="aname" id="vname" style="display:none"></div>
+          <button class="ext-btn" id="extBtn" onclick="extractAudio()" disabled>Ekstrak Audio dari Video</button>
+          <div class="extprog" id="extprog"><div class="extprogf" id="extprogf"></div></div>
+          <input type="file" id="videoFi" accept="video/*" style="display:none">
+        </div>
+        <div class="slrow" style="margin-top:9px">
+          <span style="font-size:.8rem;flex-shrink:0">🔈</span>
+          <input type="range" min="0" max="100" value="80" id="volR" oninput="setAVol(this.value)">
+          <span class="slval" id="volV">80%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
+          <input type="checkbox" id="loopChk" checked onchange="setALoop(this.checked)" style="accent-color:var(--accent)">
+          <label for="loopChk" style="font-size:.68rem;color:var(--muted);cursor:pointer">Ulangi (loop)</label>
+        </div>
+        <button class="btn btnsm" onclick="removeAudio()" style="margin-top:6px;width:100%;color:#ff6464;border-color:rgba(255,100,100,.2);background:rgba(255,100,100,.06)">✕ Hapus Audio</button>
+      </div>
     </div>
+
+    <div class="mpanel" id="mpText">
+      <div class="sec">
+        <div class="stitle">Teks</div>
+        <button class="btn btn-p btnsm" onclick="addTextLayer()" style="width:100%">+ Tambah Teks</button>
+        <div class="lbl" style="margin-top:7px">Layer</div>
+        <div class="ll" id="llM"><div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:.4rem 0">Belum ada teks</div></div>
+      </div>
+      <div class="sec" id="txtPropsM" style="display:none">
+        <div class="lbl">Isi Teks</div>
+        <textarea id="txtContentM" oninput="updateLayerM()" placeholder="Ketik teks..."></textarea>
+        <div class="lbl">Ukuran Font</div>
+        <div class="slrow"><input type="range" min="20" max="200" value="80" id="txtSizeM" oninput="updateLayerM();sv('tsMV',this.value+'px')"><span class="slval" id="tsMV">80px</span></div>
+        <div class="row2" style="margin-top:6px">
+          <div><div class="lbl">Warna Teks</div><input type="color" id="txtColorM" value="#ffffff" oninput="updateLayerM()"></div>
+          <div><div class="lbl">Warna BG</div><input type="color" id="txtBgColorM" value="#000000" oninput="updateLayerM()"></div>
+        </div>
+        <div class="lbl">Gaya</div>
+        <div class="sbtns" id="sbtnsM"></div>
+        <div class="lbl">Animasi</div>
+        <div class="chips" id="animChipsM"></div>
+        <div class="lbl">Opacity</div>
+        <div class="slrow"><input type="range" min="10" max="100" value="100" id="txtOpM" oninput="updateLayerM();sv('opMV',this.value+'%')"><span class="slval" id="opMV">100%</span></div>
+      </div>
+    </div>
+
+    <!-- Desktop canvas (hidden on mobile) -->
+    <div id="dcv" style="display:contents"></div>
+
   </div>
 
   <!-- RIGHT PANEL -->
-  <div class="panel">
-    <div class="panel-title">Teks & Layer</div>
-
-    <div class="section">
-      <div class="btns-row">
-        <button class="btn btn-accent btn-sm" onclick="addTextLayer()" style="flex:1">+ Tambah Teks</button>
+  <div class="panel pr" id="panelR">
+    <div class="sec">
+      <div class="stitle">Audio</div>
+      <div class="tabs" id="atabsD">
+        <button class="tbtn on" onclick="switchAudioTab('file',this)">📁 File Audio</button>
+        <button class="tbtn" onclick="switchAudioTab('extract',this)">🎬 Dari Video</button>
       </div>
-      <div class="lbl" style="margin-top:10px">Layer Teks</div>
-      <div class="layer-list" id="layerList">
-        <div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>
+      <div class="tpane on" id="tpFileD">
+        <div class="az" id="azD" onclick="el('audioFi').click()">
+          <div class="uico" style="font-size:1.2rem">🎵</div>
+          <div class="utxt">Klik atau seret file audio<br><span style="font-size:.6rem;color:var(--muted2)">MP3 · WAV · AAC · OGG · M4A</span></div>
+        </div>
+        <div class="aname" id="anameD" style="display:none"></div>
       </div>
+      <div class="tpane" id="tpExtD">
+        <div class="ez" id="ezD" onclick="el('videoFi').click()">
+          <div class="uico" style="font-size:1.2rem">🎬</div>
+          <div class="utxt">Klik atau seret file video<br><span style="font-size:.6rem;color:var(--muted2)">MP4 · WebM · MOV · AVI · MKV</span></div>
+        </div>
+        <div class="aname" id="vnameD" style="display:none"></div>
+        <button class="ext-btn" id="extBtnD" onclick="extractAudio()" disabled>Ekstrak Audio dari Video</button>
+        <div class="extprog" id="extprogD"><div class="extprogf" id="extprogfD"></div></div>
+      </div>
+      <div class="slrow" style="margin-top:9px">
+        <span style="font-size:.8rem;flex-shrink:0">🔈</span>
+        <input type="range" min="0" max="100" value="80" id="volRD" oninput="setAVol(this.value);el('volR').value=this.value">
+        <span class="slval" id="volVD">80%</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
+        <input type="checkbox" id="loopChkD" checked onchange="setALoop(this.checked);el('loopChk').checked=this.checked" style="accent-color:var(--accent)">
+        <label for="loopChkD" style="font-size:.68rem;color:var(--muted);cursor:pointer">Ulangi (loop)</label>
+      </div>
+      <button class="btn btnsm" onclick="removeAudio()" style="margin-top:6px;width:100%;color:#ff6464;border-color:rgba(255,100,100,.2);background:rgba(255,100,100,.06)">✕ Hapus Audio</button>
     </div>
 
-    <div class="section" id="txtProps" style="display:none">
+    <div class="sec">
+      <div class="stitle">Teks & Layer</div>
+      <button class="btn btn-p btnsm" onclick="addTextLayer()" style="width:100%">+ Tambah Teks</button>
+      <div class="lbl" style="margin-top:7px">Layer Teks</div>
+      <div class="ll" id="llD"><div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:.4rem 0">Belum ada teks</div></div>
+    </div>
+
+    <div class="sec" id="txtProps" style="display:none">
       <div class="lbl">Isi Teks</div>
-      <textarea id="txtContent" onchange="updateLayer()" oninput="updateLayer()" placeholder="Ketik teks..."></textarea>
-
-      <div class="lbl">Posisi X / Y</div>
-      <div class="row2">
-        <div>
-          <div class="sl-row">
-            <span style="font-size:.7rem;color:var(--muted);min-width:10px">X</span>
-            <input type="range" min="0" max="1920" value="960" id="posX" oninput="updateLayerPos()">
-            <span class="sl-val" id="posXV">960</span>
-          </div>
-        </div>
-        <div>
-          <div class="sl-row">
-            <span style="font-size:.7rem;color:var(--muted);min-width:10px">Y</span>
-            <input type="range" min="0" max="1080" value="100" id="posY" oninput="updateLayerPos()">
-            <span class="sl-val" id="posYV">100</span>
-          </div>
-        </div>
+      <textarea id="txtContent" oninput="updateLayer()" placeholder="Ketik teks..."></textarea>
+      <div class="lbl">Posisi</div>
+      <div class="slrow"><span style="font-size:.62rem;color:var(--muted2);width:10px">X</span><input type="range" min="0" max="1920" value="960" id="posX" oninput="updateLayerPos()"><span class="slval" id="posXV">960</span></div>
+      <div class="slrow" style="margin-top:3px"><span style="font-size:.62rem;color:var(--muted2);width:10px">Y</span><input type="range" min="0" max="1080" value="100" id="posY" oninput="updateLayerPos()"><span class="slval" id="posYV">100</span></div>
+      <div class="lbl">Ukuran Font</div>
+      <div class="slrow"><input type="range" min="20" max="200" value="80" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()"><span class="slval" id="tsV">80px</span></div>
+      <div class="row2" style="margin-top:5px">
+        <div><div class="lbl">Warna Teks</div><input type="color" id="txtColor" value="#ffffff" oninput="updateLayer()"></div>
+        <div><div class="lbl">Warna BG</div><input type="color" id="txtBgColor" value="#000000" oninput="updateLayer()"></div>
       </div>
-
-      <div class="lbl">Ukuran & Warna</div>
-      <div class="row2">
-        <div>
-          <div class="sl-row">
-            <input type="range" min="20" max="200" value="80" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()">
-            <span class="sl-val" id="tsV">80px</span>
-          </div>
-        </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <input type="color" id="txtColor" value="#ffffff" onchange="updateLayer()" oninput="updateLayer()">
-          <span style="font-size:.7rem;color:var(--muted)">Warna</span>
-        </div>
-      </div>
-
       <div class="lbl">Gaya</div>
-      <div class="style-btns">
-        <button class="style-btn" data-s="bold" onclick="toggleStyle(this,'bold')" title="Bold"><b>B</b></button>
-        <button class="style-btn" data-s="italic" onclick="toggleStyle(this,'italic')" title="Italic"><i>I</i></button>
-        <button class="style-btn" data-s="shadow" onclick="toggleStyle(this,'shadow')" title="Shadow">◑</button>
-        <button class="style-btn" data-s="outline" onclick="toggleStyle(this,'outline')" title="Outline">○</button>
-        <button class="style-btn" data-s="bg" onclick="toggleStyle(this,'bg')" title="Kotak Latar">▬</button>
+      <div class="sbtns">
+        <button class="sbtn" data-s="bold" onclick="toggleStyle(this,'bold')"><b>B</b></button>
+        <button class="sbtn" data-s="italic" onclick="toggleStyle(this,'italic')"><i>I</i></button>
+        <button class="sbtn" data-s="shadow" onclick="toggleStyle(this,'shadow')">◑</button>
+        <button class="sbtn" data-s="outline" onclick="toggleStyle(this,'outline')">○</button>
+        <button class="sbtn" data-s="bg" onclick="toggleStyle(this,'bg')">▬</button>
       </div>
-
-      <div class="lbl" style="margin-top:8px">Warna latar teks</div>
-      <input type="color" id="txtBgColor" value="#000000" onchange="updateLayer()" oninput="updateLayer()">
-
-      <div class="lbl" style="margin-top:8px">Align</div>
-      <div class="align-btns">
-        <button class="style-btn on" data-a="left" onclick="setAlign(this,'left')">≡L</button>
-        <button class="style-btn" data-a="center" onclick="setAlign(this,'center')">≡C</button>
-        <button class="style-btn" data-a="right" onclick="setAlign(this,'right')">≡R</button>
+      <div class="lbl">Align</div>
+      <div class="sbtns">
+        <button class="sbtn on" data-a="left" onclick="setAlign(this,'left')">≡L</button>
+        <button class="sbtn" data-a="center" onclick="setAlign(this,'center')">≡C</button>
+        <button class="sbtn" data-a="right" onclick="setAlign(this,'right')">≡R</button>
       </div>
-
-      <div class="lbl" style="margin-top:8px">Animasi Teks</div>
+      <div class="lbl">Animasi Teks</div>
       <div class="chips">
-        <span class="anim-badge on" data-anim="none" onclick="setTextAnim(this,'none')">Diam</span>
-        <span class="anim-badge" data-anim="fadein" onclick="setTextAnim(this,'fadein')">Fade In</span>
-        <span class="anim-badge" data-anim="slideup" onclick="setTextAnim(this,'slideup')">Slide Up</span>
-        <span class="anim-badge" data-anim="bounce" onclick="setTextAnim(this,'bounce')">Bounce</span>
-        <span class="anim-badge" data-anim="typewriter" onclick="setTextAnim(this,'typewriter')">Ketik</span>
-        <span class="anim-badge" data-anim="pulse" onclick="setTextAnim(this,'pulse')">Pulse</span>
+        <span class="abadge on" data-anim="none" onclick="setTextAnim(this,'none')">Diam</span>
+        <span class="abadge" data-anim="fadein" onclick="setTextAnim(this,'fadein')">Fade In</span>
+        <span class="abadge" data-anim="slideup" onclick="setTextAnim(this,'slideup')">Slide Up</span>
+        <span class="abadge" data-anim="bounce" onclick="setTextAnim(this,'bounce')">Bounce</span>
+        <span class="abadge" data-anim="typewriter" onclick="setTextAnim(this,'typewriter')">Ketik</span>
+        <span class="abadge" data-anim="pulse" onclick="setTextAnim(this,'pulse')">Pulse</span>
       </div>
+      <div class="lbl">Rotasi</div>
+      <div class="slrow"><input type="range" min="-180" max="180" value="0" id="txtRot" oninput="sv('rotV',this.value+'°');updateLayer()"><span class="slval" id="rotV">0°</span></div>
+      <div class="lbl">Opacity</div>
+      <div class="slrow"><input type="range" min="10" max="100" value="100" id="txtOpacity" oninput="sv('opV',this.value+'%');updateLayer()"><span class="slval" id="opV">100%</span></div>
+    </div>
 
-      <div class="lbl" style="margin-top:8px">Rotasi</div>
-      <div class="sl-row">
-        <input type="range" min="-180" max="180" value="0" id="txtRot" oninput="sv('rotV',this.value+'°');updateLayer()">
-        <span class="sl-val" id="rotV">0°</span>
+    <!-- Desktop canvas controls (shown below right panel) -->
+    <div class="sec" id="deskCtrl">
+      <div class="pgwrap" style="padding:0">
+        <div class="pgtrack"><div class="pgfill" id="pgfillD"></div></div>
+        <div class="tdisp" id="tdispD">0.0s / 7.0s</div>
       </div>
-
-      <div class="lbl" style="margin-top:8px">Opacity</div>
-      <div class="sl-row">
-        <input type="range" min="10" max="100" value="100" id="txtOpacity" oninput="sv('opV',this.value+'%');updateLayer()">
-        <span class="sl-val" id="opV">100%</span>
+      <div class="ctrlbar" style="margin-top:7px;justify-content:flex-start">
+        <button class="btn btn-p btnsm" onclick="startPrev()">▶ Preview</button>
+        <button class="btn btnsm" onclick="stopPrev()">■ Stop</button>
+        <button class="btn btnsm" onclick="resetTime()">⏮</button>
       </div>
+      <button class="btn btn-g" onclick="doExport()" style="width:100%;margin-top:7px">⬇ Export HD Video</button>
+      <div class="statpill" id="statusD" style="margin-top:6px;display:block;text-align:center">Upload foto untuk mulai</div>
     </div>
   </div>
+
 </div>
 
 <script>
-// ─── Dimensi HD ───────────────────────────────────────────
-// Selalu render di 1080p, scale untuk tampilan
-const RATIOS = {
-  '16:9': { W: 1920, H: 1080, dispW: 580, dispH: 326 },
-  '9:16': { W: 1080, H: 1920, dispW: 270, dispH: 480 }
-};
-let currentRatio = '16:9';
-let W = 1920, H = 1080;
-let DISP_W = 580, DISP_H = 326;
+// ═══ DIMENSI HD ═══
+const RATIOS={'16:9':{W:1920,H:1080},'9:16':{W:1080,H:1920}};
+let currentRatio='16:9',W=1920,H=1080;
+const cv=document.getElementById('cv'),ctx=cv.getContext('2d');
 
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
-
-function setRatio(ratio) {
-  currentRatio = ratio;
-  const r = RATIOS[ratio];
-  W = r.W; H = r.H; DISP_W = r.dispW; DISP_H = r.dispH;
-
-  // Update canvas internal size (HD)
-  cv.width = W; cv.height = H;
-
-  // Update canvas display size
-  cv.style.width = DISP_W + 'px';
-  cv.style.height = DISP_H + 'px';
-
-  // Update pos range limits
-  document.getElementById('posX').max = W;
-  document.getElementById('posY').max = H;
-
-  // Default text position to center
-  document.getElementById('posX').value = Math.round(W / 2);
-  document.getElementById('posY').value = Math.round(H * 0.08);
-  sv('posXV', Math.round(W / 2));
-  sv('posYV', Math.round(H * 0.08));
-
-  // Update info label
-  document.getElementById('resInfo').textContent = ratio === '16:9'
-    ? 'Output: 1920 × 1080 px (Full HD)'
-    : 'Output: 1080 × 1920 px (Full HD Reels)';
-
-  // Update active button
-  document.getElementById('ratio169').classList.toggle('active', ratio === '16:9');
-  document.getElementById('ratio916').classList.toggle('active', ratio === '9:16');
-
-  initParts();
-  drawFrame(0);
+function applyCanvasSize(){
+  const r=RATIOS[currentRatio];W=r.W;H=r.H;
+  cv.width=W;cv.height=H;
+  el('posX').max=W;el('posY').max=H;
+  // Desktop display size
+  if(window.innerWidth>768){
+    if(currentRatio==='16:9'){cv.style.width='550px';cv.style.height='309px';}
+    else{cv.style.width='260px';cv.style.height='462px';}
+  } else {cv.style.width='100%';cv.style.height='auto';}
 }
 
-// ─── State ───────────────────────────────────────────────
-let img = null;
-let animId = null, recId = null;
-let isRec = false;
-let t0 = null, isPaused = true;
-let selFx = 'flowers', selTr = 'zoom';
-let parts = [];
-let layers = [];
-let selLayerId = null;
-let layerIdCounter = 0;
-let dragState = null;
+function setRatio(r){
+  currentRatio=r;applyCanvasSize();
+  const res=r==='16:9'?'1920×1080 px':'1080×1920 px';
+  el('resD').textContent='Output: '+res;
+  el('resM').textContent='Output: '+res;
+  el('ratioBadge').textContent=r;
+  ['169','916'].forEach(k=>{
+    const on=r===(k==='169'?'16:9':'9:16');
+    ['D','M'].forEach(s=>{const b=el('r'+k+s);if(b)b.classList.toggle('on',on);});
+  });
+  initParts();if(!animId)drawFrame(0);
+}
 
-// Init canvas
-cv.width = W; cv.height = H;
-cv.style.width = DISP_W + 'px';
-cv.style.height = DISP_H + 'px';
+// ═══ STATE ═══
+let img=null,animId=null,recId=null,isRec=false,t0=null,isPaused=true;
+let selFx='flowers',selTr='zoom';
+let parts=[],layers=[],selLayerId=null,layerIdCounter=0,dragState=null;
+let audioEl=null,audioBlob=null,videoFile=null,curAudioName='';
 
-// ─── Helpers ──────────────────────────────────────────────
-function sv(id, val) { document.getElementById(id).textContent = val; }
-function el(id) { return document.getElementById(id); }
+function sv(id,v){const e=el(id);if(e)e.textContent=v;}
+function el(id){return document.getElementById(id);}
 
-// ─── File Upload ──────────────────────────────────────────
-el('fi').addEventListener('change', e => {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    const i = new Image();
-    i.onload = () => {
-      img = i;
-      const uz = el('uploadZone');
-      uz.classList.add('has-img');
-      uz.innerHTML = `<img src="${ev.target.result}"><div class="overlay-btn">Ganti Foto</div>`;
-      uz.onclick = () => el('fi').click();
-      initParts(); startPrev();
-    };
-    i.src = ev.target.result;
-  };
-  r.readAsDataURL(f);
+// ═══ MOBILE TABS ═══
+let curTab='canvas';
+function switchTab(tab){
+  curTab=tab;
+  el('mobNav').querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',['canvas','media','audio','text'][i]===tab));
+  ['mpCanvas','mpMedia','mpAudio','mpText'].forEach(id=>{const p=el(id);if(p)p.classList.remove('on');});
+  const pm=el('mp'+tab.charAt(0).toUpperCase()+tab.slice(1));if(pm)pm.classList.add('on');
+  if(tab==='canvas'){applyCanvasSize();if(!animId&&img)startPrev();else if(!animId)drawFrame(0);}
+  if(tab==='text')renderLayerListM();
+}
+
+// ═══ CANVAS PLACEMENT ═══
+function placeCanvas(){
+  const isMob=window.innerWidth<=768;
+  const cw=el('cwrap'),caArea=el('caArea'),mpCanvas=el('mpCanvas');
+  if(isMob){if(mpCanvas&&!mpCanvas.contains(cw))mpCanvas.prepend(cw);}
+  else{if(caArea&&!caArea.contains(cw))caArea.prepend(cw);}
+  applyCanvasSize();
+}
+
+// ═══ CHIPS ═══
+function initChipGroup(parentId,attr,cb){
+  const c=el(parentId);if(!c)return;
+  c.querySelectorAll('.chip').forEach(ch=>ch.addEventListener('click',()=>{
+    c.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));
+    ch.classList.add('on');cb(ch.dataset[attr]);
+    // sync sibling group
+    const sid=parentId==='fxD'?'fxM':parentId==='fxM'?'fxD':parentId==='trD'?'trM':'trD';
+    const sc=el(sid);if(sc)sc.querySelectorAll('[data-'+attr+'="'+ch.dataset[attr]+'"]').forEach(x=>{sc.querySelectorAll('.chip').forEach(y=>y.classList.remove('on'));x.classList.add('on');});
+  }));
+}
+initChipGroup('fxD','fx',v=>{selFx=v;initParts();});
+initChipGroup('fxM','fx',v=>{selFx=v;initParts();});
+initChipGroup('trD','tr',v=>{selTr=v;});
+initChipGroup('trM','tr',v=>{selTr=v;});
+
+// ═══ AUDIO ═══
+function switchAudioTab(tab,btn){
+  // sync both desktop & mobile tab buttons
+  document.querySelectorAll('.tabs .tbtn').forEach(b=>b.classList.remove('on'));
+  if(btn)btn.classList.add('on');
+  // find sibling tabs container and update it too
+  const allTabs=[el('atabs'),el('atabsD')];
+  allTabs.forEach(tc=>{if(!tc)return;tc.querySelectorAll('.tbtn').forEach((b,i)=>b.classList.toggle('on',i===(tab==='file'?0:1)));});
+  // panes
+  [['tpFile','tpExt'],['tpFileD','tpExtD']].forEach(([f,x])=>{
+    const pf=el(f),pe=el(x);
+    if(pf)pf.classList.toggle('on',tab==='file');
+    if(pe)pe.classList.toggle('on',tab==='extract');
+  });
+}
+
+function createAudio(src,name){
+  if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;}
+  audioEl=new Audio(src);
+  audioEl.loop=el('loopChk').checked;
+  audioEl.volume=el('volR').value/100;
+  curAudioName=name;
+  el('audioBadge').style.display='';
+  el('audioBadge').textContent='♪ '+name.substring(0,10)+(name.length>10?'…':'');
+}
+
+function removeAudio(){
+  if(audioEl){audioEl.pause();audioEl.src='';audioEl=null;}
+  audioBlob=null;curAudioName='';
+  el('audioBadge').style.display='none';
+  ['aname','anameD'].forEach(id=>{const e=el(id);if(e){e.style.display='none';e.textContent='';}});
+  ['azEl','azD'].forEach(id=>{const e=el(id);if(e)e.classList.remove('ha');});
+}
+
+function setAVol(v){sv('volV',v+'%');sv('volVD',v+'%');el('volR').value=v;el('volRD').value=v;if(audioEl)audioEl.volume=v/100;}
+function setALoop(v){if(audioEl)audioEl.loop=v;}
+
+el('audioFi').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const url=URL.createObjectURL(f);audioBlob=f;
+  createAudio(url,f.name);
+  ['aname','anameD'].forEach(id=>{const en=el(id);if(en){en.textContent='♪ '+f.name;en.style.display='block';}});
+  ['azEl','azD'].forEach(id=>{const en=el(id);if(en)en.classList.add('ha');});
 });
 
-const uz = el('uploadZone');
-uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor = 'var(--accent)'; });
-uz.addEventListener('dragleave', () => { uz.style.borderColor = ''; });
-uz.addEventListener('drop', e => {
-  e.preventDefault(); uz.style.borderColor = '';
-  const f = e.dataTransfer.files[0]; if (!f || !f.type.startsWith('image/')) return;
-  const inp = el('fi');
-  const dt = new DataTransfer(); dt.items.add(f); inp.files = dt.files;
-  inp.dispatchEvent(new Event('change'));
+el('videoFi').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;videoFile=f;
+  ['vname','vnameD'].forEach(id=>{const en=el(id);if(en){en.textContent='🎬 '+f.name;en.style.display='block';}});
+  ['ezEl','ezD'].forEach(id=>{const en=el(id);if(en)en.classList.add('hv');});
+  ['extBtn','extBtnD'].forEach(id=>{const en=el(id);if(en)en.disabled=false;});
 });
 
-// ─── Chips ────────────────────────────────────────────────
-el('fxChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-  document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
-  c.classList.add('on'); selFx = c.dataset.fx; initParts();
-}));
-el('trChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-  document.querySelectorAll('[data-tr]').forEach(x => x.classList.remove('on'));
-  c.classList.add('on'); selTr = c.dataset.tr;
-}));
+async function extractAudio(){
+  if(!videoFile)return;
+  ['extBtn','extBtnD'].forEach(id=>{const en=el(id);if(en)en.disabled=true;});
+  ['extprog','extprogD'].forEach(id=>{const en=el(id);if(en)en.style.display='block';});
+  setStatus('🎬 Mengekstrak audio...');
+  let pct=0;
+  const ticker=setInterval(()=>{pct=Math.min(pct+3,85);['extprogf','extprogfD'].forEach(id=>{const en=el(id);if(en)en.style.width=pct+'%';});},80);
+  try{
+    const ab=await videoFile.arrayBuffer();
+    const actx=new (window.AudioContext||window.webkitAudioContext)();
+    const decoded=await actx.decodeAudioData(ab);
+    const off=new OfflineAudioContext(decoded.numberOfChannels,decoded.length,decoded.sampleRate);
+    const src=off.createBufferSource();src.buffer=decoded;src.connect(off.destination);src.start(0);
+    const rendered=await off.startRendering();
+    const wavBlob=bufToWav(rendered);
+    clearInterval(ticker);
+    ['extprogf','extprogfD'].forEach(id=>{const en=el(id);if(en)en.style.width='100%';});
+    const url=URL.createObjectURL(wavBlob);
+    const name=videoFile.name.replace(/\.[^.]+$/,'')+'.wav';
+    audioBlob=wavBlob;createAudio(url,name);
+    ['aname','anameD'].forEach(id=>{const en=el(id);if(en){en.textContent='♪ '+name;en.style.display='block';}});
+    setStatus('✅ Audio berhasil diekstrak! Mendownload...');
+    const a=document.createElement('a');a.href=url;a.download=name;a.click();
+    setTimeout(()=>{['extprog','extprogD'].forEach(id=>{const en=el(id);if(en){en.style.display='none';}});},1500);
+    ['extBtn','extBtnD'].forEach(id=>{const en=el(id);if(en)en.disabled=false;});
+  }catch(err){
+    clearInterval(ticker);
+    ['extprog','extprogD'].forEach(id=>{const en=el(id);if(en)en.style.display='none';});
+    ['extBtn','extBtnD'].forEach(id=>{const en=el(id);if(en)en.disabled=false;});
+    setStatus('❌ Gagal: '+err.message);console.error(err);
+  }
+}
 
-// ─── Particles ───────────────────────────────────────────
-const FXD = {
-  flowers: { chars: ['🌸','🌺','🌼','💮'], cols: ['#ffb7c5','#ff69b4','#ffd1dc','#ff85a1'] },
-  hearts:  { chars: ['❤️','💕','💖','💗','💓'], cols: ['#ff4d6d','#ff8fa3','#ff6b81'] },
-  stars:   { chars: ['✨','⭐','💫','🌟'], cols: ['#ffe066','#ffd700','#fff9c4','#ffec6e'] },
-  bubbles: { chars: ['●','○','◉'], cols: ['#7ecfff','#48b8ff','#b3e5ff'] },
-  snow:    { chars: ['❄','·','*','✦'], cols: ['#e8f4fd','#cce7ff','#ffffff'] },
-  confetti:{ chars: ['■','▲','●','◆','★'], cols: ['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79a8'] },
-  petals:  { chars: ['🍂','🍁','🌿','🍃'], cols: ['#d4a017','#c0392b','#27ae60','#e67e22'] },
-  none:    { chars: [], cols: [] }
+function bufToWav(buf){
+  const nc=buf.numberOfChannels,sr=buf.sampleRate,nf=buf.length,ba=nc*2,br=sr*ba,ds=nf*ba;
+  const ab=new ArrayBuffer(44+ds),v=new DataView(ab);
+  const ws=(o,s)=>{for(let i=0;i<s.length;i++)v.setUint8(o+i,s.charCodeAt(i));};
+  ws(0,'RIFF');v.setUint32(4,36+ds,true);ws(8,'WAVE');ws(12,'fmt ');v.setUint32(16,16,true);
+  v.setUint16(20,1,true);v.setUint16(22,nc,true);v.setUint32(24,sr,true);v.setUint32(28,br,true);
+  v.setUint16(32,ba,true);v.setUint16(34,16,true);ws(36,'data');v.setUint32(40,ds,true);
+  const ch=[];for(let c=0;c<nc;c++)ch.push(buf.getChannelData(c));
+  let off=44;
+  for(let i=0;i<nf;i++)for(let c=0;c<nc;c++){const s=Math.max(-1,Math.min(1,ch[c][i]));v.setInt16(off,s<0?s*0x8000:s*0x7FFF,true);off+=2;}
+  return new Blob([ab],{type:'audio/wav'});
+}
+
+// DnD helpers
+function dnd(zone,accept,onFile){
+  if(!zone)return;
+  zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('drag');});
+  zone.addEventListener('dragleave',()=>zone.classList.remove('drag'));
+  zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('drag');const f=e.dataTransfer.files[0];if(f&&f.type.match(accept))onFile(f);});
+}
+dnd(el('azEl'),'audio/.*',f=>{const d=new DataTransfer();d.items.add(f);el('audioFi').files=d.files;el('audioFi').dispatchEvent(new Event('change'));});
+dnd(el('azD'),'audio/.*',f=>{const d=new DataTransfer();d.items.add(f);el('audioFi').files=d.files;el('audioFi').dispatchEvent(new Event('change'));});
+dnd(el('ezEl'),'video/.*',f=>{const d=new DataTransfer();d.items.add(f);el('videoFi').files=d.files;el('videoFi').dispatchEvent(new Event('change'));});
+dnd(el('ezD'),'video/.*',f=>{const d=new DataTransfer();d.items.add(f);el('videoFi').files=d.files;el('videoFi').dispatchEvent(new Event('change'));});
+
+// ═══ IMAGE UPLOAD ═══
+el('fi').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{
+    const i=new Image();
+    i.onload=()=>{
+      img=i;
+      [el('uzD'),el('uzM')].forEach(uz=>{
+        if(!uz)return;
+        uz.classList.add('hi');
+        uz.innerHTML=`<img src="${ev.target.result}"><div class="oz">Ganti</div>`;
+        uz.onclick=()=>el('fi').click();
+      });
+      initParts();startPrev();
+    };i.src=ev.target.result;
+  };r.readAsDataURL(f);
+});
+dnd(el('uzD'),'image/.*',f=>{const d=new DataTransfer();d.items.add(f);el('fi').files=d.files;el('fi').dispatchEvent(new Event('change'));});
+
+// ═══ PARTICLES ═══
+const FXD={
+  flowers:{chars:['🌸','🌺','🌼','💮'],cols:['#ffb7c5','#ff69b4','#ffd1dc','#ff85a1']},
+  hearts:{chars:['❤️','💕','💖','💗'],cols:['#ff4d6d','#ff8fa3','#ff6b81']},
+  stars:{chars:['✨','⭐','💫','🌟'],cols:['#ffe066','#ffd700','#ffec6e']},
+  bubbles:{chars:['●','○','◉'],cols:['#7ecfff','#48b8ff','#b3e5ff']},
+  snow:{chars:['❄','·','*'],cols:['#e8f4fd','#cce7ff','#ffffff']},
+  confetti:{chars:['■','▲','●','◆','★'],cols:['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79a8']},
+  petals:{chars:['🍂','🍁','🌿','🍃'],cols:['#d4a017','#c0392b','#27ae60','#e67e22']},
+  none:{chars:[],cols:[]}
 };
-
-function initParts() {
-  parts = [];
-  const n = parseInt(el('pCount').value);
-  const d = FXD[selFx]; if (!d || !d.chars.length) return;
-  for (let i = 0; i < n; i++) parts.push(mkPart(false));
+function initParts(){
+  parts=[];const n=parseInt(el('pCount').value);const d=FXD[selFx];
+  if(!d||!d.chars.length)return;
+  for(let i=0;i<n;i++)parts.push(mkPart(false));
 }
-
-function mkPart(top = false) {
-  const d = FXD[selFx]; if (!d.chars.length) return { dead: true };
-  return {
-    x: Math.random() * W, y: top ? -60 : Math.random() * H,
-    vy: (0.45 + Math.random() * 1.3) * (H / 360),
-    vx: (Math.random() - .5) * .9 * (W / 640),
-    size: (14 + Math.random() * 18) * (H / 360),
-    ch: d.chars[Math.floor(Math.random() * d.chars.length)],
-    col: d.cols[Math.floor(Math.random() * d.cols.length)],
-    a: 0.45 + Math.random() * .55,
-    rot: Math.random() * 360, rv: (Math.random() - .5) * 2.8,
-    wb: Math.random() * Math.PI * 2, ws: .022 + Math.random() * .04
-  };
+function mkPart(top=false){
+  const d=FXD[selFx];if(!d.chars.length)return{dead:true};
+  return{x:Math.random()*W,y:top?-60:Math.random()*H,
+    vy:(0.4+Math.random()*1.2)*(H/360),vx:(Math.random()-.5)*.9*(W/640),
+    size:(13+Math.random()*18)*(H/360),
+    ch:d.chars[Math.floor(Math.random()*d.chars.length)],
+    col:d.cols[Math.floor(Math.random()*d.cols.length)],
+    a:0.4+Math.random()*.55,rot:Math.random()*360,rv:(Math.random()-.5)*2.5,
+    wb:Math.random()*Math.PI*2,ws:.02+Math.random()*.04};
 }
-
 initParts();
 
-// ─── Text Layers ─────────────────────────────────────────
-function addTextLayer() {
-  const id = ++layerIdCounter;
-  const layer = {
-    id, text: 'Teks ' + id,
-    x: W / 2, y: 100 + (layers.length * 180),
-    size: 80, color: '#ffffff', bgColor: '#000000',
-    bold: false, italic: false, shadow: true, outline: false, bg: false,
-    align: 'left', rot: 0, opacity: 1, anim: 'none'
-  };
-  layers.push(layer);
-  selectLayer(id);
-  renderLayerList();
+// ═══ TEXT LAYERS ═══
+function addTextLayer(){
+  const id=++layerIdCounter;
+  layers.push({id,text:'Teks '+id,x:W/2,y:100+(layers.length*180),size:80,color:'#ffffff',bgColor:'#000000',bold:false,italic:false,shadow:true,outline:false,bg:false,align:'left',rot:0,opacity:1,anim:'none'});
+  selectLayer(id);renderLayerList();renderLayerListM();
 }
 
-function selectLayer(id) {
-  selLayerId = id;
-  renderLayerList();
-  const layer = layers.find(l => l.id === id);
-  if (!layer) { el('txtProps').style.display = 'none'; return; }
-  el('txtProps').style.display = 'block';
-  el('txtContent').value = layer.text;
-  el('posX').max = W; el('posY').max = H;
-  el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-  el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
-  el('txtSize').value = layer.size; sv('tsV', layer.size + 'px');
-  el('txtColor').value = layer.color;
-  el('txtBgColor').value = layer.bgColor;
-  el('txtRot').value = layer.rot; sv('rotV', layer.rot + '°');
-  el('txtOpacity').value = Math.round(layer.opacity * 100); sv('opV', Math.round(layer.opacity * 100) + '%');
-  document.querySelectorAll('[data-s]').forEach(b => b.classList.toggle('on', !!layer[b.dataset.s]));
-  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === layer.align));
-  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === layer.anim));
-  el('dragHint').textContent = 'Seret teks "' + layer.text.substring(0, 20) + '" di canvas';
+function selectLayer(id){
+  selLayerId=id;renderLayerList();renderLayerListM();
+  const l=layers.find(x=>x.id===id);
+  if(!l){el('txtProps').style.display='none';el('txtPropsM').style.display='none';return;}
+  // Desktop
+  el('txtProps').style.display='block';
+  el('txtContent').value=l.text;
+  el('posX').max=W;el('posY').max=H;
+  el('posX').value=Math.round(l.x);sv('posXV',Math.round(l.x));
+  el('posY').value=Math.round(l.y);sv('posYV',Math.round(l.y));
+  el('txtSize').value=l.size;sv('tsV',l.size+'px');
+  el('txtColor').value=l.color;el('txtBgColor').value=l.bgColor;
+  el('txtRot').value=l.rot;sv('rotV',l.rot+'°');
+  el('txtOpacity').value=Math.round(l.opacity*100);sv('opV',Math.round(l.opacity*100)+'%');
+  document.querySelectorAll('[data-s]').forEach(b=>b.classList.toggle('on',!!l[b.dataset.s]));
+  document.querySelectorAll('[data-a]').forEach(b=>b.classList.toggle('on',b.dataset.a===l.align));
+  document.querySelectorAll('[data-anim]').forEach(b=>b.classList.toggle('on',b.dataset.anim===l.anim));
+  // Mobile
+  el('txtPropsM').style.display='block';
+  el('txtContentM').value=l.text;
+  el('txtSizeM').value=l.size;sv('tsMV',l.size+'px');
+  el('txtColorM').value=l.color;el('txtBgColorM').value=l.bgColor;
+  el('txtOpM').value=Math.round(l.opacity*100);sv('opMV',Math.round(l.opacity*100)+'%');
+  buildMStyleBtns(l);buildMAnimChips(l);
 }
 
-function renderLayerList() {
-  const list = el('layerList');
-  if (layers.length === 0) {
-    list.innerHTML = '<div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>';
-    return;
-  }
-  list.innerHTML = layers.map(l => `
-    <div class="layer-item ${l.id === selLayerId ? 'active' : ''}" onclick="selectLayer(${l.id})">
-      <span class="layer-name" title="${l.text}">${l.text || '(kosong)'}</span>
-      <button class="layer-del" onclick="event.stopPropagation();deleteLayer(${l.id})" title="Hapus">✕</button>
-    </div>
-  `).join('');
+function buildMStyleBtns(l){
+  const c=el('sbtnsM');if(!c)return;
+  const styles=[['bold','<b>B</b>'],['italic','<i>I</i>'],['shadow','◑'],['outline','○'],['bg','▬']];
+  c.innerHTML=styles.map(([s,lbl])=>`<button class="sbtn ${l[s]?'on':''}" onclick="toggleLayerStyle('${s}');buildMStyleBtns(layers.find(x=>x.id===${selLayerId}))">${lbl}</button>`).join('');
+}
+function buildMAnimChips(l){
+  const c=el('animChipsM');if(!c)return;
+  const anims=[['none','Diam'],['fadein','Fade In'],['slideup','Slide Up'],['bounce','Bounce'],['typewriter','Ketik'],['pulse','Pulse']];
+  c.innerHTML=anims.map(([a,lbl])=>`<span class="abadge ${l.anim===a?'on':''}" onclick="setLayerAnim('${a}')">${lbl}</span>`).join('');
+}
+function toggleLayerStyle(s){const l=layers.find(x=>x.id===selLayerId);if(l)l[s]=!l[s];}
+function setLayerAnim(a){
+  const l=layers.find(x=>x.id===selLayerId);if(!l)return;
+  l.anim=a;buildMAnimChips(l);
+  document.querySelectorAll('[data-anim]').forEach(b=>b.classList.toggle('on',b.dataset.anim===a));
 }
 
-function deleteLayer(id) {
-  layers = layers.filter(l => l.id !== id);
-  if (selLayerId === id) {
-    selLayerId = layers.length ? layers[layers.length - 1].id : null;
-    if (selLayerId) selectLayer(selLayerId);
-    else { el('txtProps').style.display = 'none'; el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret'; }
-  }
-  renderLayerList();
+function renderLayerList(){
+  const list=el('llD');if(!list)return;
+  list.innerHTML=layers.length===0?'<div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:.4rem 0">Belum ada teks</div>':
+    layers.map(l=>`<div class="li ${l.id===selLayerId?'on':''}" onclick="selectLayer(${l.id})"><span class="ln">${l.text||'(kosong)'}</span><button class="ldel" onclick="event.stopPropagation();deleteLayer(${l.id})">✕</button></div>`).join('');
 }
-
-function updateLayer() {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.text = el('txtContent').value;
-  layer.size = parseInt(el('txtSize').value);
-  layer.color = el('txtColor').value;
-  layer.bgColor = el('txtBgColor').value;
-  layer.rot = parseInt(el('txtRot').value);
-  layer.opacity = parseInt(el('txtOpacity').value) / 100;
-  renderLayerList();
+function renderLayerListM(){
+  const list=el('llM');if(!list)return;
+  list.innerHTML=layers.length===0?'<div style="font-size:.7rem;color:var(--muted2);text-align:center;padding:.4rem 0">Belum ada teks</div>':
+    layers.map(l=>`<div class="li ${l.id===selLayerId?'on':''}" onclick="selectLayer(${l.id})"><span class="ln">${l.text||'(kosong)'}</span><button class="ldel" onclick="event.stopPropagation();deleteLayer(${l.id})">✕</button></div>`).join('');
 }
-
-function updateLayerPos() {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.x = parseInt(el('posX').value);
-  layer.y = parseInt(el('posY').value);
-  sv('posXV', layer.x); sv('posYV', layer.y);
+function deleteLayer(id){
+  layers=layers.filter(l=>l.id!==id);
+  if(selLayerId===id){selLayerId=layers.length?layers[layers.length-1].id:null;if(selLayerId)selectLayer(selLayerId);else{el('txtProps').style.display='none';el('txtPropsM').style.display='none';}}
+  renderLayerList();renderLayerListM();
 }
-
-function toggleStyle(btn, style) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer[style] = !layer[style];
-  btn.classList.toggle('on', layer[style]);
+function updateLayer(){
+  const l=layers.find(x=>x.id===selLayerId);if(!l)return;
+  l.text=el('txtContent').value;l.size=parseInt(el('txtSize').value);
+  l.color=el('txtColor').value;l.bgColor=el('txtBgColor').value;
+  l.rot=parseInt(el('txtRot').value);l.opacity=parseInt(el('txtOpacity').value)/100;
+  renderLayerList();renderLayerListM();
 }
-
-function setAlign(btn, align) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.align = align;
-  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === align));
+function updateLayerM(){
+  const l=layers.find(x=>x.id===selLayerId);if(!l)return;
+  l.text=el('txtContentM').value;l.size=parseInt(el('txtSizeM').value);
+  l.color=el('txtColorM').value;l.bgColor=el('txtBgColorM').value;
+  l.opacity=parseInt(el('txtOpM').value)/100;
+  renderLayerList();renderLayerListM();
 }
-
-function setTextAnim(badge, anim) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.anim = anim;
-  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === anim));
+function updateLayerPos(){
+  const l=layers.find(x=>x.id===selLayerId);if(!l)return;
+  l.x=parseInt(el('posX').value);l.y=parseInt(el('posY').value);
+  sv('posXV',l.x);sv('posYV',l.y);
 }
+function toggleStyle(btn,s){const l=layers.find(x=>x.id===selLayerId);if(!l)return;l[s]=!l[s];btn.classList.toggle('on',l[s]);}
+function setAlign(btn,a){const l=layers.find(x=>x.id===selLayerId);if(!l)return;l.align=a;document.querySelectorAll('[data-a]').forEach(b=>b.classList.toggle('on',b.dataset.a===a));}
+function setTextAnim(badge,a){const l=layers.find(x=>x.id===selLayerId);if(!l)return;l.anim=a;document.querySelectorAll('[data-anim]').forEach(b=>b.classList.toggle('on',b.dataset.anim===a));buildMAnimChips(l);}
 
-// ─── Canvas Drag (koordinat skala penuh) ──────────────────
-function getCanvasPos(e) {
-  const rect = cv.getBoundingClientRect();
-  // rect ukuran display, canvas internal = HD
-  const scaleX = W / rect.width, scaleY = H / rect.height;
-  return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top) * scaleY
-  };
+// ═══ CANVAS DRAG ═══
+function getCP(e){const rect=cv.getBoundingClientRect();return{x:(e.clientX-rect.left)*(W/rect.width),y:(e.clientY-rect.top)*(H/rect.height)};}
+function hitTest(mx,my){
+  for(let i=layers.length-1;i>=0;i--){
+    const l=layers[i];ctx.font=(l.bold?'700 ':'400 ')+l.size+'px Outfit,sans-serif';
+    const tw=ctx.measureText(l.text).width,th=l.size*1.4;
+    let tx=l.x,ty=l.y;if(l.align==='center')tx-=tw/2;if(l.align==='right')tx-=tw;
+    if(mx>=tx-25&&mx<=tx+tw+25&&my>=ty-25&&my<=ty+th+25)return l.id;
+  }return null;
 }
+cv.addEventListener('mousedown',e=>{const{x,y}=getCP(e);const h=hitTest(x,y);if(h!==null){selectLayer(h);const l=layers.find(x=>x.id===h);dragState={id:h,ox:x-l.x,oy:y-l.y};cv.style.cursor='grabbing';}else{selLayerId=null;el('txtProps').style.display='none';el('txtPropsM').style.display='none';renderLayerList();renderLayerListM();}});
+cv.addEventListener('mousemove',e=>{if(!dragState){const{x,y}=getCP(e);cv.style.cursor=hitTest(x,y)!==null?'grab':'default';return;}const{x,y}=getCP(e);const l=layers.find(x=>x.id===dragState.id);if(l){l.x=Math.max(0,Math.min(W,x-dragState.ox));l.y=Math.max(0,Math.min(H,y-dragState.oy));el('posX').value=Math.round(l.x);sv('posXV',Math.round(l.x));el('posY').value=Math.round(l.y);sv('posYV',Math.round(l.y));}});
+cv.addEventListener('mouseup',()=>{dragState=null;cv.style.cursor='default';});
+cv.addEventListener('mouseleave',()=>{dragState=null;});
+cv.addEventListener('touchstart',e=>{e.preventDefault();const t=e.touches[0];const{x,y}=getCP(t);const h=hitTest(x,y);if(h!==null){selectLayer(h);const l=layers.find(x=>x.id===h);dragState={id:h,ox:x-l.x,oy:y-l.y};}},{passive:false});
+cv.addEventListener('touchmove',e=>{e.preventDefault();if(!dragState)return;const t=e.touches[0];const{x,y}=getCP(t);const l=layers.find(x=>x.id===dragState.id);if(l){l.x=Math.max(0,Math.min(W,x-dragState.ox));l.y=Math.max(0,Math.min(H,y-dragState.oy));}},{passive:false});
+cv.addEventListener('touchend',()=>{dragState=null;});
 
-function hitTest(mx, my) {
-  for (let i = layers.length - 1; i >= 0; i--) {
-    const l = layers[i];
-    ctx.font = (l.bold ? '700 ' : '400 ') + l.size + 'px Syne, sans-serif';
-    const tw = ctx.measureText(l.text).width;
-    const th = l.size * 1.4;
-    let tx = l.x, ty = l.y;
-    if (l.align === 'center') tx -= tw / 2;
-    if (l.align === 'right') tx -= tw;
-    const pad = 20;
-    if (mx >= tx - pad && mx <= tx + tw + pad && my >= ty - pad && my <= ty + th + pad) return l.id;
-  }
-  return null;
-}
+// ═══ DRAW ═══
+function getDur(){return parseInt(el('dur').value)||7;}
+function getBg(){return el('bgCol').value||'#0a0a0f';}
 
-cv.addEventListener('mousedown', e => {
-  const { x, y } = getCanvasPos(e);
-  const hit = hitTest(x, y);
-  if (hit !== null) {
-    selectLayer(hit);
-    const layer = layers.find(l => l.id === hit);
-    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
-    cv.style.cursor = 'grabbing';
-  } else {
-    selLayerId = null;
-    el('txtProps').style.display = 'none';
-    renderLayerList();
-    el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret';
-  }
-});
-
-cv.addEventListener('mousemove', e => {
-  if (!dragState) {
-    const { x, y } = getCanvasPos(e);
-    const hit = hitTest(x, y);
-    cv.style.cursor = hit !== null ? 'grab' : 'default';
-    return;
-  }
-  const { x, y } = getCanvasPos(e);
-  const layer = layers.find(l => l.id === dragState.layerId);
-  if (layer) {
-    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
-    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
-    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
-  }
-});
-
-cv.addEventListener('mouseup', () => { dragState = null; cv.style.cursor = 'default'; });
-cv.addEventListener('mouseleave', () => { dragState = null; });
-
-cv.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const t = e.touches[0];
-  const { x, y } = getCanvasPos(t);
-  const hit = hitTest(x, y);
-  if (hit !== null) {
-    selectLayer(hit);
-    const layer = layers.find(l => l.id === hit);
-    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
-  }
-}, { passive: false });
-
-cv.addEventListener('touchmove', e => {
-  e.preventDefault();
-  if (!dragState) return;
-  const t = e.touches[0];
-  const { x, y } = getCanvasPos(t);
-  const layer = layers.find(l => l.id === dragState.layerId);
-  if (layer) {
-    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
-    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
-    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
-  }
-}, { passive: false });
-
-cv.addEventListener('touchend', () => { dragState = null; });
-
-// ─── Draw Frame (di koordinat HD penuh) ──────────────────
-function drawFrame(t) {
-  const dur = parseInt(el('dur').value) * 1000;
-  const prog = Math.min(t / dur, 1);
-  const bg = el('bgCol').value;
-
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
-
-  if (img) {
+function drawFrame(t){
+  const dur=getDur()*1000,prog=Math.min(t/dur,1),bg=getBg();
+  ctx.clearRect(0,0,W,H);ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  if(img){
     ctx.save();
-    const tr = selTr;
-    if (tr === 'zoom') {
-      const s = 1 + prog * .14;
-      ctx.translate(W/2, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
-    } else if (tr === 'slide') {
-      ctx.translate(-prog * 80, 0);
-    } else if (tr === 'fade') {
-      ctx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
-    } else if (tr === 'rotate') {
-      const s = 1 + prog * .08;
-      ctx.translate(W/2, H/2); ctx.rotate(prog * .035); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
-    } else if (tr === 'ken') {
-      const s = 1 + prog * .12;
-      const ox = -prog * 60;
-      ctx.translate(W/2 + ox, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+    switch(selTr){
+      case'zoom':{const s=1+prog*.14;ctx.translate(W/2,H/2);ctx.scale(s,s);ctx.translate(-W/2,-H/2);break;}
+      case'slide':ctx.translate(-prog*80,0);break;
+      case'fade':ctx.globalAlpha=.25+.75*Math.min(prog*2,1);break;
+      case'rotate':{const s=1+prog*.08;ctx.translate(W/2,H/2);ctx.rotate(prog*.035);ctx.scale(s,s);ctx.translate(-W/2,-H/2);break;}
+      case'ken':{const s=1+prog*.12;ctx.translate(W/2-prog*60,H/2);ctx.scale(s,s);ctx.translate(-W/2,-H/2);break;}
     }
-    const ir = img.width / img.height, cr = W / H;
-    let dw, dh, dx, dy;
-    if (ir > cr) { dh = H; dw = dh * ir; dx = (W - dw) / 2; dy = 0; }
-    else { dw = W; dh = dw / ir; dx = 0; dy = (H - dh) / 2; }
-    ctx.drawImage(img, dx, dy, dw, dh);
-    ctx.restore();
-    const gr = ctx.createRadialGradient(W/2, H/2, H*.2, W/2, H/2, H*.85);
-    gr.addColorStop(0, 'rgba(0,0,0,0)');
-    gr.addColorStop(1, 'rgba(0,0,0,.5)');
-    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
-    const grv = ctx.createLinearGradient(0, 0, 0, H);
-    grv.addColorStop(0, 'rgba(0,0,0,.35)');
-    grv.addColorStop(.4, 'rgba(0,0,0,.0)');
-    grv.addColorStop(1, 'rgba(0,0,0,.4)');
-    ctx.fillStyle = grv; ctx.fillRect(0, 0, W, H);
+    const ir=img.width/img.height,cr=W/H;
+    let dw,dh,dx,dy;
+    if(ir>cr){dh=H;dw=dh*ir;dx=(W-dw)/2;dy=0;}else{dw=W;dh=dw/ir;dx=0;dy=(H-dh)/2;}
+    ctx.drawImage(img,dx,dy,dw,dh);ctx.restore();
+    const g=ctx.createRadialGradient(W/2,H/2,H*.18,W/2,H/2,H*.82);
+    g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,.5)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+    const gv=ctx.createLinearGradient(0,0,0,H);
+    gv.addColorStop(0,'rgba(0,0,0,.4)');gv.addColorStop(.35,'rgba(0,0,0,0)');gv.addColorStop(1,'rgba(0,0,0,.45)');
+    ctx.fillStyle=gv;ctx.fillRect(0,0,W,H);
   }
-
-  // Particles (koordinat HD)
-  const d = FXD[selFx];
-  if (d && d.chars.length) {
-    ctx.save();
-    for (let p of parts) {
-      if (p.dead) continue;
-      ctx.save();
-      ctx.globalAlpha = p.a;
-      ctx.font = p.size + 'px serif';
-      ctx.fillStyle = p.col;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI / 180);
-      ctx.fillText(p.ch, -p.size / 2, -p.size / 2);
-      ctx.restore();
-      p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
-      p.wb += p.ws; p.rot += p.rv;
-      if (p.y > H + 80) Object.assign(p, mkPart(true));
-    }
-    ctx.restore();
+  const d=FXD[selFx];
+  if(d&&d.chars.length){
+    for(const p of parts){if(p.dead)continue;ctx.save();ctx.globalAlpha=p.a;ctx.font=p.size+'px serif';ctx.fillStyle=p.col;ctx.translate(p.x,p.y);ctx.rotate(p.rot*Math.PI/180);ctx.fillText(p.ch,-p.size/2,-p.size/2);ctx.restore();p.y+=p.vy;p.x+=p.vx+Math.sin(p.wb)*1.5;p.wb+=p.ws;p.rot+=p.rv;if(p.y>H+80)Object.assign(p,mkPart(true));}
   }
-
-  for (const layer of layers) {
-    drawTextLayer(layer, prog, t);
-  }
-
-  if (selLayerId !== null && !isRec) {
-    const layer = layers.find(l => l.id === selLayerId);
-    if (layer) drawSelBox(layer);
-  }
-
-  // Progress bar tipis di bawah
-  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(0, H - 8, W, 8);
-  ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(0, H - 8, W * prog, 8);
-
-  el('progFill').style.width = (prog * 100) + '%';
-  el('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + el('dur').value + '.0s';
+  for(const l of layers)drawTL(l,prog,t);
+  if(selLayerId!==null&&!isRec){const l=layers.find(x=>x.id===selLayerId);if(l)drawSel(l);}
+  ctx.fillStyle='rgba(255,255,255,.05)';ctx.fillRect(0,H-6,W,6);
+  ctx.fillStyle='rgba(192,132,252,.65)';ctx.fillRect(0,H-6,W*prog,6);
+  const ts=(t/1000).toFixed(1)+'s / '+getDur()+'.0s';
+  sv('tdisp',ts);sv('tdispD',ts);
+  const pct=(prog*100)+'%';
+  el('pgfill').style.width=pct;const pfd=el('pgfillD');if(pfd)pfd.style.width=pct;
 }
 
-function drawTextLayer(layer, prog, t) {
-  if (!layer.text) return;
-  let alpha = layer.opacity;
-  let offY = 0, scale = 1;
-
-  switch (layer.anim) {
-    case 'fadein': alpha *= Math.min(prog * 4, 1); break;
-    case 'slideup':
-      offY = (1 - Math.min(prog * 3, 1)) * 120;
-      alpha *= Math.min(prog * 3, 1);
-      break;
-    case 'bounce':
-      offY = Math.abs(Math.sin(t / 400)) * -22;
-      break;
-    case 'typewriter': {
-      const chars = Math.floor(prog * layer.text.length * 3);
-      layer._visText = layer.text.substring(0, Math.min(chars, layer.text.length));
-      break;
-    }
-    case 'pulse':
-      scale = 1 + Math.sin(t / 300) * .06;
-      break;
+function drawTL(l,prog,t){
+  if(!l.text)return;
+  let alpha=l.opacity,offY=0,scale=1;
+  switch(l.anim){
+    case'fadein':alpha*=Math.min(prog*4,1);break;
+    case'slideup':offY=(1-Math.min(prog*3,1))*120;alpha*=Math.min(prog*3,1);break;
+    case'bounce':offY=Math.abs(Math.sin(t/400))*-22;break;
+    case'typewriter':l._v=l.text.substring(0,Math.min(Math.floor(prog*l.text.length*3),l.text.length));break;
+    case'pulse':scale=1+Math.sin(t/300)*.06;break;
   }
-
-  const txt = layer.anim === 'typewriter' ? (layer._visText || '') : layer.text;
-
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(layer.x, layer.y + offY);
-  ctx.rotate(layer.rot * Math.PI / 180);
-  if (scale !== 1) ctx.scale(scale, scale);
-
-  const fontStyle = layer.italic ? 'italic ' : '';
-  const fontWeight = layer.bold ? '700' : '400';
-  ctx.font = `${fontStyle}${fontWeight} ${layer.size}px Syne, sans-serif`;
-  ctx.textAlign = layer.align === 'center' ? 'center' : layer.align === 'right' ? 'right' : 'left';
-  ctx.textBaseline = 'top';
-
-  const tw = ctx.measureText(txt).width;
-  const th = layer.size * 1.2;
-  const pad = 20;
-  let bx = 0;
-  if (layer.align === 'center') bx = -tw / 2;
-  if (layer.align === 'right') bx = -tw;
-
-  if (layer.bg) {
-    ctx.fillStyle = layer.bgColor + 'cc';
-    ctx.beginPath();
-    ctx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
-    ctx.fill();
-  }
-
-  if (layer.shadow) {
-    ctx.shadowColor = 'rgba(0,0,0,.85)';
-    ctx.shadowBlur = 30;
-    ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
-  }
-
-  if (layer.outline) {
-    ctx.strokeStyle = 'rgba(0,0,0,.9)'; ctx.lineWidth = 6;
-    ctx.strokeText(txt, 0, 0);
-  }
-
-  ctx.fillStyle = layer.color;
-  ctx.fillText(txt, 0, 0);
-  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+  const txt=l.anim==='typewriter'?(l._v||''):l.text;
+  ctx.save();ctx.globalAlpha=alpha;ctx.translate(l.x,l.y+offY);ctx.rotate(l.rot*Math.PI/180);if(scale!==1)ctx.scale(scale,scale);
+  ctx.font=`${l.italic?'italic ':''}${l.bold?700:400} ${l.size}px Outfit,sans-serif`;
+  ctx.textAlign=l.align==='center'?'center':l.align==='right'?'right':'left';ctx.textBaseline='top';
+  const tw=ctx.measureText(txt).width,th=l.size*1.2,pad=20;
+  let bx=0;if(l.align==='center')bx=-tw/2;if(l.align==='right')bx=-tw;
+  if(l.bg){ctx.fillStyle=l.bgColor+'cc';ctx.beginPath();ctx.roundRect(bx-pad,-pad/2,tw+pad*2,th+pad,12);ctx.fill();}
+  if(l.shadow){ctx.shadowColor='rgba(0,0,0,.9)';ctx.shadowBlur=30;ctx.shadowOffsetX=2;ctx.shadowOffsetY=2;}
+  if(l.outline){ctx.strokeStyle='rgba(0,0,0,.85)';ctx.lineWidth=6;ctx.strokeText(txt,0,0);}
+  ctx.fillStyle=l.color;ctx.fillText(txt,0,0);ctx.shadowBlur=0;ctx.shadowOffsetX=0;ctx.shadowOffsetY=0;ctx.restore();
+}
+function drawSel(l){
+  ctx.save();ctx.font=(l.bold?'700 ':'400 ')+l.size+'px Outfit,sans-serif';
+  const tw=ctx.measureText(l.text).width,th=l.size*1.2,pad=18;
+  ctx.translate(l.x,l.y);ctx.rotate(l.rot*Math.PI/180);
+  let bx=0;if(l.align==='center')bx=-tw/2;if(l.align==='right')bx=-tw;
+  ctx.strokeStyle='rgba(192,132,252,.85)';ctx.lineWidth=3;ctx.setLineDash([12,6]);
+  ctx.strokeRect(bx-pad,-pad,tw+pad*2,th+pad*2);ctx.setLineDash([]);
+  ctx.fillStyle='rgba(192,132,252,.9)';
+  [[bx-pad-5,-pad-5],[bx+tw+pad-5,-pad-5],[bx-pad-5,th+pad-5],[bx+tw+pad-5,th+pad-5]].forEach(([x,y])=>ctx.fillRect(x,y,10,10));
   ctx.restore();
 }
 
-function drawSelBox(layer) {
-  ctx.save();
-  ctx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
-  const tw = ctx.measureText(layer.text).width;
-  const th = layer.size * 1.2;
-  const pad = 16;
-  ctx.translate(layer.x, layer.y);
-  ctx.rotate(layer.rot * Math.PI / 180);
-  let bx = 0;
-  if (layer.align === 'center') bx = -tw / 2;
-  if (layer.align === 'right') bx = -tw;
-  ctx.strokeStyle = 'rgba(124,58,237,.8)';
-  ctx.lineWidth = 3;
-  ctx.setLineDash([12, 6]);
-  ctx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
-  ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(124,58,237,.9)';
-  const hs = 10;
-  ctx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
-  ctx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
-  ctx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
-  ctx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
-  ctx.restore();
-}
-
-// ─── Preview Loop ─────────────────────────────────────────
-function startPrev() {
-  stopPrev();
-  isPaused = false;
-  initParts();
-  t0 = null;
-  const durMs = parseInt(el('dur').value) * 1000;
-  function loop(ts) {
-    if (!t0) t0 = ts;
-    const t = ts - t0;
+// ═══ PREVIEW + AUDIO ═══
+function startPrev(){
+  stopPrev();isPaused=false;initParts();t0=null;
+  if(audioEl){audioEl.currentTime=0;audioEl.play().catch(()=>{});}
+  const durMs=getDur()*1000;
+  function loop(ts){
+    if(!t0)t0=ts;const t=ts-t0;
     drawFrame(t);
-    if (t < durMs + 200) animId = requestAnimationFrame(loop);
-    else { t0 = null; animId = requestAnimationFrame(loop); }
+    if(t<durMs+200)animId=requestAnimationFrame(loop);
+    else{t0=null;if(audioEl){audioEl.currentTime=0;if(audioEl.loop)audioEl.play().catch(()=>{});}animId=requestAnimationFrame(loop);}
   }
-  animId = requestAnimationFrame(loop);
-  setStatus('⏵ Preview — HD ' + (currentRatio === '16:9' ? '1920×1080' : '1080×1920'));
+  animId=requestAnimationFrame(loop);
+  setStatus('⏵ Preview HD '+(currentRatio==='16:9'?'1920×1080':'1080×1920'));
 }
-
-function stopPrev() {
-  if (animId) { cancelAnimationFrame(animId); animId = null; }
-  isPaused = true;
-  setStatus('■ Dihentikan');
-  el('progFill').style.width = '0%';
+function stopPrev(){
+  if(animId){cancelAnimationFrame(animId);animId=null;}
+  if(audioEl)audioEl.pause();
+  isPaused=true;setStatus('■ Dihentikan');
+  el('pgfill').style.width='0%';const pfd=el('pgfillD');if(pfd)pfd.style.width='0%';
 }
+function resetTime(){stopPrev();drawFrame(0);const ts='0.0s / '+getDur()+'.0s';sv('tdisp',ts);sv('tdispD',ts);}
 
-function resetTime() {
-  stopPrev();
-  drawFrame(0);
-  el('timeDisp').textContent = '0.0s / ' + el('dur').value + '.0s';
-}
-
-// ─── Export HD ────────────────────────────────────────────
-function doExport() {
-  if (isRec) { setStatus('Masih merekam...'); return; }
-  if (!window.MediaRecorder) { setStatus('Browser tidak support MediaRecorder'); return; }
-  stopPrev(); isRec = true; initParts();
-  const res = currentRatio === '16:9' ? '1920×1080' : '1080×1920';
-  setStatus('⏺ Merekam HD ' + res + '...');
-  const stream = cv.captureStream(30);
-  const mime = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4']
-    .find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
-  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 16000000 });
-  const chunks = [];
-  rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-  rec.onstop = () => {
-    const blob = new Blob(chunks, { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const ext = mime.includes('mp4') ? 'mp4' : 'webm';
-    const ratio = currentRatio.replace(':', 'x');
-    a.href = url; a.download = `videofoto-hd-${ratio}-${Date.now()}.${ext}`; a.click();
+// ═══ EXPORT HD ═══
+function doExport(){
+  if(isRec){setStatus('Masih merekam...');return;}
+  if(!window.MediaRecorder){setStatus('Browser tidak support MediaRecorder');return;}
+  stopPrev();isRec=true;initParts();
+  const res=currentRatio==='16:9'?'1920×1080':'1080×1920';
+  setStatus('⏺ Merekam HD '+res+'...');
+  const videoStream=cv.captureStream(30);
+  let finalStream=videoStream;
+  if(audioEl&&audioEl.src){
+    try{
+      const actx=new AudioContext();
+      const src=actx.createMediaElementSource(audioEl);
+      const dest=actx.createMediaStreamDestination();
+      src.connect(dest);src.connect(actx.destination);
+      const allTracks=[...videoStream.getVideoTracks(),...dest.stream.getAudioTracks()];
+      finalStream=new MediaStream(allTracks);
+    }catch(e){console.warn('Audio capture fallback:',e);}
+  }
+  const mime=['video/webm;codecs=vp9,opus','video/webm;codecs=vp9','video/webm;codecs=vp8,opus','video/webm','video/mp4'].find(m=>MediaRecorder.isTypeSupported(m))||'video/webm';
+  const rec=new MediaRecorder(finalStream,{mimeType:mime,videoBitsPerSecond:16000000});
+  const chunks=[];
+  rec.ondataavailable=e=>{if(e.data.size>0)chunks.push(e.data);};
+  rec.onstop=()=>{
+    const blob=new Blob(chunks,{type:mime});const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');const ext=mime.includes('mp4')?'mp4':'webm';
+    a.href=url;a.download=`videofoto-hd-${currentRatio.replace(':','x')}-${Date.now()}.${ext}`;a.click();
     URL.revokeObjectURL(url);
-    setStatus('✅ Video HD berhasil diunduh! (' + res + ' · ' + ext.toUpperCase() + ')');
-    isRec = false;
-    setTimeout(() => startPrev(), 400);
+    setStatus('✅ Video HD berhasil diunduh! ('+res+' · '+ext.toUpperCase()+')');
+    isRec=false;setTimeout(()=>startPrev(),400);
   };
+  if(audioEl){audioEl.currentTime=0;audioEl.play().catch(()=>{});}
   rec.start(100);
-  const dur = parseInt(el('dur').value) * 1000;
-  let r0 = null;
-  function recLoop(ts) {
-    if (!r0) r0 = ts;
-    const t = ts - r0;
+  const dur=getDur()*1000;let r0=null;
+  function recLoop(ts){
+    if(!r0)r0=ts;const t=ts-r0;
     drawFrame(t);
-    if (t < dur) recId = requestAnimationFrame(recLoop);
-    else { rec.stop(); cancelAnimationFrame(recId); }
+    if(t<dur)recId=requestAnimationFrame(recLoop);
+    else{rec.stop();cancelAnimationFrame(recId);if(audioEl)audioEl.pause();}
   }
-  recId = requestAnimationFrame(recLoop);
+  recId=requestAnimationFrame(recLoop);
 }
 
-function setStatus(msg) { el('status').textContent = msg; }
+function setStatus(msg){sv('status',msg);sv('statusD',msg);}
 
-el('pCount').addEventListener('input', initParts);
-
+// ═══ INIT ═══
+applyCanvasSize();
+placeCanvas();
 drawFrame(0);
+
+// On mobile, default to canvas tab
+if(window.innerWidth<=768){
+  switchTab('canvas');
+  el('mpCanvas').classList.add('on');
+}
+
+window.addEventListener('resize',()=>{placeCanvas();if(!animId)drawFrame(0);});
 </script>
 </body>
 </html>
