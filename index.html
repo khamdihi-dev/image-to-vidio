@@ -2,1009 +2,1112 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>VidioFoto — Foto ke Video HD</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Foto ke Video ✨</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
+:root {
+  --bg: #f4f4f8;
+  --surface: #ffffff;
+  --surface2: #f0f0f5;
+  --border: rgba(0,0,0,.08);
+  --border2: rgba(0,0,0,.13);
+  --accent: #7c3aed;
+  --accent2: #db2777;
+  --accent3: #2563eb;
+  --text: #18181b;
+  --muted: #71717a;
+  --success: #16a34a;
 }
-
+* { box-sizing: border-box; margin: 0; padding: 0; }
 body {
-  background: #050508;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', sans-serif;
-  color: #ededf0;
-  height: 100dvh;
-  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
-
-/* HEADER */
-.app-header {
-  padding: 10px 16px;
-  background: rgba(8, 8, 14, 0.9);
-  backdrop-filter: blur(4px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
+header {
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--border);
   display: flex;
+  align-items: center;
   justify-content: space-between;
-  align-items: baseline;
-  flex-shrink: 0;
+  background: rgba(255,255,255,.85);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
-.logo {
-  font-weight: 700;
+header .logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
   font-size: 1.1rem;
-  background: linear-gradient(135deg, #c084fc, #f472b6);
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
   -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
   background-clip: text;
-  color: transparent;
 }
-.badge-group { display: flex; gap: 8px; }
-.badge {
-  font-size: 0.6rem;
-  background: #1c1c24;
-  padding: 3px 8px;
-  border-radius: 40px;
-  color: #b9b9d0;
-  border: 0.5px solid rgba(255,255,255,0.1);
+header .hint {
+  font-size: .75rem;
+  color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 20px;
+  padding: 4px 12px;
 }
-
-/* GRID UTAMA */
-.app-grid {
-  display: grid;
-  grid-template-columns: 260px 1fr 280px;
+.workspace {
   flex: 1;
-  min-height: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr 260px;
+  gap: 0;
+  height: calc(100vh - 57px);
   overflow: hidden;
 }
-
 .panel {
-  background: #0c0c12;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
   overflow-y: auto;
   scrollbar-width: thin;
-  border-right: 1px solid rgba(255,255,255,0.05);
+  scrollbar-color: rgba(0,0,0,.15) transparent;
 }
-.panel-right { border-left: 1px solid rgba(255,255,255,0.05); border-right: none; }
-.panel-inner { padding: 12px 14px; }
-
-.section {
-  margin-bottom: 18px;
-  border-bottom: 1px solid rgba(255,255,255,0.04);
-  padding-bottom: 12px;
-}
-.section-title {
-  font-size: 0.65rem;
+.panel:last-child { border-right: none; border-left: 1px solid var(--border); }
+.panel-title {
+  font-family: 'Syne', sans-serif;
+  font-size: .7rem;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 1px;
-  font-weight: 600;
-  color: #8f8faa;
-  margin-bottom: 10px;
+  letter-spacing: .1em;
+  color: var(--muted);
+  padding: .9rem 1.1rem .5rem;
 }
-
-.btn {
-  background: #181820;
-  border: 1px solid #2a2a34;
-  color: #e2e2f0;
-  padding: 6px 12px;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: 0.1s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-.btn-primary {
-  background: linear-gradient(135deg, #7c3aed, #db2777);
-  border: none;
-  color: white;
-}
-.btn-primary:active { transform: scale(0.97); }
-.btn-success {
-  background: #1f3a2c;
-  border-color: #2e7d5e;
-  color: #9effcf;
-}
+.section { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); }
 .upload-zone {
-  background: #111118;
-  border: 1.5px dashed #2c2c38;
-  border-radius: 16px;
-  padding: 14px 8px;
+  border: 1.5px dashed var(--border2);
+  border-radius: 10px;
+  padding: 1.5rem 1rem;
   text-align: center;
   cursor: pointer;
-  transition: 0.1s;
-  margin-top: 6px;
+  transition: .2s;
+  position: relative;
+  overflow: hidden;
+  background: var(--surface2);
 }
-.chip-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin: 8px 0;
+.upload-zone:hover { border-color: var(--accent); background: rgba(176,106,255,.06); }
+.upload-zone.has-img { padding: 0; height: 110px; }
+.upload-zone.has-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
+.upload-zone .overlay-btn {
+  position: absolute; inset: 0; background: rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: .2s; border-radius: 8px; font-size: .8rem; color: #fff;
 }
-.chip {
-  background: #181820;
-  border: 1px solid #2c2c3a;
-  padding: 4px 10px;
-  border-radius: 40px;
-  font-size: 0.7rem;
-  cursor: pointer;
-  transition: 0.05s linear;
-}
-.chip.active {
-  background: #3a2c6e;
-  border-color: #b77cff;
-  color: white;
-}
-.slider-row {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin: 8px 0;
-}
-input[type="range"] {
-  flex: 1;
-  height: 3px;
-  -webkit-appearance: none;
-  background: #2c2c38;
-  border-radius: 3px;
-}
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px;
-  height: 14px;
-  background: #c084fc;
-  border-radius: 50%;
-  cursor: pointer;
-}
-.color-input {
-  width: 32px;
-  height: 28px;
-  border: 1px solid #333;
+.upload-zone.has-img:hover .overlay-btn { opacity: 1; }
+.up-ico { font-size: 1.8rem; margin-bottom: .4rem; }
+.up-txt { font-size: .78rem; color: var(--muted); }
+.lbl { font-size: .72rem; color: var(--muted); margin-bottom: 5px; margin-top: 10px; }
+.lbl:first-child { margin-top: 0; }
+input[type=text], textarea, select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
   border-radius: 8px;
-  background: #111;
+  padding: 7px 10px;
+  font-size: .8rem;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: .15s;
+}
+input[type=text]:focus, textarea:focus { border-color: var(--accent); }
+textarea { resize: none; height: 52px; line-height: 1.4; }
+input[type=range] {
+  -webkit-appearance: none;
+  width: 100%; height: 3px;
+  background: var(--border2);
+  border-radius: 3px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  background: var(--accent);
   cursor: pointer;
 }
-.ratio-row {
+.sl-row { display: flex; align-items: center; gap: 8px; }
+.sl-row input[type=range] { flex: 1; }
+.sl-val { font-size: .75rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
+input[type=color] {
+  width: 32px; height: 26px;
+  border: 1px solid var(--border2); border-radius: 6px;
+  cursor: pointer; padding: 2px; background: var(--surface2);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip {
+  font-size: .72rem; padding: 4px 10px; border-radius: 20px; cursor: pointer;
+  border: 1px solid var(--border2); background: var(--surface2); color: var(--muted);
+  transition: .15s; user-select: none;
+}
+.chip:hover { border-color: var(--accent); color: var(--text); }
+.chip.on { background: rgba(124,58,237,.1); color: var(--accent); border-color: rgba(124,58,237,.35); }
+.layer-list { display: flex; flex-direction: column; gap: 6px; }
+.layer-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 10px;
+  cursor: pointer;
+  transition: .15s;
   display: flex;
+  align-items: center;
+  justify-content: space-between;
   gap: 8px;
-  margin: 8px 0;
+}
+.layer-item:hover { border-color: var(--border2); }
+.layer-item.active { border-color: rgba(124,58,237,.4); background: rgba(124,58,237,.06); }
+.layer-name { font-size: .78rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.layer-del {
+  width: 20px; height: 20px; border-radius: 4px;
+  background: rgba(255,100,100,.1); color: #ff6464;
+  border: none; cursor: pointer; font-size: .7rem; display: flex; align-items: center; justify-content: center;
+  transition: .15s; flex-shrink: 0;
+}
+.layer-del:hover { background: rgba(255,100,100,.25); }
+.btn {
+  padding: 7px 14px; border-radius: 8px; font-size: .78rem; cursor: pointer;
+  border: 1px solid var(--border2); background: transparent; color: var(--text);
+  transition: .15s; font-family: 'DM Sans', sans-serif; font-weight: 400;
+}
+.btn:hover { background: var(--surface2); border-color: var(--border2); }
+.btn:active { transform: scale(.97); }
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border-color: transparent; color: #fff; font-weight: 500;
+}
+.btn-accent:hover { opacity: .88; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
+.btn-export {
+  background: linear-gradient(135deg, #1a8f52, #0f6b3c);
+  border-color: transparent; color: #fff; font-weight: 500;
+}
+.btn-export:hover { opacity: .88; background: linear-gradient(135deg, #1a8f52, #0f6b3c); }
+.btn-sm { padding: 5px 10px; font-size: .72rem; }
+.btns-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.canvas-area {
+  background: #e8e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.canvas-area::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 30% 50%, rgba(124,58,237,.07) 0%, transparent 60%),
+              radial-gradient(ellipse at 70% 50%, rgba(219,39,119,.05) 0%, transparent 60%);
+  pointer-events: none;
+}
+.canvas-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px var(--border2), 0 20px 60px rgba(0,0,0,.6);
+  flex-shrink: 0;
+}
+canvas { display: block; cursor: default; }
+.canvas-controls {
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+  z-index: 1;
+}
+.prog-wrap {
+  width: 100%; max-width: 640px; z-index: 1;
+}
+.prog-track {
+  height: 3px; background: var(--border2); border-radius: 3px; overflow: hidden;
+}
+.prog-fill {
+  height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 3px; transition: width .08s linear;
+}
+.time-display {
+  font-size: .72rem; color: var(--muted); text-align: center; margin-top: 4px;
+  font-variant-numeric: tabular-nums;
+}
+#status {
+  font-size: .75rem; color: var(--muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 4px 10px;
+}
+.drag-hint {
+  position: absolute;
+  bottom: 8px; left: 50%; transform: translateX(-50%);
+  font-size: .7rem; color: rgba(255,255,255,.4);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.style-btns { display: flex; gap: 4px; }
+.style-btn {
+  width: 28px; height: 26px; border-radius: 6px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text); cursor: pointer; font-size: .72rem;
+  display: flex; align-items: center; justify-content: center;
+  transition: .15s;
+}
+.style-btn.on { background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.45); color: var(--accent); }
+.align-btns { display: flex; gap: 4px; }
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
+.anim-badge {
+  display: inline-block;
+  font-size: .65rem;
+  padding: 2px 7px;
+  border-radius: 20px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: .15s;
+}
+.anim-badge.on { background: rgba(37,99,235,.1); color: var(--accent3); border-color: rgba(37,99,235,.35); }
+
+/* Rasio toggle */
+.ratio-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  overflow: hidden;
 }
 .ratio-btn {
   flex: 1;
-  background: #111118;
-  border: 1px solid #2a2a36;
-  border-radius: 12px;
-  padding: 6px 0;
-  text-align: center;
-  font-size: 0.7rem;
+  padding: 6px 10px;
+  border: none;
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .75rem;
   cursor: pointer;
+  transition: .15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.ratio-btn .ratio-icon {
+  display: block;
+  background: var(--border2);
+  border-radius: 2px;
 }
 .ratio-btn.active {
-  background: #2c1e4a;
-  border-color: #b77cff;
+  background: rgba(124,58,237,.12);
+  color: var(--accent);
 }
+.ratio-btn:first-child { border-right: 1px solid var(--border2); }
 
-/* CANVAS AREA */
-.canvas-area {
-  display: flex;
-  flex-direction: column;
+/* HD badge */
+.hd-badge {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  background: #000000;
-  padding: 16px;
-  gap: 12px;
-}
-.canvas-wrapper {
+  gap: 4px;
+  font-size: .65rem;
+  background: rgba(37,99,235,.1);
+  color: var(--accent3);
+  border: 1px solid rgba(37,99,235,.25);
   border-radius: 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-  background: #000;
-  line-height: 0;
-}
-canvas {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 16px;
-  cursor: grab;
-}
-canvas:active { cursor: grabbing; }
-.control-bar {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.progress-track {
-  width: 100%;
-  max-width: 540px;
-  background: #23232e;
-  height: 3px;
-  border-radius: 4px;
-  overflow: hidden;
-}
-.progress-fill {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, #c084fc, #f472b6);
-}
-.time-text {
-  font-size: 0.65rem;
-  font-family: monospace;
-  color: #9f9fb0;
-  text-align: center;
-}
-.status-pill {
-  background: #181822;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 0.65rem;
-  color: #bcbcda;
-}
-
-/* TEXT LAYER */
-.layer-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: 8px;
-  max-height: 180px;
-  overflow-y: auto;
-}
-.layer-item {
-  background: #111118;
-  border: 1px solid #262632;
-  border-radius: 10px;
-  padding: 6px 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-}
-.layer-item.active {
-  border-color: #b77cff;
-  background: #1e1932;
-}
-.layer-text {
-  font-size: 0.7rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 140px;
-}
-.del-layer {
-  background: none;
-  border: none;
-  color: #ff7b72;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-
-/* MOBILE */
-.mobile-nav {
-  display: none;
-  background: #0c0c12;
-  border-bottom: 1px solid #1f1f2a;
-  flex-shrink: 0;
-}
-.mobile-tab {
-  flex: 1;
-  background: none;
-  border: none;
-  color: #9b9bb5;
-  font-size: 0.7rem;
-  padding: 12px 0;
-  font-weight: 500;
-  cursor: pointer;
-}
-.mobile-tab.active {
-  color: #c084fc;
-  border-bottom: 2px solid #c084fc;
-}
-.mobile-panel {
-  display: none;
-  overflow-y: auto;
-  flex: 1;
-  background: #050508;
-  padding: 12px;
-}
-.mobile-panel.active { display: block; }
-
-@media (max-width: 780px) {
-  .app-grid { display: none; }
-  .mobile-nav { display: flex; }
-  body { flex-direction: column; }
-  .canvas-area { flex: 1; min-height: 0; padding: 12px; }
+  padding: 2px 8px;
+  font-weight: 600;
 }
 </style>
 </head>
 <body>
 
-<header class="app-header">
-  <div class="logo">✦ VidioFoto HD</div>
-  <div class="badge-group">
-    <span class="badge" id="resBadge">1080p · 16:9</span>
-    <span class="badge" id="audioBadge" style="display: none;">🎵 audio</span>
+<header>
+  <div class="logo">✦ VidioFoto</div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="hd-badge">HD 1080p</span>
+    <div class="hint">Geser teks langsung di canvas</div>
   </div>
 </header>
 
-<div class="mobile-nav" id="mobileNav">
-  <button class="mobile-tab active" data-mtab="canvas">🎬 Canvas</button>
-  <button class="mobile-tab" data-mtab="media">📷 Media</button>
-  <button class="mobile-tab" data-mtab="audio">🎵 Audio</button>
-  <button class="mobile-tab" data-mtab="text">✏️ Teks</button>
-</div>
+<div class="workspace">
 
-<div class="app-grid">
   <!-- LEFT PANEL -->
   <div class="panel">
-    <div class="panel-inner">
-      <div class="section">
-        <div class="section-title">Rasio / Output</div>
-        <div class="ratio-row">
-          <button class="ratio-btn active" data-ratio="16:9">16:9 (1920x1080)</button>
-          <button class="ratio-btn" data-ratio="9:16">9:16 (1080x1920)</button>
-        </div>
+    <div class="panel-title">Media & Efek</div>
+
+    <div class="section">
+      <div class="lbl">Rasio Aspek</div>
+      <div class="ratio-toggle">
+        <button class="ratio-btn active" id="ratio169" onclick="setRatio('16:9')">
+          <span class="ratio-icon" style="width:28px;height:16px"></span>
+          16:9
+          <span style="font-size:.6rem;color:var(--muted)">YouTube</span>
+        </button>
+        <button class="ratio-btn" id="ratio916" onclick="setRatio('9:16')">
+          <span class="ratio-icon" style="width:16px;height:28px"></span>
+          9:16
+          <span style="font-size:.6rem;color:var(--muted)">Reels</span>
+        </button>
       </div>
-      <div class="section">
-        <div class="section-title">📸 Foto Utama</div>
-        <div class="upload-zone" id="uploadZoneDesktop">
-          <span style="font-size: 1.5rem;">🖼️</span><br>
-          <span style="font-size: 0.7rem;">Klik atau seret foto</span>
-        </div>
-        <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
+      <div class="lbl" style="margin-top:8px;font-size:.65rem;color:var(--muted);font-style:italic" id="resInfo">Output: 1920 × 1080 px (Full HD)</div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">Foto</div>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fi').click()">
+        <div class="up-ico">📷</div>
+        <div class="up-txt">Klik atau seret foto ke sini</div>
+        <div class="overlay-btn">Ganti Foto</div>
       </div>
-      <div class="section">
-        <div class="section-title">✨ Efek Partikel</div>
-        <div class="chip-group" id="particleGroup">
-          <span class="chip active" data-pfx="flowers">🌸 Bunga</span>
-          <span class="chip" data-pfx="hearts">❤️ Hati</span>
-          <span class="chip" data-pfx="stars">⭐ Bintang</span>
-          <span class="chip" data-pfx="bubbles">🫧 Gelembung</span>
-          <span class="chip" data-pfx="snow">❄️ Salju</span>
-          <span class="chip" data-pfx="confetti">🎊 Confetti</span>
-          <span class="chip" data-pfx="none">○ Off</span>
-        </div>
-        <div class="slider-row">
-          <span style="font-size: 0.65rem;">Jumlah</span>
-          <input type="range" id="particleCount" min="6" max="35" value="22" step="1">
-          <span id="pcntVal" style="font-size: 0.7rem;">22</span>
-        </div>
+      <input type="file" id="fi" accept="image/*" style="display:none">
+    </div>
+
+    <div class="section">
+      <div class="lbl">Efek Partikel</div>
+      <div class="chips" id="fxChips">
+        <span class="chip on" data-fx="flowers">🌸 Bunga</span>
+        <span class="chip" data-fx="hearts">❤️ Hati</span>
+        <span class="chip" data-fx="stars">✨ Bintang</span>
+        <span class="chip" data-fx="bubbles">🫧 Gelembung</span>
+        <span class="chip" data-fx="snow">❄️ Salju</span>
+        <span class="chip" data-fx="confetti">🎊 Confetti</span>
+        <span class="chip" data-fx="petals">🍂 Daun</span>
+        <span class="chip" data-fx="none">○ Off</span>
       </div>
-      <div class="section">
-        <div class="section-title">🎬 Animasi Foto</div>
-        <div class="chip-group" id="animGroup">
-          <span class="chip active" data-trans="zoom">Zoom</span>
-          <span class="chip" data-trans="slide">Slide</span>
-          <span class="chip" data-trans="fade">Fade</span>
-          <span class="chip" data-trans="ken">Ken Burns</span>
-        </div>
+      <div class="lbl" style="margin-top:10px">Jumlah Partikel</div>
+      <div class="sl-row">
+        <input type="range" min="5" max="80" value="35" id="pCount" step="1" oninput="sv('pcV',this.value)">
+        <span class="sl-val" id="pcV">35</span>
       </div>
-      <div class="section">
-        <div class="section-title">⏱ Durasi & Latar</div>
-        <div class="slider-row">
-          <span>Durasi (detik)</span>
-          <input type="range" id="durationSlider" min="4" max="20" value="7" step="0.5">
-          <span id="durVal">7.0s</span>
-        </div>
-        <div class="flex-row" style="display: flex; justify-content: space-between; align-items: center;">
-          <span>Latar warna</span>
-          <input type="color" id="bgColor" value="#050508" class="color-input">
-        </div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">Animasi Foto</div>
+      <div class="chips" id="trChips">
+        <span class="chip on" data-tr="zoom">🔍 Zoom</span>
+        <span class="chip" data-tr="slide">→ Slide</span>
+        <span class="chip" data-tr="fade">≈ Fade</span>
+        <span class="chip" data-tr="rotate">↻ Putar</span>
+        <span class="chip" data-tr="ken">⬛ Ken Burns</span>
       </div>
+    </div>
+
+    <div class="section">
+      <div class="lbl">Durasi Video</div>
+      <div class="sl-row">
+        <input type="range" min="5" max="10" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')">
+        <span class="sl-val" id="durV">7s</span>
+      </div>
+      <div class="lbl" style="margin-top:10px">Warna Latar</div>
+      <input type="color" id="bgCol" value="#f0f0f8">
     </div>
   </div>
 
-  <!-- CANVAS CENTER -->
-  <div class="canvas-area">
-    <div class="canvas-wrapper">
-      <canvas id="mainCanvas" width="1920" height="1080" style="width:100%; height:auto; max-width:620px; border-radius:16px;"></canvas>
+  <!-- CENTER: Canvas -->
+  <div class="canvas-area" id="canvasArea">
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="cv"></canvas>
+      <div class="drag-hint" id="dragHint">Klik teks di canvas untuk memilih, lalu seret</div>
     </div>
-    <div class="control-bar">
-      <button class="btn btn-primary" id="previewBtn">▶ Preview</button>
-      <button class="btn" id="stopBtn">◼ Stop</button>
-      <button class="btn" id="resetTimeBtn">⏮ Reset</button>
-      <button class="btn btn-success" id="exportBtn">⬇ Export HD</button>
-      <div class="status-pill" id="statusMsg">Siap</div>
+
+    <div class="prog-wrap">
+      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
+      <div class="time-display" id="timeDisp">0.0s / 7.0s</div>
     </div>
-    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
-    <div class="time-text" id="timeDisplay">0.0s / 7.0s</div>
+
+    <div class="canvas-controls">
+      <button class="btn btn-accent" onclick="startPrev()">▶ Preview</button>
+      <button class="btn" onclick="stopPrev()">■ Stop</button>
+      <button class="btn btn-sm" onclick="resetTime()">⏮ Reset</button>
+      <div id="status">Upload foto untuk mulai</div>
+      <button class="btn btn-export" onclick="doExport()">⬇ Export HD Video</button>
+    </div>
   </div>
 
   <!-- RIGHT PANEL -->
-  <div class="panel panel-right">
-    <div class="panel-inner">
-      <div class="section">
-        <div class="section-title">🎧 Audio (opsional)</div>
-        <div class="upload-zone" id="audioUploadZone" style="padding: 10px;">🎵 Upload MP3 / M4A / OGG</div>
-        <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
-        <div id="audioFileName" style="font-size:0.65rem; margin-top:5px; color:#9c9cb0;"></div>
-        <div class="slider-row">
-          <span>🔊 Volume</span>
-          <input type="range" id="volumeSlider" min="0" max="100" value="75">
-          <span id="volVal">75%</span>
+  <div class="panel">
+    <div class="panel-title">Teks & Layer</div>
+
+    <div class="section">
+      <div class="btns-row">
+        <button class="btn btn-accent btn-sm" onclick="addTextLayer()" style="flex:1">+ Tambah Teks</button>
+      </div>
+      <div class="lbl" style="margin-top:10px">Layer Teks</div>
+      <div class="layer-list" id="layerList">
+        <div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>
+      </div>
+    </div>
+
+    <div class="section" id="txtProps" style="display:none">
+      <div class="lbl">Isi Teks</div>
+      <textarea id="txtContent" onchange="updateLayer()" oninput="updateLayer()" placeholder="Ketik teks..."></textarea>
+
+      <div class="lbl">Posisi X / Y</div>
+      <div class="row2">
+        <div>
+          <div class="sl-row">
+            <span style="font-size:.7rem;color:var(--muted);min-width:10px">X</span>
+            <input type="range" min="0" max="1920" value="960" id="posX" oninput="updateLayerPos()">
+            <span class="sl-val" id="posXV">960</span>
+          </div>
         </div>
-        <div style="display: flex; gap: 8px; margin-top: 6px;">
-          <label style="font-size:0.7rem;"><input type="checkbox" id="loopAudio" checked> Loop</label>
-          <button class="btn" id="removeAudioBtn" style="margin-left:auto; background:#2a1a1a;">✖ Hapus</button>
+        <div>
+          <div class="sl-row">
+            <span style="font-size:.7rem;color:var(--muted);min-width:10px">Y</span>
+            <input type="range" min="0" max="1080" value="100" id="posY" oninput="updateLayerPos()">
+            <span class="sl-val" id="posYV">100</span>
+          </div>
         </div>
       </div>
-      <div class="section">
-        <div class="section-title">✏️ Layer Teks (Drag & Edit)</div>
-        <button class="btn" id="addTextBtn" style="width:100%; margin-bottom:8px;">+ Tambah Teks</button>
-        <div id="textLayerList" class="layer-list">
-          <div style="font-size:0.7rem; color:#6a6a80;">Belum ada teks</div>
+
+      <div class="lbl">Ukuran & Warna</div>
+      <div class="row2">
+        <div>
+          <div class="sl-row">
+            <input type="range" min="20" max="200" value="80" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()">
+            <span class="sl-val" id="tsV">80px</span>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <input type="color" id="txtColor" value="#ffffff" onchange="updateLayer()" oninput="updateLayer()">
+          <span style="font-size:.7rem;color:var(--muted)">Warna</span>
         </div>
       </div>
-      <div class="section" id="textEditorPanel" style="display: none;">
-        <div class="section-title">Edit Teks</div>
-        <textarea id="textContent" rows="2" placeholder="Teks Anda" style="width:100%; background:#111118; border:1px solid #2a2a36; border-radius:10px; padding:6px; color:white; font-size:0.75rem;"></textarea>
-        <div class="slider-row"><span>Ukuran</span><input type="range" id="fontSize" min="24" max="160" value="60"><span id="fsVal">60px</span></div>
-        <div style="display: flex; gap: 8px; justify-content: space-between;">
-          <span>Warna</span><input type="color" id="textColor" value="#ffffff" class="color-input">
-          <span>BG Teks</span><input type="color" id="textBgColor" value="#000000" class="color-input">
-        </div>
-        <div class="chip-group" style="margin: 6px 0;">
-          <span class="chip" data-style="bold">Bold</span>
-          <span class="chip" data-style="italic">Italic</span>
-          <span class="chip" data-style="shadow">Shadow</span>
-          <span class="chip" data-style="outline">Outline</span>
-          <span class="chip" data-style="bgEnabled">BG</span>
-        </div>
-        <div class="chip-group" id="textAnimGroup">
-          <span class="chip active" data-tanim="none">Diam</span>
-          <span class="chip" data-tanim="fadein">Fade In</span>
-          <span class="chip" data-tanim="slideup">Slide Up</span>
-          <span class="chip" data-tanim="pulse">Pulse</span>
-        </div>
-        <div class="slider-row"><span>Opacity</span><input type="range" id="textOpacity" min="0.2" max="1" step="0.01" value="1"><span id="opVal">100%</span></div>
+
+      <div class="lbl">Gaya</div>
+      <div class="style-btns">
+        <button class="style-btn" data-s="bold" onclick="toggleStyle(this,'bold')" title="Bold"><b>B</b></button>
+        <button class="style-btn" data-s="italic" onclick="toggleStyle(this,'italic')" title="Italic"><i>I</i></button>
+        <button class="style-btn" data-s="shadow" onclick="toggleStyle(this,'shadow')" title="Shadow">◑</button>
+        <button class="style-btn" data-s="outline" onclick="toggleStyle(this,'outline')" title="Outline">○</button>
+        <button class="style-btn" data-s="bg" onclick="toggleStyle(this,'bg')" title="Kotak Latar">▬</button>
+      </div>
+
+      <div class="lbl" style="margin-top:8px">Warna latar teks</div>
+      <input type="color" id="txtBgColor" value="#000000" onchange="updateLayer()" oninput="updateLayer()">
+
+      <div class="lbl" style="margin-top:8px">Align</div>
+      <div class="align-btns">
+        <button class="style-btn on" data-a="left" onclick="setAlign(this,'left')">≡L</button>
+        <button class="style-btn" data-a="center" onclick="setAlign(this,'center')">≡C</button>
+        <button class="style-btn" data-a="right" onclick="setAlign(this,'right')">≡R</button>
+      </div>
+
+      <div class="lbl" style="margin-top:8px">Animasi Teks</div>
+      <div class="chips">
+        <span class="anim-badge on" data-anim="none" onclick="setTextAnim(this,'none')">Diam</span>
+        <span class="anim-badge" data-anim="fadein" onclick="setTextAnim(this,'fadein')">Fade In</span>
+        <span class="anim-badge" data-anim="slideup" onclick="setTextAnim(this,'slideup')">Slide Up</span>
+        <span class="anim-badge" data-anim="bounce" onclick="setTextAnim(this,'bounce')">Bounce</span>
+        <span class="anim-badge" data-anim="typewriter" onclick="setTextAnim(this,'typewriter')">Ketik</span>
+        <span class="anim-badge" data-anim="pulse" onclick="setTextAnim(this,'pulse')">Pulse</span>
+      </div>
+
+      <div class="lbl" style="margin-top:8px">Rotasi</div>
+      <div class="sl-row">
+        <input type="range" min="-180" max="180" value="0" id="txtRot" oninput="sv('rotV',this.value+'°');updateLayer()">
+        <span class="sl-val" id="rotV">0°</span>
+      </div>
+
+      <div class="lbl" style="margin-top:8px">Opacity</div>
+      <div class="sl-row">
+        <input type="range" min="10" max="100" value="100" id="txtOpacity" oninput="sv('opV',this.value+'%');updateLayer()">
+        <span class="sl-val" id="opV">100%</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- MOBILE PANELS -->
-<div id="mobileCanvasPanel" class="mobile-panel active"></div>
-<div id="mobileMediaPanel" class="mobile-panel"></div>
-<div id="mobileAudioPanel" class="mobile-panel"></div>
-<div id="mobileTextPanel" class="mobile-panel"></div>
-
 <script>
-// ========== INISIALISASI VARIABEL (SEMUA SEBELUM DIPAKAI) ==========
-let currentRatio = "16:9";
-let canvasWidth = 1920, canvasHeight = 1080;
-const canvas = document.getElementById("mainCanvas");
-let ctx = canvas.getContext("2d");
+// ─── Dimensi HD ───────────────────────────────────────────
+// Selalu render di 1080p, scale untuk tampilan
+const RATIOS = {
+  '16:9': { W: 1920, H: 1080, dispW: 580, dispH: 326 },
+  '9:16': { W: 1080, H: 1920, dispW: 270, dispH: 480 }
+};
+let currentRatio = '16:9';
+let W = 1920, H = 1080;
+let DISP_W = 580, DISP_H = 326;
 
-// State utama
-let uploadedImage = null;
-let animationId = null;
-let isPreviewing = false;
-let startTime = null;
-let durationSec = 7.0;
-let selectedTransition = "zoom";
-let selectedParticle = "flowers";
-let particles = [];
-let particleCount = 22;
-let bgColorHex = "#050508";  // ✅ Dideklarasikan SEBELUM dipakai
+const cv = document.getElementById('cv');
+const ctx = cv.getContext('2d');
 
-// Audio
-let audioElement = null;
+function setRatio(ratio) {
+  currentRatio = ratio;
+  const r = RATIOS[ratio];
+  W = r.W; H = r.H; DISP_W = r.dispW; DISP_H = r.dispH;
 
-// Text layers
-let textLayers = [];
-let selectedLayerId = null;
-let nextLayerId = 1;
-let dragLayer = null;
-let dragOffsetX = 0, dragOffsetY = 0;
-let isDragging = false;
+  // Update canvas internal size (HD)
+  cv.width = W; cv.height = H;
 
-// ========== FUNGSI UTAMA ==========
-function updateCanvasSize() {
-  if (currentRatio === "16:9") { canvasWidth = 1920; canvasHeight = 1080; }
-  else { canvasWidth = 1080; canvasHeight = 1920; }
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
-  document.getElementById("resBadge").innerText = currentRatio === "16:9" ? "1080p · 16:9" : "1080x1920 · 9:16";
-  document.querySelectorAll(".ratio-btn").forEach(btn => {
-    btn.classList.toggle("active", btn.getAttribute("data-ratio") === currentRatio);
-  });
-  drawStaticFrame(0);
+  // Update canvas display size
+  cv.style.width = DISP_W + 'px';
+  cv.style.height = DISP_H + 'px';
+
+  // Update pos range limits
+  document.getElementById('posX').max = W;
+  document.getElementById('posY').max = H;
+
+  // Default text position to center
+  document.getElementById('posX').value = Math.round(W / 2);
+  document.getElementById('posY').value = Math.round(H * 0.08);
+  sv('posXV', Math.round(W / 2));
+  sv('posYV', Math.round(H * 0.08));
+
+  // Update info label
+  document.getElementById('resInfo').textContent = ratio === '16:9'
+    ? 'Output: 1920 × 1080 px (Full HD)'
+    : 'Output: 1080 × 1920 px (Full HD Reels)';
+
+  // Update active button
+  document.getElementById('ratio169').classList.toggle('active', ratio === '16:9');
+  document.getElementById('ratio916').classList.toggle('active', ratio === '9:16');
+
+  initParts();
+  drawFrame(0);
 }
 
-function initParticles() {
-  if (selectedParticle === "none") { particles = []; return; }
-  const fxMap = {
-    flowers: ["🌸","🌺","🌼"], hearts: ["❤️","💕","💖"], stars: ["✨","⭐","🌟"],
-    bubbles: ["○","●","◌"], snow: ["❄️","❄","✧"], confetti: ["🎊","🎉","✨"]
+// ─── State ───────────────────────────────────────────────
+let img = null;
+let animId = null, recId = null;
+let isRec = false;
+let t0 = null, isPaused = true;
+let selFx = 'flowers', selTr = 'zoom';
+let parts = [];
+let layers = [];
+let selLayerId = null;
+let layerIdCounter = 0;
+let dragState = null;
+
+// Init canvas
+cv.width = W; cv.height = H;
+cv.style.width = DISP_W + 'px';
+cv.style.height = DISP_H + 'px';
+
+// ─── Helpers ──────────────────────────────────────────────
+function sv(id, val) { document.getElementById(id).textContent = val; }
+function el(id) { return document.getElementById(id); }
+
+// ─── File Upload ──────────────────────────────────────────
+el('fi').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    const i = new Image();
+    i.onload = () => {
+      img = i;
+      const uz = el('uploadZone');
+      uz.classList.add('has-img');
+      uz.innerHTML = `<img src="${ev.target.result}"><div class="overlay-btn">Ganti Foto</div>`;
+      uz.onclick = () => el('fi').click();
+      initParts(); startPrev();
+    };
+    i.src = ev.target.result;
   };
-  const chars = fxMap[selectedParticle] || ["✨"];
-  const newParts = [];
-  for (let i = 0; i < particleCount; i++) {
-    newParts.push({
-      x: Math.random() * canvasWidth,
-      y: Math.random() * canvasHeight,
-      vx: (Math.random() - 0.5) * 1.1,
-      vy: 0.5 + Math.random() * 1.2,
-      size: 16 + Math.random() * 20,
-      char: chars[Math.floor(Math.random() * chars.length)],
-      alpha: 0.5 + Math.random() * 0.5,
-      rot: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 2
-    });
-  }
-  particles = newParts;
+  r.readAsDataURL(f);
+});
+
+const uz = el('uploadZone');
+uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor = 'var(--accent)'; });
+uz.addEventListener('dragleave', () => { uz.style.borderColor = ''; });
+uz.addEventListener('drop', e => {
+  e.preventDefault(); uz.style.borderColor = '';
+  const f = e.dataTransfer.files[0]; if (!f || !f.type.startsWith('image/')) return;
+  const inp = el('fi');
+  const dt = new DataTransfer(); dt.items.add(f); inp.files = dt.files;
+  inp.dispatchEvent(new Event('change'));
+});
+
+// ─── Chips ────────────────────────────────────────────────
+el('fxChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on'); selFx = c.dataset.fx; initParts();
+}));
+el('trChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+  document.querySelectorAll('[data-tr]').forEach(x => x.classList.remove('on'));
+  c.classList.add('on'); selTr = c.dataset.tr;
+}));
+
+// ─── Particles ───────────────────────────────────────────
+const FXD = {
+  flowers: { chars: ['🌸','🌺','🌼','💮'], cols: ['#ffb7c5','#ff69b4','#ffd1dc','#ff85a1'] },
+  hearts:  { chars: ['❤️','💕','💖','💗','💓'], cols: ['#ff4d6d','#ff8fa3','#ff6b81'] },
+  stars:   { chars: ['✨','⭐','💫','🌟'], cols: ['#ffe066','#ffd700','#fff9c4','#ffec6e'] },
+  bubbles: { chars: ['●','○','◉'], cols: ['#7ecfff','#48b8ff','#b3e5ff'] },
+  snow:    { chars: ['❄','·','*','✦'], cols: ['#e8f4fd','#cce7ff','#ffffff'] },
+  confetti:{ chars: ['■','▲','●','◆','★'], cols: ['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79a8'] },
+  petals:  { chars: ['🍂','🍁','🌿','🍃'], cols: ['#d4a017','#c0392b','#27ae60','#e67e22'] },
+  none:    { chars: [], cols: [] }
+};
+
+function initParts() {
+  parts = [];
+  const n = parseInt(el('pCount').value);
+  const d = FXD[selFx]; if (!d || !d.chars.length) return;
+  for (let i = 0; i < n; i++) parts.push(mkPart(false));
 }
 
-function updateParticles() {
-  if (selectedParticle === "none" || !particles.length) return;
-  for (let p of particles) {
-    p.x += p.vx;
-    p.y += p.vy;
-    p.rot += p.rotSpeed;
-    if (p.y > canvasHeight + 60) { p.y = -40; p.x = Math.random() * canvasWidth; }
-    if (p.x < -60) p.x = canvasWidth + 20;
-    if (p.x > canvasWidth + 60) p.x = -40;
-  }
-}
-
-function drawFrame(progress01, currentTimeMs = 0) {
-  if (!ctx) return;
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
-  ctx.fillStyle = bgColorHex;
-  ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-  
-  if (uploadedImage) {
-    ctx.save();
-    const imgW = uploadedImage.width, imgH = uploadedImage.height;
-    const targetAspect = canvasWidth / canvasHeight;
-    const imgAspect = imgW / imgH;
-    let drawW, drawH, drawX, drawY;
-    if (imgAspect > targetAspect) { 
-      drawH = canvasHeight; drawW = drawH * imgAspect; drawX = (canvasWidth - drawW) / 2; drawY = 0;
-    } else { 
-      drawW = canvasWidth; drawH = drawW / imgAspect; drawX = 0; drawY = (canvasHeight - drawH) / 2;
-    }
-    
-    if (selectedTransition === "zoom") {
-      const scale = 1 + progress01 * 0.12;
-      ctx.translate(canvasWidth/2, canvasHeight/2);
-      ctx.scale(scale, scale);
-      ctx.translate(-canvasWidth/2, -canvasHeight/2);
-    } else if (selectedTransition === "slide") {
-      ctx.translate(progress01 * 60, 0);
-    } else if (selectedTransition === "fade") {
-      ctx.globalAlpha = 0.4 + progress01 * 0.6;
-    } else if (selectedTransition === "ken") {
-      const scaleK = 1 + progress01 * 0.1;
-      ctx.translate(progress01 * 40, 0);
-      ctx.scale(scaleK, scaleK);
-    }
-    ctx.drawImage(uploadedImage, drawX, drawY, drawW, drawH);
-    ctx.restore();
-    
-    // Vignette ringan
-    const grad = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, canvasHeight*0.2, canvasWidth/2, canvasHeight/2, canvasHeight*0.8);
-    grad.addColorStop(0, "rgba(0,0,0,0)");
-    grad.addColorStop(1, "rgba(0,0,0,0.35)");
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-  }
-  
-  // Partikel
-  if (selectedParticle !== "none" && particles.length) {
-    for (let p of particles) {
-      ctx.save();
-      ctx.globalAlpha = p.alpha;
-      ctx.font = `${p.size}px "Segoe UI Emoji", "Apple Color Emoji", system-ui`;
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI / 180);
-      ctx.fillStyle = "#fff9e6";
-      ctx.fillText(p.char, 0, 0);
-      ctx.restore();
-    }
-    updateParticles();
-  }
-  
-  // Teks layers
-  for (let layer of textLayers) {
-    let opacityLayer = layer.opacity;
-    let offsetY = 0;
-    let extraScale = 1;
-    if (layer.anim === "fadein") opacityLayer *= Math.min(progress01 * 3, 1);
-    if (layer.anim === "slideup") offsetY = (1 - Math.min(progress01 * 2.5, 1)) * 50;
-    if (layer.anim === "pulse") extraScale = 1 + Math.sin(currentTimeMs / 250) * 0.03;
-    
-    ctx.save();
-    ctx.globalAlpha = opacityLayer;
-    ctx.font = `${layer.italic ? "italic " : ""}${layer.bold ? "bold " : ""}${layer.fontSize}px system-ui, "Inter", sans-serif`;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    let xPos = layer.x;
-    let yPos = layer.y + offsetY;
-    ctx.translate(xPos, yPos);
-    if (extraScale !== 1) ctx.scale(extraScale, extraScale);
-    if (layer.rotation) ctx.rotate(layer.rotation * Math.PI / 180);
-    
-    if (layer.bgEnabled) {
-      const metrics = ctx.measureText(layer.text);
-      const width = metrics.width;
-      ctx.fillStyle = layer.bgColor + "cc";
-      ctx.fillRect(-width/2 - 12, -layer.fontSize/2 - 6, width + 24, layer.fontSize + 12);
-    }
-    if (layer.shadow) { ctx.shadowColor = "rgba(0,0,0,0.8)"; ctx.shadowBlur = 12; }
-    if (layer.outline) { ctx.strokeStyle = "#000000"; ctx.lineWidth = 3; ctx.strokeText(layer.text, 0, 0); }
-    ctx.fillStyle = layer.color;
-    ctx.fillText(layer.text, 0, 0);
-    ctx.shadowBlur = 0;
-    ctx.restore();
-  }
-  
-  // Progress bar
-  const progressWidth = (progress01 * 100) + "%";
-  const progressFill = document.getElementById("progressFill");
-  if (progressFill) progressFill.style.width = progressWidth;
-  const currentSec = (progress01 * durationSec).toFixed(1);
-  document.getElementById("timeDisplay").innerHTML = `${currentSec}s / ${durationSec.toFixed(1)}s`;
-}
-
-function drawStaticFrame(progress01) { 
-  drawFrame(progress01, performance.now()); 
-}
-
-// Preview dengan requestAnimationFrame
-function startPreview() {
-  if (animationId) cancelAnimationFrame(animationId);
-  isPreviewing = true;
-  startTime = performance.now();
-  if (audioElement && audioElement.src) {
-    audioElement.currentTime = 0;
-    audioElement.play().catch(e => console.log("audio play", e));
-  }
-  function step(now) {
-    if (!isPreviewing) return;
-    const elapsed = (now - startTime) / 1000;
-    let prog = Math.min(elapsed / durationSec, 1);
-    drawFrame(prog, now);
-    if (elapsed >= durationSec) {
-      if (audioElement && audioElement.loop) audioElement.play().catch(()=>{});
-      startTime = performance.now();
-      animationId = requestAnimationFrame(step);
-    } else {
-      animationId = requestAnimationFrame(step);
-    }
-  }
-  animationId = requestAnimationFrame(step);
-}
-
-function stopPreview() {
-  isPreviewing = false;
-  if (animationId) cancelAnimationFrame(animationId);
-  animationId = null;
-  if (audioElement) audioElement.pause();
-  drawFrame(0, 0);
-}
-
-function resetPreviewTime() { 
-  stopPreview(); 
-  drawFrame(0, 0); 
-}
-
-// Export Video HD
-async function exportVideo() {
-  if (!uploadedImage) { setStatus("❌ Upload foto dulu"); return; }
-  if (!window.MediaRecorder) { setStatus("Browser tidak support MediaRecorder"); return; }
-  stopPreview();
-  setStatus("🎬 Merekam HD ...");
-  const stream = canvas.captureStream(30);
-  let finalStream = stream;
-  if (audioElement && audioElement.src) {
-    try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const source = audioCtx.createMediaElementSource(audioElement);
-      const dest = audioCtx.createMediaStreamDestination();
-      source.connect(dest);
-      source.connect(audioCtx.destination);
-      const combined = new MediaStream([...stream.getVideoTracks(), ...dest.stream.getAudioTracks()]);
-      finalStream = combined;
-      audioElement.currentTime = 0;
-      await audioCtx.resume();
-      audioElement.play().catch(e=>console.log);
-    } catch(e) { console.warn("Audio mix fallback", e); }
-  }
-  const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
-  const recorder = new MediaRecorder(finalStream, { mimeType, videoBitsPerSecond: 12000000 });
-  let chunks = [];
-  recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
-  recorder.onstop = () => {
-    const blob = new Blob(chunks, { type: 'video/webm' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `videofoto_${currentRatio}_${Date.now()}.webm`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setStatus("✅ Video HD selesai!");
-    if (audioElement) audioElement.pause();
+function mkPart(top = false) {
+  const d = FXD[selFx]; if (!d.chars.length) return { dead: true };
+  return {
+    x: Math.random() * W, y: top ? -60 : Math.random() * H,
+    vy: (0.45 + Math.random() * 1.3) * (H / 360),
+    vx: (Math.random() - .5) * .9 * (W / 640),
+    size: (14 + Math.random() * 18) * (H / 360),
+    ch: d.chars[Math.floor(Math.random() * d.chars.length)],
+    col: d.cols[Math.floor(Math.random() * d.cols.length)],
+    a: 0.45 + Math.random() * .55,
+    rot: Math.random() * 360, rv: (Math.random() - .5) * 2.8,
+    wb: Math.random() * Math.PI * 2, ws: .022 + Math.random() * .04
   };
-  recorder.start(250);
-  const startExportTime = performance.now();
-  function recordFrame(now) {
-    const elapsed = (now - startExportTime) / 1000;
-    const prog = Math.min(elapsed / durationSec, 1);
-    drawFrame(prog, now);
-    if (elapsed >= durationSec) {
-      recorder.stop();
-      return;
-    }
-    requestAnimationFrame(recordFrame);
-  }
-  requestAnimationFrame(recordFrame);
 }
 
-// ========== TEXT LAYER FUNCTIONS ==========
+initParts();
+
+// ─── Text Layers ─────────────────────────────────────────
 function addTextLayer() {
-  const newId = nextLayerId++;
-  textLayers.push({
-    id: newId, text: "Teks Baru", x: canvasWidth/2, y: canvasHeight/2, fontSize: 60,
-    color: "#ffffff", bgColor: "#000000", bgEnabled: false, bold: false, italic: false,
-    shadow: true, outline: false, opacity: 1, rotation: 0, anim: "none"
-  });
-  selectedLayerId = newId;
-  renderLayerListUI();
-  syncEditorWithLayer(textLayers.find(l=>l.id===newId));
-  drawFrame(0,0);
+  const id = ++layerIdCounter;
+  const layer = {
+    id, text: 'Teks ' + id,
+    x: W / 2, y: 100 + (layers.length * 180),
+    size: 80, color: '#ffffff', bgColor: '#000000',
+    bold: false, italic: false, shadow: true, outline: false, bg: false,
+    align: 'left', rot: 0, opacity: 1, anim: 'none'
+  };
+  layers.push(layer);
+  selectLayer(id);
+  renderLayerList();
+}
+
+function selectLayer(id) {
+  selLayerId = id;
+  renderLayerList();
+  const layer = layers.find(l => l.id === id);
+  if (!layer) { el('txtProps').style.display = 'none'; return; }
+  el('txtProps').style.display = 'block';
+  el('txtContent').value = layer.text;
+  el('posX').max = W; el('posY').max = H;
+  el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
+  el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
+  el('txtSize').value = layer.size; sv('tsV', layer.size + 'px');
+  el('txtColor').value = layer.color;
+  el('txtBgColor').value = layer.bgColor;
+  el('txtRot').value = layer.rot; sv('rotV', layer.rot + '°');
+  el('txtOpacity').value = Math.round(layer.opacity * 100); sv('opV', Math.round(layer.opacity * 100) + '%');
+  document.querySelectorAll('[data-s]').forEach(b => b.classList.toggle('on', !!layer[b.dataset.s]));
+  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === layer.align));
+  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === layer.anim));
+  el('dragHint').textContent = 'Seret teks "' + layer.text.substring(0, 20) + '" di canvas';
+}
+
+function renderLayerList() {
+  const list = el('layerList');
+  if (layers.length === 0) {
+    list.innerHTML = '<div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>';
+    return;
+  }
+  list.innerHTML = layers.map(l => `
+    <div class="layer-item ${l.id === selLayerId ? 'active' : ''}" onclick="selectLayer(${l.id})">
+      <span class="layer-name" title="${l.text}">${l.text || '(kosong)'}</span>
+      <button class="layer-del" onclick="event.stopPropagation();deleteLayer(${l.id})" title="Hapus">✕</button>
+    </div>
+  `).join('');
 }
 
 function deleteLayer(id) {
-  textLayers = textLayers.filter(l=>l.id !== id);
-  if (selectedLayerId === id) selectedLayerId = textLayers.length ? textLayers[0].id : null;
-  renderLayerListUI();
-  if (!selectedLayerId) document.getElementById("textEditorPanel").style.display = "none";
-  drawFrame(0,0);
-}
-
-function syncEditorWithLayer(layer) {
-  if(!layer) return;
-  document.getElementById("textEditorPanel").style.display = "block";
-  document.getElementById("textContent").value = layer.text;
-  document.getElementById("fontSize").value = layer.fontSize; 
-  document.getElementById("fsVal").innerText = layer.fontSize+"px";
-  document.getElementById("textColor").value = layer.color;
-  document.getElementById("textBgColor").value = layer.bgColor;
-  document.getElementById("textOpacity").value = layer.opacity; 
-  document.getElementById("opVal").innerText = Math.round(layer.opacity*100)+"%";
-  document.querySelectorAll("[data-style]").forEach(chip => {
-    chip.classList.toggle("active", layer[chip.getAttribute("data-style")] === true);
-  });
-  document.querySelectorAll("#textAnimGroup .chip").forEach(chip => {
-    chip.classList.toggle("active", chip.getAttribute("data-tanim") === layer.anim);
-  });
-}
-
-function renderLayerListUI() {
-  const container = document.getElementById("textLayerList");
-  if (!container) return;
-  if (!textLayers.length) { 
-    container.innerHTML = "<div style='font-size:0.7rem; color:#6a6a80;'>Belum ada teks</div>"; 
-    return; 
+  layers = layers.filter(l => l.id !== id);
+  if (selLayerId === id) {
+    selLayerId = layers.length ? layers[layers.length - 1].id : null;
+    if (selLayerId) selectLayer(selLayerId);
+    else { el('txtProps').style.display = 'none'; el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret'; }
   }
-  container.innerHTML = textLayers.map(l => `<div class="layer-item ${selectedLayerId===l.id ? 'active' : ''}" data-id="${l.id}">
-    <span class="layer-text">${l.text.substring(0,18)}</span>
-    <button class="del-layer" data-del="${l.id}">✕</button>
-  </div>`).join("");
-  container.querySelectorAll(".layer-item").forEach(el => {
-    const id = parseInt(el.getAttribute("data-id"));
-    el.addEventListener("click", (e) => { 
-      if(!e.target.classList.contains("del-layer")) { 
-        selectedLayerId = id; 
-        syncEditorWithLayer(textLayers.find(l=>l.id===id)); 
-        renderLayerListUI(); 
-        drawFrame(0,0); 
-      } 
-    });
-    const delBtn = el.querySelector(".del-layer");
-    if(delBtn) delBtn.addEventListener("click", (e) => { 
-      e.stopPropagation(); 
-      deleteLayer(parseInt(delBtn.getAttribute("data-del"))); 
-    });
-  });
+  renderLayerList();
 }
 
-// Drag text di canvas
-function setupCanvasDrag() {
-  canvas.addEventListener("mousedown", (e) => {
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    const mouseX = (e.clientX - rect.left) * scaleX;
-    const mouseY = (e.clientY - rect.top) * scaleY;
-    for (let i=textLayers.length-1; i>=0; i--) {
-      const l = textLayers[i];
-      ctx.font = `${l.fontSize}px system-ui`;
-      const metrics = ctx.measureText(l.text);
-      const halfW = metrics.width/2 + 20;
-      const halfH = l.fontSize/2 + 20;
-      if (Math.abs(mouseX - l.x) < halfW && Math.abs(mouseY - l.y) < halfH) {
-        dragLayer = l;
-        isDragging = true;
-        dragOffsetX = l.x - mouseX;
-        dragOffsetY = l.y - mouseY;
-        selectedLayerId = l.id;
-        syncEditorWithLayer(l);
-        renderLayerListUI();
-        canvas.style.cursor = "grabbing";
-        break;
-      }
+function updateLayer() {
+  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+  layer.text = el('txtContent').value;
+  layer.size = parseInt(el('txtSize').value);
+  layer.color = el('txtColor').value;
+  layer.bgColor = el('txtBgColor').value;
+  layer.rot = parseInt(el('txtRot').value);
+  layer.opacity = parseInt(el('txtOpacity').value) / 100;
+  renderLayerList();
+}
+
+function updateLayerPos() {
+  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+  layer.x = parseInt(el('posX').value);
+  layer.y = parseInt(el('posY').value);
+  sv('posXV', layer.x); sv('posYV', layer.y);
+}
+
+function toggleStyle(btn, style) {
+  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+  layer[style] = !layer[style];
+  btn.classList.toggle('on', layer[style]);
+}
+
+function setAlign(btn, align) {
+  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+  layer.align = align;
+  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === align));
+}
+
+function setTextAnim(badge, anim) {
+  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+  layer.anim = anim;
+  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === anim));
+}
+
+// ─── Canvas Drag (koordinat skala penuh) ──────────────────
+function getCanvasPos(e) {
+  const rect = cv.getBoundingClientRect();
+  // rect ukuran display, canvas internal = HD
+  const scaleX = W / rect.width, scaleY = H / rect.height;
+  return {
+    x: (e.clientX - rect.left) * scaleX,
+    y: (e.clientY - rect.top) * scaleY
+  };
+}
+
+function hitTest(mx, my) {
+  for (let i = layers.length - 1; i >= 0; i--) {
+    const l = layers[i];
+    ctx.font = (l.bold ? '700 ' : '400 ') + l.size + 'px Syne, sans-serif';
+    const tw = ctx.measureText(l.text).width;
+    const th = l.size * 1.4;
+    let tx = l.x, ty = l.y;
+    if (l.align === 'center') tx -= tw / 2;
+    if (l.align === 'right') tx -= tw;
+    const pad = 20;
+    if (mx >= tx - pad && mx <= tx + tw + pad && my >= ty - pad && my <= ty + th + pad) return l.id;
+  }
+  return null;
+}
+
+cv.addEventListener('mousedown', e => {
+  const { x, y } = getCanvasPos(e);
+  const hit = hitTest(x, y);
+  if (hit !== null) {
+    selectLayer(hit);
+    const layer = layers.find(l => l.id === hit);
+    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
+    cv.style.cursor = 'grabbing';
+  } else {
+    selLayerId = null;
+    el('txtProps').style.display = 'none';
+    renderLayerList();
+    el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret';
+  }
+});
+
+cv.addEventListener('mousemove', e => {
+  if (!dragState) {
+    const { x, y } = getCanvasPos(e);
+    const hit = hitTest(x, y);
+    cv.style.cursor = hit !== null ? 'grab' : 'default';
+    return;
+  }
+  const { x, y } = getCanvasPos(e);
+  const layer = layers.find(l => l.id === dragState.layerId);
+  if (layer) {
+    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
+    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
+    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
+    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
+  }
+});
+
+cv.addEventListener('mouseup', () => { dragState = null; cv.style.cursor = 'default'; });
+cv.addEventListener('mouseleave', () => { dragState = null; });
+
+cv.addEventListener('touchstart', e => {
+  e.preventDefault();
+  const t = e.touches[0];
+  const { x, y } = getCanvasPos(t);
+  const hit = hitTest(x, y);
+  if (hit !== null) {
+    selectLayer(hit);
+    const layer = layers.find(l => l.id === hit);
+    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
+  }
+}, { passive: false });
+
+cv.addEventListener('touchmove', e => {
+  e.preventDefault();
+  if (!dragState) return;
+  const t = e.touches[0];
+  const { x, y } = getCanvasPos(t);
+  const layer = layers.find(l => l.id === dragState.layerId);
+  if (layer) {
+    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
+    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
+    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
+    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
+  }
+}, { passive: false });
+
+cv.addEventListener('touchend', () => { dragState = null; });
+
+// ─── Draw Frame (di koordinat HD penuh) ──────────────────
+function drawFrame(t) {
+  const dur = parseInt(el('dur').value) * 1000;
+  const prog = Math.min(t / dur, 1);
+  const bg = el('bgCol').value;
+
+  ctx.clearRect(0, 0, W, H);
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, W, H);
+
+  if (img) {
+    ctx.save();
+    const tr = selTr;
+    if (tr === 'zoom') {
+      const s = 1 + prog * .14;
+      ctx.translate(W/2, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+    } else if (tr === 'slide') {
+      ctx.translate(-prog * 80, 0);
+    } else if (tr === 'fade') {
+      ctx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
+    } else if (tr === 'rotate') {
+      const s = 1 + prog * .08;
+      ctx.translate(W/2, H/2); ctx.rotate(prog * .035); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+    } else if (tr === 'ken') {
+      const s = 1 + prog * .12;
+      const ox = -prog * 60;
+      ctx.translate(W/2 + ox, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
     }
-  });
-  window.addEventListener("mousemove", (e) => {
-    if (!isDragging || !dragLayer) return;
-    const rect = canvas.getBoundingClientRect();
-    const scaleX = canvas.width / rect.width;
-    const scaleY = canvas.height / rect.height;
-    let newX = (e.clientX - rect.left) * scaleX + dragOffsetX;
-    let newY = (e.clientY - rect.top) * scaleY + dragOffsetY;
-    dragLayer.x = Math.min(Math.max(newX, 50), canvasWidth-50);
-    dragLayer.y = Math.min(Math.max(newY, 50), canvasHeight-50);
-    drawFrame(isPreviewing ? (performance.now() - startTime)/1000 / durationSec : 0, performance.now());
-  });
-  window.addEventListener("mouseup", () => { 
-    isDragging = false; 
-    dragLayer = null; 
-    canvas.style.cursor = "grab"; 
-  });
+    const ir = img.width / img.height, cr = W / H;
+    let dw, dh, dx, dy;
+    if (ir > cr) { dh = H; dw = dh * ir; dx = (W - dw) / 2; dy = 0; }
+    else { dw = W; dh = dw / ir; dx = 0; dy = (H - dh) / 2; }
+    ctx.drawImage(img, dx, dy, dw, dh);
+    ctx.restore();
+    const gr = ctx.createRadialGradient(W/2, H/2, H*.2, W/2, H/2, H*.85);
+    gr.addColorStop(0, 'rgba(0,0,0,0)');
+    gr.addColorStop(1, 'rgba(0,0,0,.5)');
+    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
+    const grv = ctx.createLinearGradient(0, 0, 0, H);
+    grv.addColorStop(0, 'rgba(0,0,0,.35)');
+    grv.addColorStop(.4, 'rgba(0,0,0,.0)');
+    grv.addColorStop(1, 'rgba(0,0,0,.4)');
+    ctx.fillStyle = grv; ctx.fillRect(0, 0, W, H);
+  }
+
+  // Particles (koordinat HD)
+  const d = FXD[selFx];
+  if (d && d.chars.length) {
+    ctx.save();
+    for (let p of parts) {
+      if (p.dead) continue;
+      ctx.save();
+      ctx.globalAlpha = p.a;
+      ctx.font = p.size + 'px serif';
+      ctx.fillStyle = p.col;
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot * Math.PI / 180);
+      ctx.fillText(p.ch, -p.size / 2, -p.size / 2);
+      ctx.restore();
+      p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
+      p.wb += p.ws; p.rot += p.rv;
+      if (p.y > H + 80) Object.assign(p, mkPart(true));
+    }
+    ctx.restore();
+  }
+
+  for (const layer of layers) {
+    drawTextLayer(layer, prog, t);
+  }
+
+  if (selLayerId !== null && !isRec) {
+    const layer = layers.find(l => l.id === selLayerId);
+    if (layer) drawSelBox(layer);
+  }
+
+  // Progress bar tipis di bawah
+  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(0, H - 8, W, 8);
+  ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(0, H - 8, W * prog, 8);
+
+  el('progFill').style.width = (prog * 100) + '%';
+  el('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + el('dur').value + '.0s';
 }
 
-function setStatus(msg) { 
-  const el = document.getElementById("statusMsg");
-  if(el) el.innerText = msg;
+function drawTextLayer(layer, prog, t) {
+  if (!layer.text) return;
+  let alpha = layer.opacity;
+  let offY = 0, scale = 1;
+
+  switch (layer.anim) {
+    case 'fadein': alpha *= Math.min(prog * 4, 1); break;
+    case 'slideup':
+      offY = (1 - Math.min(prog * 3, 1)) * 120;
+      alpha *= Math.min(prog * 3, 1);
+      break;
+    case 'bounce':
+      offY = Math.abs(Math.sin(t / 400)) * -22;
+      break;
+    case 'typewriter': {
+      const chars = Math.floor(prog * layer.text.length * 3);
+      layer._visText = layer.text.substring(0, Math.min(chars, layer.text.length));
+      break;
+    }
+    case 'pulse':
+      scale = 1 + Math.sin(t / 300) * .06;
+      break;
+  }
+
+  const txt = layer.anim === 'typewriter' ? (layer._visText || '') : layer.text;
+
+  ctx.save();
+  ctx.globalAlpha = alpha;
+  ctx.translate(layer.x, layer.y + offY);
+  ctx.rotate(layer.rot * Math.PI / 180);
+  if (scale !== 1) ctx.scale(scale, scale);
+
+  const fontStyle = layer.italic ? 'italic ' : '';
+  const fontWeight = layer.bold ? '700' : '400';
+  ctx.font = `${fontStyle}${fontWeight} ${layer.size}px Syne, sans-serif`;
+  ctx.textAlign = layer.align === 'center' ? 'center' : layer.align === 'right' ? 'right' : 'left';
+  ctx.textBaseline = 'top';
+
+  const tw = ctx.measureText(txt).width;
+  const th = layer.size * 1.2;
+  const pad = 20;
+  let bx = 0;
+  if (layer.align === 'center') bx = -tw / 2;
+  if (layer.align === 'right') bx = -tw;
+
+  if (layer.bg) {
+    ctx.fillStyle = layer.bgColor + 'cc';
+    ctx.beginPath();
+    ctx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
+    ctx.fill();
+  }
+
+  if (layer.shadow) {
+    ctx.shadowColor = 'rgba(0,0,0,.85)';
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+  }
+
+  if (layer.outline) {
+    ctx.strokeStyle = 'rgba(0,0,0,.9)'; ctx.lineWidth = 6;
+    ctx.strokeText(txt, 0, 0);
+  }
+
+  ctx.fillStyle = layer.color;
+  ctx.fillText(txt, 0, 0);
+  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
+  ctx.restore();
 }
 
-// ========== BIND EVENT ==========
-function bindUI() {
-  document.querySelectorAll("[data-ratio]").forEach(btn => {
-    btn.onclick = () => { 
-      currentRatio = btn.getAttribute("data-ratio"); 
-      updateCanvasSize(); 
-      initParticles(); 
-      drawFrame(0,0); 
-    };
-  });
-  document.getElementById("durationSlider").oninput = (e) => { 
-    durationSec = parseFloat(e.target.value); 
-    document.getElementById("durVal").innerText = durationSec.toFixed(1)+"s"; 
-    drawFrame(0,0); 
-  };
-  document.getElementById("bgColor").oninput = (e) => { 
-    bgColorHex = e.target.value; 
-    drawFrame(0,0); 
-  };
-  document.querySelectorAll("#particleGroup .chip").forEach(chip => {
-    chip.onclick = () => { 
-      document.querySelectorAll("#particleGroup .chip").forEach(c=>c.classList.remove("active")); 
-      chip.classList.add("active"); 
-      selectedParticle = chip.getAttribute("data-pfx"); 
-      initParticles(); 
-      drawFrame(0,0); 
-    };
-  });
-  document.querySelectorAll("#animGroup .chip").forEach(chip => {
-    chip.onclick = () => { 
-      document.querySelectorAll("#animGroup .chip").forEach(c=>c.classList.remove("active")); 
-      chip.classList.add("active"); 
-      selectedTransition = chip.getAttribute("data-trans"); 
-      drawFrame(0,0); 
-    };
-  });
-  document.getElementById("particleCount").oninput = (e) => { 
-    particleCount = parseInt(e.target.value); 
-    document.getElementById("pcntVal").innerText = particleCount; 
-    initParticles(); 
-    drawFrame(0,0); 
-  };
-  document.getElementById("previewBtn").onclick = startPreview;
-  document.getElementById("stopBtn").onclick = stopPreview;
-  document.getElementById("resetTimeBtn").onclick = resetPreviewTime;
-  document.getElementById("exportBtn").onclick = exportVideo;
-  document.getElementById("addTextBtn").onclick = addTextLayer;
-  
-  // Audio
-  document.getElementById("audioUploadZone").onclick = () => document.getElementById("audioFileInput").click();
-  document.getElementById("audioFileInput").onchange = (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const url = URL.createObjectURL(file);
-    if(audioElement) { audioElement.pause(); audioElement.src = ""; }
-    audioElement = new Audio(url);
-    audioElement.loop = document.getElementById("loopAudio").checked;
-    audioElement.volume = document.getElementById("volumeSlider").value / 100;
-    document.getElementById("audioFileName").innerHTML = `🎵 ${file.name.substring(0,25)}`;
-    document.getElementById("audioBadge").style.display = "inline-flex";
-    audioElement.play().catch(()=>{});
-  };
-  document.getElementById("volumeSlider").oninput = (e) => { 
-    let v = e.target.value/100; 
-    if(audioElement) audioElement.volume = v; 
-    document.getElementById("volVal").innerText = e.target.value+"%"; 
-  };
-  document.getElementById("loopAudio").onchange = (e) => { if(audioElement) audioElement.loop = e.target.checked; };
-  document.getElementById("removeAudioBtn").onclick = () => { 
-    if(audioElement) { audioElement.pause(); audioElement.src = ""; audioElement = null; } 
-    document.getElementById("audioFileName").innerHTML = ""; 
-    document.getElementById("audioBadge").style.display = "none"; 
-  };
-  
-  // Text editor sync
-  document.getElementById("textContent").oninput = () => { 
-    let l = textLayers.find(l=>l.id===selectedLayerId); 
-    if(l){ l.text = document.getElementById("textContent").value; renderLayerListUI(); drawFrame(0,0); } 
-  };
-  document.getElementById("fontSize").oninput = (e) => { 
-    let l = textLayers.find(l=>l.id===selectedLayerId); 
-    if(l){ l.fontSize = parseInt(e.target.value); document.getElementById("fsVal").innerText = l.fontSize+"px"; drawFrame(0,0); } 
-  };
-  document.getElementById("textColor").oninput = (e) => { 
-    let l = textLayers.find(l=>l.id===selectedLayerId); 
-    if(l){ l.color = e.target.value; drawFrame(0,0); } 
-  };
-  document.getElementById("textBgColor").oninput = (e) => { 
-    let l = textLayers.find(l=>l.id===selectedLayerId); 
-    if(l){ l.bgColor = e.target.value; drawFrame(0,0); } 
-  };
-  document.getElementById("textOpacity").oninput = (e) => { 
-    let l = textLayers.find(l=>l.id===selectedLayerId); 
-    if(l){ l.opacity = parseFloat(e.target.value); document.getElementById("opVal").innerText = Math.round(l.opacity*100)+"%"; drawFrame(0,0); } 
-  };
-  document.querySelectorAll("[data-style]").forEach(btn => {
-    btn.onclick = () => { 
-      let l = textLayers.find(l=>l.id===selectedLayerId); 
-      if(l){ let style = btn.getAttribute("data-style"); l[style] = !l[style]; btn.classList.toggle("active", l[style]); drawFrame(0,0); } 
-    };
-  });
-  document.querySelectorAll("#textAnimGroup .chip").forEach(ch => {
-    ch.onclick = () => { 
-      let l = textLayers.find(l=>l.id===selectedLayerId); 
-      if(l){ 
-        l.anim = ch.getAttribute("data-tanim"); 
-        document.querySelectorAll("#textAnimGroup .chip").forEach(c=>c.classList.remove("active")); 
-        ch.classList.add("active"); 
-        drawFrame(0,0); 
-      } 
-    };
-  });
-  
-  // Upload foto
-  document.getElementById("uploadZoneDesktop").onclick = () => document.getElementById("fileInput").click();
-  document.getElementById("fileInput").onchange = (e) => {
-    const file = e.target.files[0];
-    if(!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => { 
-      const img = new Image(); 
-      img.onload = () => { 
-        uploadedImage = img; 
-        stopPreview(); 
-        drawFrame(0,0); 
-        setStatus("Foto siap"); 
-      }; 
-      img.src = ev.target.result; 
-    };
-    reader.readAsDataURL(file);
-  };
+function drawSelBox(layer) {
+  ctx.save();
+  ctx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
+  const tw = ctx.measureText(layer.text).width;
+  const th = layer.size * 1.2;
+  const pad = 16;
+  ctx.translate(layer.x, layer.y);
+  ctx.rotate(layer.rot * Math.PI / 180);
+  let bx = 0;
+  if (layer.align === 'center') bx = -tw / 2;
+  if (layer.align === 'right') bx = -tw;
+  ctx.strokeStyle = 'rgba(124,58,237,.8)';
+  ctx.lineWidth = 3;
+  ctx.setLineDash([12, 6]);
+  ctx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
+  ctx.setLineDash([]);
+  ctx.fillStyle = 'rgba(124,58,237,.9)';
+  const hs = 10;
+  ctx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
+  ctx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
+  ctx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
+  ctx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
+  ctx.restore();
 }
 
-// ========== INIT ==========
-updateCanvasSize();
-initParticles();
-setupCanvasDrag();
-bindUI();
-drawFrame(0,0);
-setStatus("✅ Siap · Upload foto");
+// ─── Preview Loop ─────────────────────────────────────────
+function startPrev() {
+  stopPrev();
+  isPaused = false;
+  initParts();
+  t0 = null;
+  const durMs = parseInt(el('dur').value) * 1000;
+  function loop(ts) {
+    if (!t0) t0 = ts;
+    const t = ts - t0;
+    drawFrame(t);
+    if (t < durMs + 200) animId = requestAnimationFrame(loop);
+    else { t0 = null; animId = requestAnimationFrame(loop); }
+  }
+  animId = requestAnimationFrame(loop);
+  setStatus('⏵ Preview — HD ' + (currentRatio === '16:9' ? '1920×1080' : '1080×1920'));
+}
+
+function stopPrev() {
+  if (animId) { cancelAnimationFrame(animId); animId = null; }
+  isPaused = true;
+  setStatus('■ Dihentikan');
+  el('progFill').style.width = '0%';
+}
+
+function resetTime() {
+  stopPrev();
+  drawFrame(0);
+  el('timeDisp').textContent = '0.0s / ' + el('dur').value + '.0s';
+}
+
+// ─── Export HD ────────────────────────────────────────────
+function doExport() {
+  if (isRec) { setStatus('Masih merekam...'); return; }
+  if (!window.MediaRecorder) { setStatus('Browser tidak support MediaRecorder'); return; }
+  stopPrev(); isRec = true; initParts();
+  const res = currentRatio === '16:9' ? '1920×1080' : '1080×1920';
+  setStatus('⏺ Merekam HD ' + res + '...');
+  const stream = cv.captureStream(30);
+  const mime = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4']
+    .find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
+  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 16000000 });
+  const chunks = [];
+  rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
+  rec.onstop = () => {
+    const blob = new Blob(chunks, { type: mime });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const ext = mime.includes('mp4') ? 'mp4' : 'webm';
+    const ratio = currentRatio.replace(':', 'x');
+    a.href = url; a.download = `videofoto-hd-${ratio}-${Date.now()}.${ext}`; a.click();
+    URL.revokeObjectURL(url);
+    setStatus('✅ Video HD berhasil diunduh! (' + res + ' · ' + ext.toUpperCase() + ')');
+    isRec = false;
+    setTimeout(() => startPrev(), 400);
+  };
+  rec.start(100);
+  const dur = parseInt(el('dur').value) * 1000;
+  let r0 = null;
+  function recLoop(ts) {
+    if (!r0) r0 = ts;
+    const t = ts - r0;
+    drawFrame(t);
+    if (t < dur) recId = requestAnimationFrame(recLoop);
+    else { rec.stop(); cancelAnimationFrame(recId); }
+  }
+  recId = requestAnimationFrame(recLoop);
+}
+
+function setStatus(msg) { el('status').textContent = msg; }
+
+el('pCount').addEventListener('input', initParts);
+
+drawFrame(0);
 </script>
 </body>
 </html>
