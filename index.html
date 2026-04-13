@@ -9,13 +9,12 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  user-select: none; /* mencegah highlight berlebihan di mobile */
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
   background: #050508;
-  font-family: system-ui, -apple-system, 'Segoe UI', 'Outfit', 'Inter', sans-serif;
+  font-family: system-ui, -apple-system, 'Segoe UI', 'Inter', sans-serif;
   color: #ededf0;
   height: 100dvh;
   overflow: hidden;
@@ -23,23 +22,10 @@ body {
   flex-direction: column;
 }
 
-/* ----- UTILS ----- */
-.flex-row {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.text-mono {
-  font-family: 'SF Mono', 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: -0.2px;
-}
-
-/* ----- HEADER (minimal) ----- */
+/* HEADER */
 .app-header {
   padding: 10px 16px;
-  background: rgba(8, 8, 14, 0.85);
+  background: rgba(8, 8, 14, 0.9);
   backdrop-filter: blur(4px);
   border-bottom: 1px solid rgba(255,255,255,0.06);
   display: flex;
@@ -54,12 +40,8 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  letter-spacing: -0.3px;
 }
-.badge-group {
-  display: flex;
-  gap: 8px;
-}
+.badge-group { display: flex; gap: 8px; }
 .badge {
   font-size: 0.6rem;
   background: #1c1c24;
@@ -69,7 +51,7 @@ body {
   border: 0.5px solid rgba(255,255,255,0.1);
 }
 
-/* ----- LAYOUT UTAMA (desktop grid) ----- */
+/* GRID UTAMA */
 .app-grid {
   display: grid;
   grid-template-columns: 260px 1fr 280px;
@@ -78,22 +60,15 @@ body {
   overflow: hidden;
 }
 
-/* panel kiri/kanan */
 .panel {
   background: #0c0c12;
   overflow-y: auto;
   scrollbar-width: thin;
   border-right: 1px solid rgba(255,255,255,0.05);
 }
-.panel-right {
-  border-left: 1px solid rgba(255,255,255,0.05);
-  border-right: none;
-}
-.panel-inner {
-  padding: 12px 14px;
-}
+.panel-right { border-left: 1px solid rgba(255,255,255,0.05); border-right: none; }
+.panel-inner { padding: 12px 14px; }
 
-/* section */
 .section {
   margin-bottom: 18px;
   border-bottom: 1px solid rgba(255,255,255,0.04);
@@ -108,7 +83,6 @@ body {
   margin-bottom: 10px;
 }
 
-/* komponen UI minimal */
 .btn {
   background: #181820;
   border: 1px solid #2a2a34;
@@ -127,7 +101,6 @@ body {
   background: linear-gradient(135deg, #7c3aed, #db2777);
   border: none;
   color: white;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
 .btn-primary:active { transform: scale(0.97); }
 .btn-success {
@@ -145,7 +118,6 @@ body {
   transition: 0.1s;
   margin-top: 6px;
 }
-.upload-zone:active { background: #181822; }
 .chip-group {
   display: flex;
   flex-wrap: wrap;
@@ -179,7 +151,6 @@ input[type="range"] {
   background: #2c2c38;
   border-radius: 3px;
 }
-input[type="range"]:focus { outline: none; }
 input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 14px;
@@ -216,7 +187,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-color: #b77cff;
 }
 
-/* canvas tengah */
+/* CANVAS AREA */
 .canvas-area {
   display: flex;
   flex-direction: column;
@@ -225,7 +196,6 @@ input[type="range"]::-webkit-slider-thumb {
   background: #000000;
   padding: 16px;
   gap: 12px;
-  position: relative;
 }
 .canvas-wrapper {
   border-radius: 20px;
@@ -246,7 +216,6 @@ canvas:active { cursor: grabbing; }
   gap: 8px;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 6px;
 }
 .progress-track {
   width: 100%;
@@ -266,7 +235,6 @@ canvas:active { cursor: grabbing; }
   font-family: monospace;
   color: #9f9fb0;
   text-align: center;
-  margin-top: 5px;
 }
 .status-pill {
   background: #181822;
@@ -276,7 +244,7 @@ canvas:active { cursor: grabbing; }
   color: #bcbcda;
 }
 
-/* text layer list */
+/* TEXT LAYER */
 .layer-list {
   display: flex;
   flex-direction: column;
@@ -314,7 +282,7 @@ canvas:active { cursor: grabbing; }
   cursor: pointer;
 }
 
-/* mobile nav (hidden di desktop) */
+/* MOBILE */
 .mobile-nav {
   display: none;
   background: #0c0c12;
@@ -329,14 +297,12 @@ canvas:active { cursor: grabbing; }
   font-size: 0.7rem;
   padding: 12px 0;
   font-weight: 500;
-  transition: 0.1s;
+  cursor: pointer;
 }
 .mobile-tab.active {
   color: #c084fc;
   border-bottom: 2px solid #c084fc;
 }
-
-/* panel mobile (default hide) */
 .mobile-panel {
   display: none;
   overflow-y: auto;
@@ -344,25 +310,14 @@ canvas:active { cursor: grabbing; }
   background: #050508;
   padding: 12px;
 }
-.mobile-panel.active {
-  display: block;
-}
+.mobile-panel.active { display: block; }
 
-/* responsif */
 @media (max-width: 780px) {
   .app-grid { display: none; }
   .mobile-nav { display: flex; }
   body { flex-direction: column; }
   .canvas-area { flex: 1; min-height: 0; padding: 12px; }
-  .canvas-wrapper { width: 100%; display: flex; justify-content: center; }
-  canvas { max-width: 100%; height: auto; }
-  .control-bar { flex-wrap: wrap; }
 }
-
-/* scroll ringan */
-::-webkit-scrollbar { width: 3px; height: 3px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #3a3a4a; border-radius: 10px; }
 </style>
 </head>
 <body>
@@ -375,7 +330,6 @@ canvas:active { cursor: grabbing; }
   </div>
 </header>
 
-<!-- MOBILE NAVIGATION -->
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-tab active" data-mtab="canvas">🎬 Canvas</button>
   <button class="mobile-tab" data-mtab="media">📷 Media</button>
@@ -383,15 +337,14 @@ canvas:active { cursor: grabbing; }
   <button class="mobile-tab" data-mtab="text">✏️ Teks</button>
 </div>
 
-<!-- DESKTOP GRID -->
 <div class="app-grid">
-  <!-- LEFT PANEL: Media & efek -->
+  <!-- LEFT PANEL -->
   <div class="panel">
     <div class="panel-inner">
       <div class="section">
         <div class="section-title">Rasio / Output</div>
         <div class="ratio-row">
-          <button class="ratio-btn active" data-ratio="16:9">16:9 (HD 1920x1080)</button>
+          <button class="ratio-btn active" data-ratio="16:9">16:9 (1920x1080)</button>
           <button class="ratio-btn" data-ratio="9:16">9:16 (1080x1920)</button>
         </div>
       </div>
@@ -404,7 +357,7 @@ canvas:active { cursor: grabbing; }
         <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" style="display: none;">
       </div>
       <div class="section">
-        <div class="section-title">✨ Efek Partikel (ringan)</div>
+        <div class="section-title">✨ Efek Partikel</div>
         <div class="chip-group" id="particleGroup">
           <span class="chip active" data-pfx="flowers">🌸 Bunga</span>
           <span class="chip" data-pfx="hearts">❤️ Hati</span>
@@ -436,7 +389,7 @@ canvas:active { cursor: grabbing; }
           <input type="range" id="durationSlider" min="4" max="20" value="7" step="0.5">
           <span id="durVal">7.0s</span>
         </div>
-        <div class="flex-row" style="justify-content: space-between;">
+        <div class="flex-row" style="display: flex; justify-content: space-between; align-items: center;">
           <span>Latar warna</span>
           <input type="color" id="bgColor" value="#050508" class="color-input">
         </div>
@@ -453,23 +406,19 @@ canvas:active { cursor: grabbing; }
       <button class="btn btn-primary" id="previewBtn">▶ Preview</button>
       <button class="btn" id="stopBtn">◼ Stop</button>
       <button class="btn" id="resetTimeBtn">⏮ Reset</button>
-      <button class="btn btn-success" id="exportBtn">⬇ Export HD Video</button>
+      <button class="btn btn-success" id="exportBtn">⬇ Export HD</button>
       <div class="status-pill" id="statusMsg">Siap</div>
     </div>
-    <div class="progress-track">
-      <div class="progress-fill" id="progressFill"></div>
-    </div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
     <div class="time-text" id="timeDisplay">0.0s / 7.0s</div>
   </div>
 
-  <!-- RIGHT PANEL: Audio & Teks -->
+  <!-- RIGHT PANEL -->
   <div class="panel panel-right">
     <div class="panel-inner">
       <div class="section">
         <div class="section-title">🎧 Audio (opsional)</div>
-        <div class="upload-zone" id="audioUploadZone" style="padding: 10px;">
-          🎵 Upload MP3 / M4A / OGG
-        </div>
+        <div class="upload-zone" id="audioUploadZone" style="padding: 10px;">🎵 Upload MP3 / M4A / OGG</div>
         <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
         <div id="audioFileName" style="font-size:0.65rem; margin-top:5px; color:#9c9cb0;"></div>
         <div class="slider-row">
@@ -477,9 +426,9 @@ canvas:active { cursor: grabbing; }
           <input type="range" id="volumeSlider" min="0" max="100" value="75">
           <span id="volVal">75%</span>
         </div>
-        <div class="flex-row">
+        <div style="display: flex; gap: 8px; margin-top: 6px;">
           <label style="font-size:0.7rem;"><input type="checkbox" id="loopAudio" checked> Loop</label>
-          <button class="btn" id="removeAudioBtn" style="margin-left:auto; background:#2a1a1a; border-color:#5a3a3a;">✖ Hapus</button>
+          <button class="btn" id="removeAudioBtn" style="margin-left:auto; background:#2a1a1a;">✖ Hapus</button>
         </div>
       </div>
       <div class="section">
@@ -493,7 +442,7 @@ canvas:active { cursor: grabbing; }
         <div class="section-title">Edit Teks</div>
         <textarea id="textContent" rows="2" placeholder="Teks Anda" style="width:100%; background:#111118; border:1px solid #2a2a36; border-radius:10px; padding:6px; color:white; font-size:0.75rem;"></textarea>
         <div class="slider-row"><span>Ukuran</span><input type="range" id="fontSize" min="24" max="160" value="60"><span id="fsVal">60px</span></div>
-        <div class="flex-row" style="justify-content: space-between;">
+        <div style="display: flex; gap: 8px; justify-content: space-between;">
           <span>Warna</span><input type="color" id="textColor" value="#ffffff" class="color-input">
           <span>BG Teks</span><input type="color" id="textBgColor" value="#000000" class="color-input">
         </div>
@@ -502,6 +451,7 @@ canvas:active { cursor: grabbing; }
           <span class="chip" data-style="italic">Italic</span>
           <span class="chip" data-style="shadow">Shadow</span>
           <span class="chip" data-style="outline">Outline</span>
+          <span class="chip" data-style="bgEnabled">BG</span>
         </div>
         <div class="chip-group" id="textAnimGroup">
           <span class="chip active" data-tanim="none">Diam</span>
@@ -515,19 +465,43 @@ canvas:active { cursor: grabbing; }
   </div>
 </div>
 
-<!-- MOBILE PANELS (duplikat ringan) -->
+<!-- MOBILE PANELS -->
 <div id="mobileCanvasPanel" class="mobile-panel active"></div>
 <div id="mobileMediaPanel" class="mobile-panel"></div>
 <div id="mobileAudioPanel" class="mobile-panel"></div>
 <div id="mobileTextPanel" class="mobile-panel"></div>
 
 <script>
-// ---------- DIMENSI ADAPTIF, PERFORMANCE FIRST ----------
+// ========== INISIALISASI VARIABEL (SEMUA SEBELUM DIPAKAI) ==========
 let currentRatio = "16:9";
 let canvasWidth = 1920, canvasHeight = 1080;
 const canvas = document.getElementById("mainCanvas");
 let ctx = canvas.getContext("2d");
 
+// State utama
+let uploadedImage = null;
+let animationId = null;
+let isPreviewing = false;
+let startTime = null;
+let durationSec = 7.0;
+let selectedTransition = "zoom";
+let selectedParticle = "flowers";
+let particles = [];
+let particleCount = 22;
+let bgColorHex = "#050508";  // ✅ Dideklarasikan SEBELUM dipakai
+
+// Audio
+let audioElement = null;
+
+// Text layers
+let textLayers = [];
+let selectedLayerId = null;
+let nextLayerId = 1;
+let dragLayer = null;
+let dragOffsetX = 0, dragOffsetY = 0;
+let isDragging = false;
+
+// ========== FUNGSI UTAMA ==========
 function updateCanvasSize() {
   if (currentRatio === "16:9") { canvasWidth = 1920; canvasHeight = 1080; }
   else { canvasWidth = 1080; canvasHeight = 1920; }
@@ -539,30 +513,7 @@ function updateCanvasSize() {
   });
   drawStaticFrame(0);
 }
-updateCanvasSize();
 
-// state global
-let uploadedImage = null;
-let animationId = null;
-let isPreviewing = false;
-let startTime = null;
-let durationSec = 7.0;
-let selectedTransition = "zoom";
-let selectedParticle = "flowers";
-let particles = [];
-let particleCount = 22;
-let bgColorHex = "#050508";
-let audioElement = null;
-let audioFileName = null;
-
-// text layers
-let textLayers = [];
-let selectedLayerId = null;
-let nextLayerId = 1;
-let dragTarget = false;
-let dragOffsetX = 0, dragOffsetY = 0;
-
-// re-use particles object array (tidak create tiap frame)
 function initParticles() {
   if (selectedParticle === "none") { particles = []; return; }
   const fxMap = {
@@ -588,7 +539,7 @@ function initParticles() {
 }
 
 function updateParticles() {
-  if (selectedParticle === "none") return;
+  if (selectedParticle === "none" || !particles.length) return;
   for (let p of particles) {
     p.x += p.vx;
     p.y += p.vy;
@@ -599,7 +550,6 @@ function updateParticles() {
   }
 }
 
-// Draw frame dengan animasi foto + partikel + teks (reuse, tanpa alokasi berat)
 function drawFrame(progress01, currentTimeMs = 0) {
   if (!ctx) return;
   ctx.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -612,37 +562,38 @@ function drawFrame(progress01, currentTimeMs = 0) {
     const targetAspect = canvasWidth / canvasHeight;
     const imgAspect = imgW / imgH;
     let drawW, drawH, drawX, drawY;
-    if (imgAspect > targetAspect) { drawH = canvasHeight; drawW = drawH * imgAspect; drawX = (canvasWidth - drawW) / 2; drawY = 0; }
-    else { drawW = canvasWidth; drawH = drawW / imgAspect; drawX = 0; drawY = (canvasHeight - drawH) / 2; }
+    if (imgAspect > targetAspect) { 
+      drawH = canvasHeight; drawW = drawH * imgAspect; drawX = (canvasWidth - drawW) / 2; drawY = 0;
+    } else { 
+      drawW = canvasWidth; drawH = drawW / imgAspect; drawX = 0; drawY = (canvasHeight - drawH) / 2;
+    }
     
-    // animasi ringan
     if (selectedTransition === "zoom") {
       const scale = 1 + progress01 * 0.12;
       ctx.translate(canvasWidth/2, canvasHeight/2);
       ctx.scale(scale, scale);
       ctx.translate(-canvasWidth/2, -canvasHeight/2);
     } else if (selectedTransition === "slide") {
-      const shiftX = progress01 * 60;
-      ctx.translate(shiftX, 0);
+      ctx.translate(progress01 * 60, 0);
     } else if (selectedTransition === "fade") {
       ctx.globalAlpha = 0.4 + progress01 * 0.6;
     } else if (selectedTransition === "ken") {
       const scaleK = 1 + progress01 * 0.1;
-      const offsetX = progress01 * 40;
-      ctx.translate(offsetX, 0);
+      ctx.translate(progress01 * 40, 0);
       ctx.scale(scaleK, scaleK);
     }
     ctx.drawImage(uploadedImage, drawX, drawY, drawW, drawH);
     ctx.restore();
-    // vignette ringan (gratis)
+    
+    // Vignette ringan
     const grad = ctx.createRadialGradient(canvasWidth/2, canvasHeight/2, canvasHeight*0.2, canvasWidth/2, canvasHeight/2, canvasHeight*0.8);
     grad.addColorStop(0, "rgba(0,0,0,0)");
-    grad.addColorStop(1, "rgba(0,0,0,0.4)");
+    grad.addColorStop(1, "rgba(0,0,0,0.35)");
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
   }
   
-  // partikel (20-30 reusable)
+  // Partikel
   if (selectedParticle !== "none" && particles.length) {
     for (let p of particles) {
       ctx.save();
@@ -652,14 +603,14 @@ function drawFrame(progress01, currentTimeMs = 0) {
       ctx.textBaseline = "middle";
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot * Math.PI / 180);
-      ctx.fillStyle = "#fff3e0";
+      ctx.fillStyle = "#fff9e6";
       ctx.fillText(p.char, 0, 0);
       ctx.restore();
     }
     updateParticles();
   }
   
-  // gambar teks layers dengan efek animasi teks ringan
+  // Teks layers
   for (let layer of textLayers) {
     let opacityLayer = layer.opacity;
     let offsetY = 0;
@@ -667,16 +618,18 @@ function drawFrame(progress01, currentTimeMs = 0) {
     if (layer.anim === "fadein") opacityLayer *= Math.min(progress01 * 3, 1);
     if (layer.anim === "slideup") offsetY = (1 - Math.min(progress01 * 2.5, 1)) * 50;
     if (layer.anim === "pulse") extraScale = 1 + Math.sin(currentTimeMs / 250) * 0.03;
+    
     ctx.save();
     ctx.globalAlpha = opacityLayer;
-    ctx.font = `${layer.italic ? "italic " : ""}${layer.bold ? "bold " : ""}${layer.fontSize}px system-ui, "Outfit", sans-serif`;
+    ctx.font = `${layer.italic ? "italic " : ""}${layer.bold ? "bold " : ""}${layer.fontSize}px system-ui, "Inter", sans-serif`;
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     let xPos = layer.x;
     let yPos = layer.y + offsetY;
     ctx.translate(xPos, yPos);
     if (extraScale !== 1) ctx.scale(extraScale, extraScale);
-    ctx.rotate(layer.rotation * Math.PI / 180);
+    if (layer.rotation) ctx.rotate(layer.rotation * Math.PI / 180);
+    
     if (layer.bgEnabled) {
       const metrics = ctx.measureText(layer.text);
       const width = metrics.width;
@@ -691,24 +644,26 @@ function drawFrame(progress01, currentTimeMs = 0) {
     ctx.restore();
   }
   
-  // progress bar bawah
+  // Progress bar
   const progressWidth = (progress01 * 100) + "%";
-  document.getElementById("progressFill").style.width = progressWidth;
+  const progressFill = document.getElementById("progressFill");
+  if (progressFill) progressFill.style.width = progressWidth;
   const currentSec = (progress01 * durationSec).toFixed(1);
   document.getElementById("timeDisplay").innerHTML = `${currentSec}s / ${durationSec.toFixed(1)}s`;
 }
 
-function drawStaticFrame(progress01) { drawFrame(progress01, performance.now()); }
+function drawStaticFrame(progress01) { 
+  drawFrame(progress01, performance.now()); 
+}
 
-// preview loop requestAnimationFrame (stop saat idle)
-let previewLoop = null;
+// Preview dengan requestAnimationFrame
 function startPreview() {
-  if (previewLoop) cancelAnimationFrame(previewLoop);
+  if (animationId) cancelAnimationFrame(animationId);
   isPreviewing = true;
   startTime = performance.now();
   if (audioElement && audioElement.src) {
     audioElement.currentTime = 0;
-    audioElement.play().catch(e => console.log("audio play fail", e));
+    audioElement.play().catch(e => console.log("audio play", e));
   }
   function step(now) {
     if (!isPreviewing) return;
@@ -718,23 +673,28 @@ function startPreview() {
     if (elapsed >= durationSec) {
       if (audioElement && audioElement.loop) audioElement.play().catch(()=>{});
       startTime = performance.now();
-      previewLoop = requestAnimationFrame(step);
+      animationId = requestAnimationFrame(step);
     } else {
-      previewLoop = requestAnimationFrame(step);
+      animationId = requestAnimationFrame(step);
     }
   }
-  previewLoop = requestAnimationFrame(step);
+  animationId = requestAnimationFrame(step);
 }
+
 function stopPreview() {
   isPreviewing = false;
-  if (previewLoop) cancelAnimationFrame(previewLoop);
-  previewLoop = null;
+  if (animationId) cancelAnimationFrame(animationId);
+  animationId = null;
   if (audioElement) audioElement.pause();
   drawFrame(0, 0);
 }
-function resetPreviewTime() { stopPreview(); drawFrame(0,0); }
 
-// Export HD (MediaRecorder)
+function resetPreviewTime() { 
+  stopPreview(); 
+  drawFrame(0, 0); 
+}
+
+// Export Video HD
 async function exportVideo() {
   if (!uploadedImage) { setStatus("❌ Upload foto dulu"); return; }
   if (!window.MediaRecorder) { setStatus("Browser tidak support MediaRecorder"); return; }
@@ -744,13 +704,12 @@ async function exportVideo() {
   let finalStream = stream;
   if (audioElement && audioElement.src) {
     try {
-      const audioCtx = new AudioContext();
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const source = audioCtx.createMediaElementSource(audioElement);
       const dest = audioCtx.createMediaStreamDestination();
       source.connect(dest);
       source.connect(audioCtx.destination);
-      const audioTracks = dest.stream.getAudioTracks();
-      const combined = new MediaStream([...stream.getVideoTracks(), ...audioTracks]);
+      const combined = new MediaStream([...stream.getVideoTracks(), ...dest.stream.getAudioTracks()]);
       finalStream = combined;
       audioElement.currentTime = 0;
       await audioCtx.resume();
@@ -758,7 +717,7 @@ async function exportVideo() {
     } catch(e) { console.warn("Audio mix fallback", e); }
   }
   const mimeType = MediaRecorder.isTypeSupported('video/webm;codecs=vp9') ? 'video/webm;codecs=vp9' : 'video/webm';
-  const recorder = new MediaRecorder(finalStream, { mimeType, videoBitsPerSecond: 12_000_000 });
+  const recorder = new MediaRecorder(finalStream, { mimeType, videoBitsPerSecond: 12000000 });
   let chunks = [];
   recorder.ondataavailable = e => { if(e.data.size) chunks.push(e.data); };
   recorder.onstop = () => {
@@ -787,9 +746,77 @@ async function exportVideo() {
   requestAnimationFrame(recordFrame);
 }
 
-// Helper UI & text layer drag di canvas
-function handleCanvasDragEvents() {
-  let isDragging = false, dragLayer = null, dragStartX=0,dragStartY=0;
+// ========== TEXT LAYER FUNCTIONS ==========
+function addTextLayer() {
+  const newId = nextLayerId++;
+  textLayers.push({
+    id: newId, text: "Teks Baru", x: canvasWidth/2, y: canvasHeight/2, fontSize: 60,
+    color: "#ffffff", bgColor: "#000000", bgEnabled: false, bold: false, italic: false,
+    shadow: true, outline: false, opacity: 1, rotation: 0, anim: "none"
+  });
+  selectedLayerId = newId;
+  renderLayerListUI();
+  syncEditorWithLayer(textLayers.find(l=>l.id===newId));
+  drawFrame(0,0);
+}
+
+function deleteLayer(id) {
+  textLayers = textLayers.filter(l=>l.id !== id);
+  if (selectedLayerId === id) selectedLayerId = textLayers.length ? textLayers[0].id : null;
+  renderLayerListUI();
+  if (!selectedLayerId) document.getElementById("textEditorPanel").style.display = "none";
+  drawFrame(0,0);
+}
+
+function syncEditorWithLayer(layer) {
+  if(!layer) return;
+  document.getElementById("textEditorPanel").style.display = "block";
+  document.getElementById("textContent").value = layer.text;
+  document.getElementById("fontSize").value = layer.fontSize; 
+  document.getElementById("fsVal").innerText = layer.fontSize+"px";
+  document.getElementById("textColor").value = layer.color;
+  document.getElementById("textBgColor").value = layer.bgColor;
+  document.getElementById("textOpacity").value = layer.opacity; 
+  document.getElementById("opVal").innerText = Math.round(layer.opacity*100)+"%";
+  document.querySelectorAll("[data-style]").forEach(chip => {
+    chip.classList.toggle("active", layer[chip.getAttribute("data-style")] === true);
+  });
+  document.querySelectorAll("#textAnimGroup .chip").forEach(chip => {
+    chip.classList.toggle("active", chip.getAttribute("data-tanim") === layer.anim);
+  });
+}
+
+function renderLayerListUI() {
+  const container = document.getElementById("textLayerList");
+  if (!container) return;
+  if (!textLayers.length) { 
+    container.innerHTML = "<div style='font-size:0.7rem; color:#6a6a80;'>Belum ada teks</div>"; 
+    return; 
+  }
+  container.innerHTML = textLayers.map(l => `<div class="layer-item ${selectedLayerId===l.id ? 'active' : ''}" data-id="${l.id}">
+    <span class="layer-text">${l.text.substring(0,18)}</span>
+    <button class="del-layer" data-del="${l.id}">✕</button>
+  </div>`).join("");
+  container.querySelectorAll(".layer-item").forEach(el => {
+    const id = parseInt(el.getAttribute("data-id"));
+    el.addEventListener("click", (e) => { 
+      if(!e.target.classList.contains("del-layer")) { 
+        selectedLayerId = id; 
+        syncEditorWithLayer(textLayers.find(l=>l.id===id)); 
+        renderLayerListUI(); 
+        drawFrame(0,0); 
+      } 
+    });
+    const delBtn = el.querySelector(".del-layer");
+    if(delBtn) delBtn.addEventListener("click", (e) => { 
+      e.stopPropagation(); 
+      deleteLayer(parseInt(delBtn.getAttribute("data-del"))); 
+    });
+  });
+}
+
+// Drag text di canvas
+function setupCanvasDrag() {
   canvas.addEventListener("mousedown", (e) => {
     const rect = canvas.getBoundingClientRect();
     const scaleX = canvas.width / rect.width;
@@ -800,11 +827,13 @@ function handleCanvasDragEvents() {
       const l = textLayers[i];
       ctx.font = `${l.fontSize}px system-ui`;
       const metrics = ctx.measureText(l.text);
-      const halfW = metrics.width/2 + 15;
-      const halfH = l.fontSize/2 + 15;
+      const halfW = metrics.width/2 + 20;
+      const halfH = l.fontSize/2 + 20;
       if (Math.abs(mouseX - l.x) < halfW && Math.abs(mouseY - l.y) < halfH) {
-        dragLayer = l; isDragging = true;
-        dragOffsetX = l.x - mouseX; dragOffsetY = l.y - mouseY;
+        dragLayer = l;
+        isDragging = true;
+        dragOffsetX = l.x - mouseX;
+        dragOffsetY = l.y - mouseY;
         selectedLayerId = l.id;
         syncEditorWithLayer(l);
         renderLayerListUI();
@@ -820,73 +849,71 @@ function handleCanvasDragEvents() {
     const scaleY = canvas.height / rect.height;
     let newX = (e.clientX - rect.left) * scaleX + dragOffsetX;
     let newY = (e.clientY - rect.top) * scaleY + dragOffsetY;
-    dragLayer.x = Math.min(Math.max(newX, 40), canvasWidth-40);
-    dragLayer.y = Math.min(Math.max(newY, 40), canvasHeight-40);
+    dragLayer.x = Math.min(Math.max(newX, 50), canvasWidth-50);
+    dragLayer.y = Math.min(Math.max(newY, 50), canvasHeight-50);
     drawFrame(isPreviewing ? (performance.now() - startTime)/1000 / durationSec : 0, performance.now());
   });
-  window.addEventListener("mouseup", () => { isDragging = false; dragLayer = null; canvas.style.cursor = "grab"; });
-}
-// Text Layer helpers
-function addTextLayer() {
-  const newId = nextLayerId++;
-  textLayers.push({
-    id: newId, text: "Teks Baru", x: canvasWidth/2, y: canvasHeight/2, fontSize: 60,
-    color: "#ffffff", bgColor: "#000000", bgEnabled: false, bold: false, italic: false,
-    shadow: true, outline: false, opacity: 1, rotation: 0, anim: "none"
-  });
-  selectedLayerId = newId;
-  renderLayerListUI();
-  syncEditorWithLayer(textLayers.find(l=>l.id===newId));
-  drawFrame(0,0);
-}
-function deleteLayer(id) {
-  textLayers = textLayers.filter(l=>l.id !== id);
-  if (selectedLayerId === id) selectedLayerId = textLayers.length ? textLayers[0].id : null;
-  renderLayerListUI();
-  drawFrame(0,0);
-}
-function syncEditorWithLayer(layer) {
-  if(!layer) return;
-  document.getElementById("textEditorPanel").style.display = "block";
-  document.getElementById("textContent").value = layer.text;
-  document.getElementById("fontSize").value = layer.fontSize; document.getElementById("fsVal").innerText = layer.fontSize+"px";
-  document.getElementById("textColor").value = layer.color;
-  document.getElementById("textBgColor").value = layer.bgColor;
-  document.getElementById("textOpacity").value = layer.opacity; document.getElementById("opVal").innerText = Math.round(layer.opacity*100)+"%";
-  // update style chips
-  document.querySelectorAll("[data-style]").forEach(chip => chip.classList.toggle("active", layer[chip.getAttribute("data-style")]===true));
-}
-function renderLayerListUI() {
-  const container = document.getElementById("textLayerList");
-  if (!container) return;
-  if (!textLayers.length) { container.innerHTML = "<div style='font-size:0.7rem; color:#6a6a80;'>Belum ada teks</div>"; return; }
-  container.innerHTML = textLayers.map(l => `<div class="layer-item ${selectedLayerId===l.id ? 'active' : ''}" data-id="${l.id}">
-    <span class="layer-text">${l.text.substring(0,18)}</span>
-    <button class="del-layer" data-del="${l.id}">✕</button>
-  </div>`).join("");
-  container.querySelectorAll(".layer-item").forEach(el => {
-    const id = parseInt(el.getAttribute("data-id"));
-    el.addEventListener("click", (e) => { if(!e.target.classList.contains("del-layer")) { selectedLayerId = id; syncEditorWithLayer(textLayers.find(l=>l.id===id)); renderLayerListUI(); drawFrame(0,0); } });
-    const delBtn = el.querySelector(".del-layer");
-    if(delBtn) delBtn.addEventListener("click", (e) => { e.stopPropagation(); deleteLayer(parseInt(delBtn.getAttribute("data-del"))); });
+  window.addEventListener("mouseup", () => { 
+    isDragging = false; 
+    dragLayer = null; 
+    canvas.style.cursor = "grab"; 
   });
 }
 
-// Event Binding & Init
+function setStatus(msg) { 
+  const el = document.getElementById("statusMsg");
+  if(el) el.innerText = msg;
+}
+
+// ========== BIND EVENT ==========
 function bindUI() {
-  document.querySelectorAll("[data-ratio]").forEach(btn => btn.onclick = () => { currentRatio = btn.getAttribute("data-ratio"); updateCanvasSize(); initParticles(); drawFrame(0,0); });
-  document.getElementById("durationSlider").oninput = (e) => { durationSec = parseFloat(e.target.value); document.getElementById("durVal").innerText = durationSec.toFixed(1)+"s"; drawFrame(0,0); };
-  document.getElementById("bgColor").oninput = (e) => { bgColorHex = e.target.value; drawFrame(0,0); };
-  document.querySelectorAll("#particleGroup .chip").forEach(chip => chip.onclick = () => { document.querySelectorAll("#particleGroup .chip").forEach(c=>c.classList.remove("active")); chip.classList.add("active"); selectedParticle = chip.getAttribute("data-pfx"); initParticles(); drawFrame(0,0); });
-  document.querySelectorAll("#animGroup .chip").forEach(chip => chip.onclick = () => { document.querySelectorAll("#animGroup .chip").forEach(c=>c.classList.remove("active")); chip.classList.add("active"); selectedTransition = chip.getAttribute("data-trans"); drawFrame(0,0); });
-  document.getElementById("particleCount").oninput = (e) => { particleCount = parseInt(e.target.value); document.getElementById("pcntVal").innerText = particleCount; initParticles(); drawFrame(0,0); };
+  document.querySelectorAll("[data-ratio]").forEach(btn => {
+    btn.onclick = () => { 
+      currentRatio = btn.getAttribute("data-ratio"); 
+      updateCanvasSize(); 
+      initParticles(); 
+      drawFrame(0,0); 
+    };
+  });
+  document.getElementById("durationSlider").oninput = (e) => { 
+    durationSec = parseFloat(e.target.value); 
+    document.getElementById("durVal").innerText = durationSec.toFixed(1)+"s"; 
+    drawFrame(0,0); 
+  };
+  document.getElementById("bgColor").oninput = (e) => { 
+    bgColorHex = e.target.value; 
+    drawFrame(0,0); 
+  };
+  document.querySelectorAll("#particleGroup .chip").forEach(chip => {
+    chip.onclick = () => { 
+      document.querySelectorAll("#particleGroup .chip").forEach(c=>c.classList.remove("active")); 
+      chip.classList.add("active"); 
+      selectedParticle = chip.getAttribute("data-pfx"); 
+      initParticles(); 
+      drawFrame(0,0); 
+    };
+  });
+  document.querySelectorAll("#animGroup .chip").forEach(chip => {
+    chip.onclick = () => { 
+      document.querySelectorAll("#animGroup .chip").forEach(c=>c.classList.remove("active")); 
+      chip.classList.add("active"); 
+      selectedTransition = chip.getAttribute("data-trans"); 
+      drawFrame(0,0); 
+    };
+  });
+  document.getElementById("particleCount").oninput = (e) => { 
+    particleCount = parseInt(e.target.value); 
+    document.getElementById("pcntVal").innerText = particleCount; 
+    initParticles(); 
+    drawFrame(0,0); 
+  };
   document.getElementById("previewBtn").onclick = startPreview;
   document.getElementById("stopBtn").onclick = stopPreview;
   document.getElementById("resetTimeBtn").onclick = resetPreviewTime;
   document.getElementById("exportBtn").onclick = exportVideo;
   document.getElementById("addTextBtn").onclick = addTextLayer;
   
-  // audio
+  // Audio
   document.getElementById("audioUploadZone").onclick = () => document.getElementById("audioFileInput").click();
   document.getElementById("audioFileInput").onchange = (e) => {
     const file = e.target.files[0];
@@ -896,24 +923,60 @@ function bindUI() {
     audioElement = new Audio(url);
     audioElement.loop = document.getElementById("loopAudio").checked;
     audioElement.volume = document.getElementById("volumeSlider").value / 100;
-    audioFileName = file.name;
-    document.getElementById("audioFileName").innerHTML = `🎵 ${file.name.substring(0,20)}`;
+    document.getElementById("audioFileName").innerHTML = `🎵 ${file.name.substring(0,25)}`;
     document.getElementById("audioBadge").style.display = "inline-flex";
     audioElement.play().catch(()=>{});
   };
-  document.getElementById("volumeSlider").oninput = (e) => { let v = e.target.value/100; if(audioElement) audioElement.volume = v; document.getElementById("volVal").innerText = e.target.value+"%"; };
+  document.getElementById("volumeSlider").oninput = (e) => { 
+    let v = e.target.value/100; 
+    if(audioElement) audioElement.volume = v; 
+    document.getElementById("volVal").innerText = e.target.value+"%"; 
+  };
   document.getElementById("loopAudio").onchange = (e) => { if(audioElement) audioElement.loop = e.target.checked; };
-  document.getElementById("removeAudioBtn").onclick = () => { if(audioElement) { audioElement.pause(); audioElement.src = ""; audioElement = null; } document.getElementById("audioFileName").innerHTML = ""; document.getElementById("audioBadge").style.display = "none"; };
+  document.getElementById("removeAudioBtn").onclick = () => { 
+    if(audioElement) { audioElement.pause(); audioElement.src = ""; audioElement = null; } 
+    document.getElementById("audioFileName").innerHTML = ""; 
+    document.getElementById("audioBadge").style.display = "none"; 
+  };
   
-  // text property sync
-  const textarea = document.getElementById("textContent");
-  textarea.oninput = () => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.text = textarea.value; renderLayerListUI(); drawFrame(0,0); } };
-  document.getElementById("fontSize").oninput = (e) => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.fontSize = parseInt(e.target.value); document.getElementById("fsVal").innerText = l.fontSize+"px"; drawFrame(0,0); } };
-  document.getElementById("textColor").oninput = (e) => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.color = e.target.value; drawFrame(0,0); } };
-  document.getElementById("textBgColor").oninput = (e) => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.bgColor = e.target.value; drawFrame(0,0); } };
-  document.getElementById("textOpacity").oninput = (e) => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.opacity = parseFloat(e.target.value); document.getElementById("opVal").innerText = Math.round(l.opacity*100)+"%"; drawFrame(0,0); } };
-  document.querySelectorAll("[data-style]").forEach(btn => btn.onclick = () => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ let style = btn.getAttribute("data-style"); l[style] = !l[style]; btn.classList.toggle("active", l[style]); drawFrame(0,0); } });
-  document.querySelectorAll("#textAnimGroup .chip").forEach(ch => ch.onclick = () => { let l = textLayers.find(l=>l.id===selectedLayerId); if(l){ l.anim = ch.getAttribute("data-tanim"); document.querySelectorAll("#textAnimGroup .chip").forEach(c=>c.classList.remove("active")); ch.classList.add("active"); drawFrame(0,0); } });
+  // Text editor sync
+  document.getElementById("textContent").oninput = () => { 
+    let l = textLayers.find(l=>l.id===selectedLayerId); 
+    if(l){ l.text = document.getElementById("textContent").value; renderLayerListUI(); drawFrame(0,0); } 
+  };
+  document.getElementById("fontSize").oninput = (e) => { 
+    let l = textLayers.find(l=>l.id===selectedLayerId); 
+    if(l){ l.fontSize = parseInt(e.target.value); document.getElementById("fsVal").innerText = l.fontSize+"px"; drawFrame(0,0); } 
+  };
+  document.getElementById("textColor").oninput = (e) => { 
+    let l = textLayers.find(l=>l.id===selectedLayerId); 
+    if(l){ l.color = e.target.value; drawFrame(0,0); } 
+  };
+  document.getElementById("textBgColor").oninput = (e) => { 
+    let l = textLayers.find(l=>l.id===selectedLayerId); 
+    if(l){ l.bgColor = e.target.value; drawFrame(0,0); } 
+  };
+  document.getElementById("textOpacity").oninput = (e) => { 
+    let l = textLayers.find(l=>l.id===selectedLayerId); 
+    if(l){ l.opacity = parseFloat(e.target.value); document.getElementById("opVal").innerText = Math.round(l.opacity*100)+"%"; drawFrame(0,0); } 
+  };
+  document.querySelectorAll("[data-style]").forEach(btn => {
+    btn.onclick = () => { 
+      let l = textLayers.find(l=>l.id===selectedLayerId); 
+      if(l){ let style = btn.getAttribute("data-style"); l[style] = !l[style]; btn.classList.toggle("active", l[style]); drawFrame(0,0); } 
+    };
+  });
+  document.querySelectorAll("#textAnimGroup .chip").forEach(ch => {
+    ch.onclick = () => { 
+      let l = textLayers.find(l=>l.id===selectedLayerId); 
+      if(l){ 
+        l.anim = ch.getAttribute("data-tanim"); 
+        document.querySelectorAll("#textAnimGroup .chip").forEach(c=>c.classList.remove("active")); 
+        ch.classList.add("active"); 
+        drawFrame(0,0); 
+      } 
+    };
+  });
   
   // Upload foto
   document.getElementById("uploadZoneDesktop").onclick = () => document.getElementById("fileInput").click();
@@ -921,16 +984,25 @@ function bindUI() {
     const file = e.target.files[0];
     if(!file) return;
     const reader = new FileReader();
-    reader.onload = (ev) => { const img = new Image(); img.onload = () => { uploadedImage = img; stopPreview(); drawFrame(0,0); setStatus("Foto siap"); }; img.src = ev.target.result; };
+    reader.onload = (ev) => { 
+      const img = new Image(); 
+      img.onload = () => { 
+        uploadedImage = img; 
+        stopPreview(); 
+        drawFrame(0,0); 
+        setStatus("Foto siap"); 
+      }; 
+      img.src = ev.target.result; 
+    };
     reader.readAsDataURL(file);
   };
 }
-function setStatus(msg) { document.getElementById("statusMsg").innerText = msg; }
-// mobile panels copas UI sederhana
-function initMobileFallback() { /* cukup redirect ui sama, tapi sederhana */ }
-handleCanvasDragEvents();
-bindUI();
+
+// ========== INIT ==========
+updateCanvasSize();
 initParticles();
+setupCanvasDrag();
+bindUI();
 drawFrame(0,0);
 setStatus("✅ Siap · Upload foto");
 </script>
