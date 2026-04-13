@@ -28,8 +28,6 @@ body {
   display: flex;
   flex-direction: column;
 }
-
-/* ── Header ── */
 header {
   padding: 1rem 2rem;
   border-bottom: 1px solid var(--border);
@@ -59,8 +57,6 @@ header .hint {
   border-radius: 20px;
   padding: 4px 12px;
 }
-
-/* ── Layout ── */
 .workspace {
   flex: 1;
   display: grid;
@@ -69,8 +65,6 @@ header .hint {
   height: calc(100vh - 57px);
   overflow: hidden;
 }
-
-/* ── Panels ── */
 .panel {
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -89,8 +83,6 @@ header .hint {
   padding: .9rem 1.1rem .5rem;
 }
 .section { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); }
-
-/* Upload */
 .upload-zone {
   border: 1.5px dashed var(--border2);
   border-radius: 10px;
@@ -113,12 +105,8 @@ header .hint {
 .upload-zone.has-img:hover .overlay-btn { opacity: 1; }
 .up-ico { font-size: 1.8rem; margin-bottom: .4rem; }
 .up-txt { font-size: .78rem; color: var(--muted); }
-
-/* Lbl */
 .lbl { font-size: .72rem; color: var(--muted); margin-bottom: 5px; margin-top: 10px; }
 .lbl:first-child { margin-top: 0; }
-
-/* Inputs */
 input[type=text], textarea, select {
   width: 100%;
   background: var(--surface2);
@@ -133,7 +121,6 @@ input[type=text], textarea, select {
 }
 input[type=text]:focus, textarea:focus { border-color: var(--accent); }
 textarea { resize: none; height: 52px; line-height: 1.4; }
-
 input[type=range] {
   -webkit-appearance: none;
   width: 100%; height: 3px;
@@ -150,14 +137,11 @@ input[type=range]::-webkit-slider-thumb {
 .sl-row { display: flex; align-items: center; gap: 8px; }
 .sl-row input[type=range] { flex: 1; }
 .sl-val { font-size: .75rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
-
 input[type=color] {
   width: 32px; height: 26px;
   border: 1px solid var(--border2); border-radius: 6px;
   cursor: pointer; padding: 2px; background: var(--surface2);
 }
-
-/* Chips */
 .chips { display: flex; flex-wrap: wrap; gap: 5px; }
 .chip {
   font-size: .72rem; padding: 4px 10px; border-radius: 20px; cursor: pointer;
@@ -166,8 +150,6 @@ input[type=color] {
 }
 .chip:hover { border-color: var(--accent); color: var(--text); }
 .chip.on { background: rgba(124,58,237,.1); color: var(--accent); border-color: rgba(124,58,237,.35); }
-
-/* Text layer list */
 .layer-list { display: flex; flex-direction: column; gap: 6px; }
 .layer-item {
   background: var(--surface2);
@@ -191,8 +173,6 @@ input[type=color] {
   transition: .15s; flex-shrink: 0;
 }
 .layer-del:hover { background: rgba(255,100,100,.25); }
-
-/* Btn */
 .btn {
   padding: 7px 14px; border-radius: 8px; font-size: .78rem; cursor: pointer;
   border: 1px solid var(--border2); background: transparent; color: var(--text);
@@ -212,12 +192,7 @@ input[type=color] {
 .btn-export:hover { opacity: .88; background: linear-gradient(135deg, #1a8f52, #0f6b3c); }
 .btn-sm { padding: 5px 10px; font-size: .72rem; }
 .btns-row { display: flex; gap: 6px; flex-wrap: wrap; }
-
-/* Row grid */
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
-
-/* ── Canvas area ── */
 .canvas-area {
   background: #e8e8f0;
   display: flex;
@@ -241,6 +216,7 @@ input[type=color] {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 0 0 1px var(--border2), 0 20px 60px rgba(0,0,0,.6);
+  flex-shrink: 0;
 }
 canvas { display: block; cursor: default; }
 .canvas-controls {
@@ -261,8 +237,6 @@ canvas { display: block; cursor: default; }
   font-size: .72rem; color: var(--muted); text-align: center; margin-top: 4px;
   font-variant-numeric: tabular-nums;
 }
-
-/* Status */
 #status {
   font-size: .75rem; color: var(--muted);
   background: var(--surface2);
@@ -270,8 +244,6 @@ canvas { display: block; cursor: default; }
   border-radius: 6px;
   padding: 4px 10px;
 }
-
-/* Selected text indicator on canvas */
 .drag-hint {
   position: absolute;
   bottom: 8px; left: 50%; transform: translateX(-50%);
@@ -279,8 +251,6 @@ canvas { display: block; cursor: default; }
   pointer-events: none;
   white-space: nowrap;
 }
-
-/* Style btns */
 .style-btns { display: flex; gap: 4px; }
 .style-btn {
   width: 28px; height: 26px; border-radius: 6px;
@@ -290,16 +260,10 @@ canvas { display: block; cursor: default; }
   transition: .15s;
 }
 .style-btn.on { background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.45); color: var(--accent); }
-
-/* Align btns */
 .align-btns { display: flex; gap: 4px; }
-
-/* Scroll */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
-
-/* Anim pos badge */
 .anim-badge {
   display: inline-block;
   font-size: .65rem;
@@ -313,17 +277,52 @@ canvas { display: block; cursor: default; }
 }
 .anim-badge.on { background: rgba(37,99,235,.1); color: var(--accent3); border-color: rgba(37,99,235,.35); }
 
-/* Tooltip text on canvas handles */
-.sel-box-label {
-  position: absolute;
-  background: rgba(176,106,255,.9);
-  color: #fff;
+/* Rasio toggle */
+.ratio-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.ratio-btn {
+  flex: 1;
+  padding: 6px 10px;
+  border: none;
+  background: var(--surface2);
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: .75rem;
+  cursor: pointer;
+  transition: .15s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.ratio-btn .ratio-icon {
+  display: block;
+  background: var(--border2);
+  border-radius: 2px;
+}
+.ratio-btn.active {
+  background: rgba(124,58,237,.12);
+  color: var(--accent);
+}
+.ratio-btn:first-child { border-right: 1px solid var(--border2); }
+
+/* HD badge */
+.hd-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: .65rem;
-  padding: 2px 6px;
-  border-radius: 4px;
-  pointer-events: none;
-  white-space: nowrap;
-  transform: translateY(-100%);
+  background: rgba(37,99,235,.1);
+  color: var(--accent3);
+  border: 1px solid rgba(37,99,235,.25);
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -331,7 +330,10 @@ canvas { display: block; cursor: default; }
 
 <header>
   <div class="logo">✦ VidioFoto</div>
-  <div class="hint">Geser teks langsung di canvas</div>
+  <div style="display:flex;align-items:center;gap:8px">
+    <span class="hd-badge">HD 1080p</span>
+    <div class="hint">Geser teks langsung di canvas</div>
+  </div>
 </header>
 
 <div class="workspace">
@@ -339,6 +341,23 @@ canvas { display: block; cursor: default; }
   <!-- LEFT PANEL -->
   <div class="panel">
     <div class="panel-title">Media & Efek</div>
+
+    <div class="section">
+      <div class="lbl">Rasio Aspek</div>
+      <div class="ratio-toggle">
+        <button class="ratio-btn active" id="ratio169" onclick="setRatio('16:9')">
+          <span class="ratio-icon" style="width:28px;height:16px"></span>
+          16:9
+          <span style="font-size:.6rem;color:var(--muted)">YouTube</span>
+        </button>
+        <button class="ratio-btn" id="ratio916" onclick="setRatio('9:16')">
+          <span class="ratio-icon" style="width:16px;height:28px"></span>
+          9:16
+          <span style="font-size:.6rem;color:var(--muted)">Reels</span>
+        </button>
+      </div>
+      <div class="lbl" style="margin-top:8px;font-size:.65rem;color:var(--muted);font-style:italic" id="resInfo">Output: 1920 × 1080 px (Full HD)</div>
+    </div>
 
     <div class="section">
       <div class="lbl">Foto</div>
@@ -392,9 +411,9 @@ canvas { display: block; cursor: default; }
   </div>
 
   <!-- CENTER: Canvas -->
-  <div class="canvas-area">
-    <div class="canvas-wrap">
-      <canvas id="cv" width="640" height="360"></canvas>
+  <div class="canvas-area" id="canvasArea">
+    <div class="canvas-wrap" id="canvasWrap">
+      <canvas id="cv"></canvas>
       <div class="drag-hint" id="dragHint">Klik teks di canvas untuk memilih, lalu seret</div>
     </div>
 
@@ -408,7 +427,7 @@ canvas { display: block; cursor: default; }
       <button class="btn" onclick="stopPrev()">■ Stop</button>
       <button class="btn btn-sm" onclick="resetTime()">⏮ Reset</button>
       <div id="status">Upload foto untuk mulai</div>
-      <button class="btn btn-export" onclick="doExport()">⬇ Export Video</button>
+      <button class="btn btn-export" onclick="doExport()">⬇ Export HD Video</button>
     </div>
   </div>
 
@@ -426,7 +445,6 @@ canvas { display: block; cursor: default; }
       </div>
     </div>
 
-    <!-- Text properties (shown when layer selected) -->
     <div class="section" id="txtProps" style="display:none">
       <div class="lbl">Isi Teks</div>
       <textarea id="txtContent" onchange="updateLayer()" oninput="updateLayer()" placeholder="Ketik teks..."></textarea>
@@ -436,15 +454,15 @@ canvas { display: block; cursor: default; }
         <div>
           <div class="sl-row">
             <span style="font-size:.7rem;color:var(--muted);min-width:10px">X</span>
-            <input type="range" min="0" max="640" value="320" id="posX" oninput="updateLayerPos()">
-            <span class="sl-val" id="posXV">320</span>
+            <input type="range" min="0" max="1920" value="960" id="posX" oninput="updateLayerPos()">
+            <span class="sl-val" id="posXV">960</span>
           </div>
         </div>
         <div>
           <div class="sl-row">
             <span style="font-size:.7rem;color:var(--muted);min-width:10px">Y</span>
-            <input type="range" min="0" max="360" value="50" id="posY" oninput="updateLayerPos()">
-            <span class="sl-val" id="posYV">50</span>
+            <input type="range" min="0" max="1080" value="100" id="posY" oninput="updateLayerPos()">
+            <span class="sl-val" id="posYV">100</span>
           </div>
         </div>
       </div>
@@ -453,8 +471,8 @@ canvas { display: block; cursor: default; }
       <div class="row2">
         <div>
           <div class="sl-row">
-            <input type="range" min="12" max="72" value="28" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()">
-            <span class="sl-val" id="tsV">28px</span>
+            <input type="range" min="20" max="200" value="80" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()">
+            <span class="sl-val" id="tsV">80px</span>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:6px">
@@ -504,27 +522,74 @@ canvas { display: block; cursor: default; }
         <span class="sl-val" id="opV">100%</span>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-// ─── State ───────────────────────────────────────────────
+// ─── Dimensi HD ───────────────────────────────────────────
+// Selalu render di 1080p, scale untuk tampilan
+const RATIOS = {
+  '16:9': { W: 1920, H: 1080, dispW: 580, dispH: 326 },
+  '9:16': { W: 1080, H: 1920, dispW: 270, dispH: 480 }
+};
+let currentRatio = '16:9';
+let W = 1920, H = 1080;
+let DISP_W = 580, DISP_H = 326;
+
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
-const W = 640, H = 360;
+
+function setRatio(ratio) {
+  currentRatio = ratio;
+  const r = RATIOS[ratio];
+  W = r.W; H = r.H; DISP_W = r.dispW; DISP_H = r.dispH;
+
+  // Update canvas internal size (HD)
+  cv.width = W; cv.height = H;
+
+  // Update canvas display size
+  cv.style.width = DISP_W + 'px';
+  cv.style.height = DISP_H + 'px';
+
+  // Update pos range limits
+  document.getElementById('posX').max = W;
+  document.getElementById('posY').max = H;
+
+  // Default text position to center
+  document.getElementById('posX').value = Math.round(W / 2);
+  document.getElementById('posY').value = Math.round(H * 0.08);
+  sv('posXV', Math.round(W / 2));
+  sv('posYV', Math.round(H * 0.08));
+
+  // Update info label
+  document.getElementById('resInfo').textContent = ratio === '16:9'
+    ? 'Output: 1920 × 1080 px (Full HD)'
+    : 'Output: 1080 × 1920 px (Full HD Reels)';
+
+  // Update active button
+  document.getElementById('ratio169').classList.toggle('active', ratio === '16:9');
+  document.getElementById('ratio916').classList.toggle('active', ratio === '9:16');
+
+  initParts();
+  drawFrame(0);
+}
+
+// ─── State ───────────────────────────────────────────────
 let img = null;
 let animId = null, recId = null;
 let isRec = false;
-let t0 = null, pausedAt = 0, isPaused = true;
+let t0 = null, isPaused = true;
 let selFx = 'flowers', selTr = 'zoom';
 let parts = [];
 let layers = [];
 let selLayerId = null;
 let layerIdCounter = 0;
+let dragState = null;
 
-// Drag state
-let dragState = null; // {layerId, offX, offY}
+// Init canvas
+cv.width = W; cv.height = H;
+cv.style.width = DISP_W + 'px';
+cv.style.height = DISP_H + 'px';
 
 // ─── Helpers ──────────────────────────────────────────────
 function sv(id, val) { document.getElementById(id).textContent = val; }
@@ -549,7 +614,6 @@ el('fi').addEventListener('change', e => {
   r.readAsDataURL(f);
 });
 
-// Drag & drop on upload zone
 const uz = el('uploadZone');
 uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor = 'var(--accent)'; });
 uz.addEventListener('dragleave', () => { uz.style.borderColor = ''; });
@@ -593,9 +657,10 @@ function initParts() {
 function mkPart(top = false) {
   const d = FXD[selFx]; if (!d.chars.length) return { dead: true };
   return {
-    x: Math.random() * W, y: top ? -30 : Math.random() * H,
-    vy: 0.45 + Math.random() * 1.3, vx: (Math.random() - .5) * .9,
-    size: 14 + Math.random() * 18,
+    x: Math.random() * W, y: top ? -60 : Math.random() * H,
+    vy: (0.45 + Math.random() * 1.3) * (H / 360),
+    vx: (Math.random() - .5) * .9 * (W / 640),
+    size: (14 + Math.random() * 18) * (H / 360),
     ch: d.chars[Math.floor(Math.random() * d.chars.length)],
     col: d.cols[Math.floor(Math.random() * d.cols.length)],
     a: 0.45 + Math.random() * .55,
@@ -611,12 +676,10 @@ function addTextLayer() {
   const id = ++layerIdCounter;
   const layer = {
     id, text: 'Teks ' + id,
-    x: W / 2, y: 50 + (layers.length * 60),
-    size: 28, color: '#ffffff', bgColor: '#000000',
+    x: W / 2, y: 100 + (layers.length * 180),
+    size: 80, color: '#ffffff', bgColor: '#000000',
     bold: false, italic: false, shadow: true, outline: false, bg: false,
-    align: 'left',
-    rot: 0, opacity: 1,
-    anim: 'none'
+    align: 'left', rot: 0, opacity: 1, anim: 'none'
   };
   layers.push(layer);
   selectLayer(id);
@@ -630,6 +693,7 @@ function selectLayer(id) {
   if (!layer) { el('txtProps').style.display = 'none'; return; }
   el('txtProps').style.display = 'block';
   el('txtContent').value = layer.text;
+  el('posX').max = W; el('posY').max = H;
   el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
   el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
   el('txtSize').value = layer.size; sv('tsV', layer.size + 'px');
@@ -637,18 +701,9 @@ function selectLayer(id) {
   el('txtBgColor').value = layer.bgColor;
   el('txtRot').value = layer.rot; sv('rotV', layer.rot + '°');
   el('txtOpacity').value = Math.round(layer.opacity * 100); sv('opV', Math.round(layer.opacity * 100) + '%');
-  // Style buttons
-  document.querySelectorAll('[data-s]').forEach(b => {
-    b.classList.toggle('on', !!layer[b.dataset.s]);
-  });
-  // Align buttons
-  document.querySelectorAll('[data-a]').forEach(b => {
-    b.classList.toggle('on', b.dataset.a === layer.align);
-  });
-  // Anim badges
-  document.querySelectorAll('[data-anim]').forEach(b => {
-    b.classList.toggle('on', b.dataset.anim === layer.anim);
-  });
+  document.querySelectorAll('[data-s]').forEach(b => b.classList.toggle('on', !!layer[b.dataset.s]));
+  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === layer.align));
+  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === layer.anim));
   el('dragHint').textContent = 'Seret teks "' + layer.text.substring(0, 20) + '" di canvas';
 }
 
@@ -712,9 +767,10 @@ function setTextAnim(badge, anim) {
   document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === anim));
 }
 
-// ─── Canvas Drag ──────────────────────────────────────────
+// ─── Canvas Drag (koordinat skala penuh) ──────────────────
 function getCanvasPos(e) {
   const rect = cv.getBoundingClientRect();
+  // rect ukuran display, canvas internal = HD
   const scaleX = W / rect.width, scaleY = H / rect.height;
   return {
     x: (e.clientX - rect.left) * scaleX,
@@ -723,16 +779,15 @@ function getCanvasPos(e) {
 }
 
 function hitTest(mx, my) {
-  // Test in reverse (top layer first)
   for (let i = layers.length - 1; i >= 0; i--) {
     const l = layers[i];
-    ctx.font = (l.bold ? '500 ' : '400 ') + l.size + 'px Syne, sans-serif';
+    ctx.font = (l.bold ? '700 ' : '400 ') + l.size + 'px Syne, sans-serif';
     const tw = ctx.measureText(l.text).width;
     const th = l.size * 1.4;
     let tx = l.x, ty = l.y;
     if (l.align === 'center') tx -= tw / 2;
     if (l.align === 'right') tx -= tw;
-    const pad = 8;
+    const pad = 20;
     if (mx >= tx - pad && mx <= tx + tw + pad && my >= ty - pad && my <= ty + th + pad) return l.id;
   }
   return null;
@@ -774,7 +829,6 @@ cv.addEventListener('mousemove', e => {
 cv.addEventListener('mouseup', () => { dragState = null; cv.style.cursor = 'default'; });
 cv.addEventListener('mouseleave', () => { dragState = null; });
 
-// Touch support
 cv.addEventListener('touchstart', e => {
   e.preventDefault();
   const t = e.touches[0];
@@ -803,7 +857,7 @@ cv.addEventListener('touchmove', e => {
 
 cv.addEventListener('touchend', () => { dragState = null; });
 
-// ─── Draw Frame ───────────────────────────────────────────
+// ─── Draw Frame (di koordinat HD penuh) ──────────────────
 function drawFrame(t) {
   const dur = parseInt(el('dur').value) * 1000;
   const prog = Math.min(t / dur, 1);
@@ -813,7 +867,6 @@ function drawFrame(t) {
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Photo + transition
   if (img) {
     ctx.save();
     const tr = selTr;
@@ -821,7 +874,7 @@ function drawFrame(t) {
       const s = 1 + prog * .14;
       ctx.translate(W/2, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
     } else if (tr === 'slide') {
-      ctx.translate(-prog * 35, 0);
+      ctx.translate(-prog * 80, 0);
     } else if (tr === 'fade') {
       ctx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
     } else if (tr === 'rotate') {
@@ -829,7 +882,7 @@ function drawFrame(t) {
       ctx.translate(W/2, H/2); ctx.rotate(prog * .035); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
     } else if (tr === 'ken') {
       const s = 1 + prog * .12;
-      const ox = -prog * 20;
+      const ox = -prog * 60;
       ctx.translate(W/2 + ox, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
     }
     const ir = img.width / img.height, cr = W / H;
@@ -838,7 +891,6 @@ function drawFrame(t) {
     else { dw = W; dh = dw / ir; dx = 0; dy = (H - dh) / 2; }
     ctx.drawImage(img, dx, dy, dw, dh);
     ctx.restore();
-    // Vignette overlay
     const gr = ctx.createRadialGradient(W/2, H/2, H*.2, W/2, H/2, H*.85);
     gr.addColorStop(0, 'rgba(0,0,0,0)');
     gr.addColorStop(1, 'rgba(0,0,0,.5)');
@@ -850,7 +902,7 @@ function drawFrame(t) {
     ctx.fillStyle = grv; ctx.fillRect(0, 0, W, H);
   }
 
-  // Particles
+  // Particles (koordinat HD)
   const d = FXD[selFx];
   if (d && d.chars.length) {
     ctx.save();
@@ -864,48 +916,43 @@ function drawFrame(t) {
       ctx.rotate(p.rot * Math.PI / 180);
       ctx.fillText(p.ch, -p.size / 2, -p.size / 2);
       ctx.restore();
-      p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * .65;
+      p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
       p.wb += p.ws; p.rot += p.rv;
-      if (p.y > H + 30) Object.assign(p, mkPart(true));
+      if (p.y > H + 80) Object.assign(p, mkPart(true));
     }
     ctx.restore();
   }
 
-  // Text layers
   for (const layer of layers) {
     drawTextLayer(layer, prog, t);
   }
 
-  // Selection indicator
   if (selLayerId !== null && !isRec) {
     const layer = layers.find(l => l.id === selLayerId);
     if (layer) drawSelBox(layer);
   }
 
-  // Progress bar on canvas
-  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(0, H - 3, W, 3);
-  ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(0, H - 3, W * prog, 3);
+  // Progress bar tipis di bawah
+  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(0, H - 8, W, 8);
+  ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(0, H - 8, W * prog, 8);
 
-  // UI progress
   el('progFill').style.width = (prog * 100) + '%';
   el('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + el('dur').value + '.0s';
 }
 
 function drawTextLayer(layer, prog, t) {
   if (!layer.text) return;
-  const dur = parseInt(el('dur').value) * 1000;
   let alpha = layer.opacity;
   let offY = 0, scale = 1;
 
-  // Anim
   switch (layer.anim) {
     case 'fadein': alpha *= Math.min(prog * 4, 1); break;
     case 'slideup':
-      offY = (1 - Math.min(prog * 3, 1)) * 40;
+      offY = (1 - Math.min(prog * 3, 1)) * 120;
       alpha *= Math.min(prog * 3, 1);
       break;
     case 'bounce':
-      offY = Math.abs(Math.sin(t / 400)) * -8;
+      offY = Math.abs(Math.sin(t / 400)) * -22;
       break;
     case 'typewriter': {
       const chars = Math.floor(prog * layer.text.length * 3);
@@ -933,29 +980,26 @@ function drawTextLayer(layer, prog, t) {
 
   const tw = ctx.measureText(txt).width;
   const th = layer.size * 1.2;
-  const pad = 8;
+  const pad = 20;
   let bx = 0;
   if (layer.align === 'center') bx = -tw / 2;
   if (layer.align === 'right') bx = -tw;
 
-  // Background box
   if (layer.bg) {
     ctx.fillStyle = layer.bgColor + 'cc';
     ctx.beginPath();
-    ctx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 6);
+    ctx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
     ctx.fill();
   }
 
-  // Shadow
   if (layer.shadow) {
     ctx.shadowColor = 'rgba(0,0,0,.85)';
-    ctx.shadowBlur = 12;
-    ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 30;
+    ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
   }
 
-  // Outline
   if (layer.outline) {
-    ctx.strokeStyle = 'rgba(0,0,0,.9)'; ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(0,0,0,.9)'; ctx.lineWidth = 6;
     ctx.strokeText(txt, 0, 0);
   }
 
@@ -970,23 +1014,23 @@ function drawSelBox(layer) {
   ctx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
   const tw = ctx.measureText(layer.text).width;
   const th = layer.size * 1.2;
-  const pad = 6;
+  const pad = 16;
   ctx.translate(layer.x, layer.y);
   ctx.rotate(layer.rot * Math.PI / 180);
   let bx = 0;
   if (layer.align === 'center') bx = -tw / 2;
   if (layer.align === 'right') bx = -tw;
   ctx.strokeStyle = 'rgba(124,58,237,.8)';
-  ctx.lineWidth = 1.5;
-  ctx.setLineDash([5, 3]);
+  ctx.lineWidth = 3;
+  ctx.setLineDash([12, 6]);
   ctx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
   ctx.setLineDash([]);
-  // Handle
   ctx.fillStyle = 'rgba(124,58,237,.9)';
-  ctx.fillRect(bx - pad - 4, -pad - 4, 8, 8);
-  ctx.fillRect(bx + tw + pad - 4, -pad - 4, 8, 8);
-  ctx.fillRect(bx - pad - 4, th + pad - 4, 8, 8);
-  ctx.fillRect(bx + tw + pad - 4, th + pad - 4, 8, 8);
+  const hs = 10;
+  ctx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
+  ctx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
+  ctx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
+  ctx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
   ctx.restore();
 }
 
@@ -1005,7 +1049,7 @@ function startPrev() {
     else { t0 = null; animId = requestAnimationFrame(loop); }
   }
   animId = requestAnimationFrame(loop);
-  setStatus('⏵ Preview');
+  setStatus('⏵ Preview — HD ' + (currentRatio === '16:9' ? '1920×1080' : '1080×1920'));
 }
 
 function stopPrev() {
@@ -1021,16 +1065,17 @@ function resetTime() {
   el('timeDisp').textContent = '0.0s / ' + el('dur').value + '.0s';
 }
 
-// ─── Export ───────────────────────────────────────────────
+// ─── Export HD ────────────────────────────────────────────
 function doExport() {
   if (isRec) { setStatus('Masih merekam...'); return; }
-  if (!window.MediaRecorder) { setStatus('Browser tidak support'); return; }
+  if (!window.MediaRecorder) { setStatus('Browser tidak support MediaRecorder'); return; }
   stopPrev(); isRec = true; initParts();
-  setStatus('⏺ Merekam video...');
+  const res = currentRatio === '16:9' ? '1920×1080' : '1080×1920';
+  setStatus('⏺ Merekam HD ' + res + '...');
   const stream = cv.captureStream(30);
   const mime = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4']
     .find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
-  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 6000000 });
+  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 16000000 });
   const chunks = [];
   rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
   rec.onstop = () => {
@@ -1038,9 +1083,10 @@ function doExport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     const ext = mime.includes('mp4') ? 'mp4' : 'webm';
-    a.href = url; a.download = 'videofoto-' + Date.now() + '.' + ext; a.click();
+    const ratio = currentRatio.replace(':', 'x');
+    a.href = url; a.download = `videofoto-hd-${ratio}-${Date.now()}.${ext}`; a.click();
     URL.revokeObjectURL(url);
-    setStatus('✅ Video berhasil diunduh! (' + ext.toUpperCase() + ')');
+    setStatus('✅ Video HD berhasil diunduh! (' + res + ' · ' + ext.toUpperCase() + ')');
     isRec = false;
     setTimeout(() => startPrev(), 400);
   };
@@ -1059,10 +1105,8 @@ function doExport() {
 
 function setStatus(msg) { el('status').textContent = msg; }
 
-// ─── Particle count live ──────────────────────────────────
 el('pCount').addEventListener('input', initParts);
 
-// ─── Init draw ────────────────────────────────────────────
 drawFrame(0);
 </script>
 </body>
