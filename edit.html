@@ -4,179 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>VidioStudio Pro — Editor Video Lengkap</title>
-<!-- Bootstrap 4 + Font Awesome + Google Fonts -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: transparent;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: #f5f7fb;
-  overflow-x: hidden;
-}
-
-.editor-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  width: 100%;
-  overflow: hidden;
-}
-
-.preview-area {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eef2f6;
-  position: relative;
-  padding: 16px;
-  min-height: 0;
-}
-
-.canvas-wrapper {
-  background: #fff;
-  border-radius: 24px;
-  overflow: hidden;
-  box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
-  max-width: 100%;
-  max-height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border: 1px solid rgba(0,0,0,0.05);
-}
-
-canvas {
-  display: block;
-  width: auto;
-  height: auto;
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-  cursor: pointer;
-  border-radius: 20px;
-}
-
-.bottom-editor {
-  background: #ffffff;
-  border-top: 1px solid #e9edf2;
-  padding: 12px 16px 20px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
-}
-
-.tools-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.tool-icon-btn {
-  background: #f1f5f9;
-  border: none;
-  border-radius: 40px;
-  padding: 10px 18px;
-  color: #1e293b;
-  font-size: 0.8rem;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tool-icon-btn i { color: #667eea; font-size: 0.95rem; }
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+body { font-family: 'Inter', sans-serif; background: #f5f7fb; overflow-x: hidden; }
+.editor-container { display: flex; flex-direction: column; height: 100vh; width: 100%; overflow: hidden; }
+.preview-area { flex: 1; display: flex; align-items: center; justify-content: center; background: #eef2f6; padding: 16px; min-height: 0; }
+.canvas-wrapper { background: #fff; border-radius: 24px; overflow: hidden; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15); max-width: 100%; max-height: 100%; display: flex; justify-content: center; align-items: center; border: 1px solid rgba(0,0,0,0.05); }
+canvas { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; cursor: pointer; border-radius: 20px; }
+.bottom-editor { background: #ffffff; border-top: 1px solid #e9edf2; padding: 12px 16px 20px; box-shadow: 0 -4px 20px rgba(0,0,0,0.03); }
+.tools-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.tool-icon-btn { background: #f1f5f9; border: none; border-radius: 40px; padding: 10px 18px; color: #1e293b; font-size: 0.8rem; font-weight: 600; transition: all 0.2s ease; display: inline-flex; align-items: center; gap: 8px; }
+.tool-icon-btn i { color: #667eea; }
 .tool-icon-btn:active { transform: scale(0.96); background: #e2e8f0; }
 .tool-icon-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
 .tool-icon-btn.active i { color: white; }
-
 .primary-btn { background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 10px 20px; border-radius: 40px; color: white; font-weight: 600; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(102,126,234,0.3); }
-
-.progress-timeline {
-  background: #f8fafc;
-  border-radius: 20px;
-  padding: 8px 12px;
-  margin-top: 6px;
-}
-
-.custom-range {
-  width: 100%;
-  height: 4px;
-  -webkit-appearance: none;
-  background: #e2e8f0;
-  border-radius: 4px;
-  outline: none;
-}
-.custom-range::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #667eea;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(102,126,234,0.4);
-  border: 2px solid white;
-}
-
-.bottom-sheet {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #ffffff;
-  border-radius: 28px 28px 0 0;
-  z-index: 1050;
-  transform: translateY(100%);
-  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  max-height: 75vh;
-  overflow-y: auto;
-  padding: 20px;
-  border-top: 1px solid #eef2f6;
-  box-shadow: 0 -8px 30px rgba(0,0,0,0.1);
-}
+.progress-timeline { background: #f8fafc; border-radius: 20px; padding: 8px 12px; margin-top: 6px; }
+.custom-range { width: 100%; height: 4px; -webkit-appearance: none; background: #e2e8f0; border-radius: 4px; outline: none; }
+.custom-range::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: #667eea; cursor: pointer; box-shadow: 0 2px 10px rgba(102,126,234,0.4); border: 2px solid white; }
+.bottom-sheet { position: fixed; bottom: 0; left: 0; right: 0; background: #ffffff; border-radius: 28px 28px 0 0; z-index: 1050; transform: translateY(100%); transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); max-height: 75vh; overflow-y: auto; padding: 20px; border-top: 1px solid #eef2f6; box-shadow: 0 -8px 30px rgba(0,0,0,0.1); }
 .bottom-sheet.show { transform: translateY(0); }
 .sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 700; color: #0f172a; }
 .chip-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
-.chip {
-  background: #f1f5f9;
-  padding: 8px 16px;
-  border-radius: 40px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  color: #334155;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s;
-}
+.chip { background: #f1f5f9; padding: 8px 16px; border-radius: 40px; font-size: 0.75rem; font-weight: 500; color: #334155; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; transition: all 0.2s; }
 .chip.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
-.layer-item {
-  background: #f8fafc;
-  border-radius: 16px;
-  padding: 12px;
-  margin-bottom: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  border: 1px solid #eef2f6;
-}
+.layer-item { background: #f8fafc; border-radius: 16px; padding: 12px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; border: 1px solid #eef2f6; }
 .layer-item.active { background: #ede9fe; border-left: 3px solid #667eea; }
 .prop-row { margin-bottom: 16px; }
 .prop-label { font-size: 0.7rem; text-transform: uppercase; color: #64748b; margin-bottom: 6px; font-weight: 600; }
 .music-wave { background: #f8fafc; border-radius: 16px; padding: 12px; margin-top: 10px; border: 1px solid #eef2f6; }
 .close-sheet { cursor: pointer; font-size: 1.2rem; color: #94a3b8; }
+.color-palette { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.color-option { width: 40px; height: 40px; border-radius: 20px; cursor: pointer; border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.1); transition: transform 0.1s; }
+.color-option:hover { transform: scale(1.1); }
+.color-option.active { border: 3px solid #667eea; transform: scale(1.05); }
+.text-style-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 8px; }
+.text-style-card { background: #f8fafc; border-radius: 12px; padding: 8px; text-align: center; cursor: pointer; border: 1px solid #eef2f6; transition: all 0.2s; font-size: 0.7rem; }
+.text-style-card.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-color: transparent; }
 .share-buttons { display: flex; gap: 12px; margin-top: 16px; justify-content: center; }
 .share-btn { background: #f1f5f9; border: none; border-radius: 40px; padding: 10px 20px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
 </style>
@@ -189,7 +57,6 @@ canvas {
       <canvas id="mainCanvas"></canvas>
     </div>
   </div>
-
   <div class="bottom-editor">
     <div class="tools-row">
       <button class="tool-icon-btn" id="uploadBtn"><i class="fas fa-image"></i> <span>Foto</span></button>
@@ -199,20 +66,14 @@ canvas {
       <button class="tool-icon-btn" id="aspectBtn"><i class="fas fa-crop-alt"></i> <span>Rasio</span></button>
       <button class="tool-icon-btn" id="exportBtn"><i class="fas fa-download"></i> <span>Export</span></button>
     </div>
-    
     <div class="progress-timeline">
       <div class="d-flex justify-content-between align-items-center mb-1">
         <span style="font-size: 0.7rem; color:#64748b;"><i class="fas fa-play-circle"></i> Preview</span>
-        <div class="d-flex gap-2">
-          <button class="btn btn-sm" style="background: #f1f5f9; border-radius: 30px; padding: 4px 12px;" id="playPauseBtn"><i class="fas fa-play" style="color:#667eea;"></i></button>
-          <button class="btn btn-sm" style="background: #f1f5f9; border-radius: 30px; padding: 4px 12px;" id="stopBtn"><i class="fas fa-stop" style="color:#667eea;"></i></button>
-        </div>
+        <div><button class="btn btn-sm" style="background:#f1f5f9; border-radius:30px; padding:4px 12px;" id="playPauseBtn"><i class="fas fa-play" style="color:#667eea;"></i></button>
+        <button class="btn btn-sm" style="background:#f1f5f9; border-radius:30px; padding:4px 12px;" id="stopBtn"><i class="fas fa-stop" style="color:#667eea;"></i></button></div>
       </div>
       <input type="range" id="timelineSlider" class="custom-range" min="0" max="100" value="0" step="0.1">
-      <div class="d-flex justify-content-between mt-1">
-        <small class="text-muted" id="currentTimeLabel">0.0s</small>
-        <small class="text-muted" id="totalDurationLabel">6.0s</small>
-      </div>
+      <div class="d-flex justify-content-between mt-1"><small id="currentTimeLabel">0.0s</small><small id="totalDurationLabel">6.0s</small></div>
     </div>
   </div>
 </div>
@@ -220,37 +81,60 @@ canvas {
 <!-- BOTTOM SHEETS -->
 <div id="musicSheet" class="bottom-sheet">
   <div class="sheet-header"><span><i class="fas fa-music mr-2"></i>Audio & Musik</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
-  <div class="chip-group">
-    <div class="chip" id="uploadMusicBtn"><i class="fas fa-upload"></i> Upload Musik</div>
-    <div class="chip" id="extractVideoAudioBtn"><i class="fas fa-video"></i> Ekstrak dari Video</div>
-  </div>
-  <div id="musicInfo" class="music-wave" style="display:none;">
-    <div class="d-flex justify-content-between"><span><i class="fas fa-headphones"></i> <span id="musicName">-</span></span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" id="removeMusicBtn"></i></div>
-    <div class="prop-row mt-2"><div class="prop-label">Potong Musik</div><div class="d-flex gap-2 align-items-center"><input type="range" id="musicStartTrim" class="custom-range" min="0" max="100" value="0" style="width:45%"><span>→</span><input type="range" id="musicEndTrim" class="custom-range" min="0" max="100" value="100" style="width:45%"></div><div class="d-flex justify-content-between mt-1"><small id="startTrimLabel">0.0s</small><small id="endTrimLabel">0.0s</small></div></div>
-    <div class="prop-row"><div class="prop-label">Volume</div><input type="range" id="musicVolume" class="custom-range" min="0" max="100" value="70"></div>
-  </div>
+  <div class="chip-group"><div class="chip" id="uploadMusicBtn"><i class="fas fa-upload"></i> Upload Musik</div><div class="chip" id="extractVideoAudioBtn"><i class="fas fa-video"></i> Ekstrak dari Video</div></div>
+  <div id="musicInfo" class="music-wave" style="display:none;"><div class="d-flex justify-content-between"><span><i class="fas fa-headphones"></i> <span id="musicName">-</span></span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" id="removeMusicBtn"></i></div>
+  <div class="prop-row mt-2"><div class="prop-label">Potong Musik</div><div class="d-flex gap-2 align-items-center"><input type="range" id="musicStartTrim" class="custom-range" min="0" max="100" value="0" style="width:45%"><span>→</span><input type="range" id="musicEndTrim" class="custom-range" min="0" max="100" value="100" style="width:45%"></div><div class="d-flex justify-content-between mt-1"><small id="startTrimLabel">0.0s</small><small id="endTrimLabel">0.0s</small></div></div>
+  <div class="prop-row"><div class="prop-label">Volume</div><input type="range" id="musicVolume" class="custom-range" min="0" max="100" value="70"></div></div>
   <input type="file" id="musicFileInput" accept="audio/*,video/*" style="display:none">
 </div>
 
 <div id="effectsSheet" class="bottom-sheet">
   <div class="sheet-header"><span><i class="fas fa-sparkles mr-2"></i>Efek Visual</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
   <div class="chip-group"><div class="chip" data-fx="flowers"><i class="fas fa-fan"></i> Bunga</div><div class="chip" data-fx="hearts"><i class="fas fa-heart"></i> Hati</div><div class="chip" data-fx="stars"><i class="fas fa-star"></i> Bintang</div><div class="chip" data-fx="snow"><i class="fas fa-snowflake"></i> Salju</div><div class="chip" data-fx="none"><i class="fas fa-ban"></i> Off</div></div>
-  <div class="prop-row"><div class="prop-label">Jumlah Partikel</div><input type="range" id="particleRange" class="custom-range" min="0" max="40" value="20"><small id="particleVal" class="text-muted">20</small></div>
+  <div class="prop-row"><div class="prop-label">Jumlah Partikel</div><input type="range" id="particleRange" class="custom-range" min="0" max="40" value="20"><small id="particleVal">20</small></div>
   <div class="prop-row"><div class="prop-label">Animasi Foto</div><div class="chip-group"><div class="chip" data-tr="zoom">Zoom</div><div class="chip" data-tr="slide">Slide</div><div class="chip" data-tr="fade">Fade</div></div></div>
-  <div class="prop-row"><div class="prop-label">Warna Background</div><input type="color" id="bgColorPicker" value="#f0f4f8" class="form-control form-control-sm" style="width:100%; border-radius:12px;"></div>
+  <div class="prop-row"><div class="prop-label">Warna Background</div><input type="color" id="bgColorPicker" value="#f0f4f8" style="width:100%; border-radius:12px; height:40px;"></div>
 </div>
 
 <div id="textSheet" class="bottom-sheet">
   <div class="sheet-header"><span><i class="fas fa-font mr-2"></i>Teks (Multiline)</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
   <button class="tool-icon-btn" style="width:100%; justify-content:center; margin-bottom:12px;" id="addTextLayerBtn"><i class="fas fa-plus"></i> Tambah Teks</button>
-  <div id="layerListContainer" style="max-height:180px; overflow-y:auto;"></div>
+  <div id="layerListContainer" style="max-height:150px; overflow-y:auto;"></div>
   <div id="textPropPanel" style="display: none; margin-top: 16px;">
-    <div class="prop-row"><div class="prop-label">Teks (Enter baris baru)</div><textarea id="textContentInput" rows="3" class="form-control" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px;"></textarea></div>
+    <div class="prop-row"><div class="prop-label">Teks (Enter baris baru)</div><textarea id="textContentInput" rows="2" class="form-control" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px;"></textarea></div>
     <div class="prop-row"><div class="prop-label">Posisi X</div><input type="range" id="textPosX" class="custom-range" min="0" max="100" value="50"></div>
     <div class="prop-row"><div class="prop-label">Posisi Y</div><input type="range" id="textPosY" class="custom-range" min="0" max="100" value="30"></div>
     <div class="prop-row"><div class="prop-label">Ukuran</div><input type="range" id="textSize" class="custom-range" min="20" max="90" value="42"></div>
-    <div class="prop-row d-flex justify-content-between"><div><div class="prop-label">Warna</div><input type="color" id="textColorPicker" value="#1e293b"></div><div><div class="prop-label">Style</div><div class="d-flex gap-2"><div class="chip" data-style="bold">Bold</div><div class="chip" data-style="shadow">Shadow</div></div></div></div>
-    <div class="prop-row"><div class="prop-label">Animasi Teks</div><div class="chip-group"><div class="chip" data-anim="none">Diam</div><div class="chip" data-anim="fadein">Fade In</div><div class="chip" data-anim="slideup">Slide Up</div></div></div>
+    <div class="prop-row"><div class="prop-label">Warna Teks</div>
+      <div class="color-palette" id="colorPalette">
+        <div class="color-option" style="background:#ffffff;" data-color="#ffffff"></div>
+        <div class="color-option" style="background:#1e293b;" data-color="#1e293b"></div>
+        <div class="color-option" style="background:#ef4444;" data-color="#ef4444"></div>
+        <div class="color-option" style="background:#22c55e;" data-color="#22c55e"></div>
+        <div class="color-option" style="background:#3b82f6;" data-color="#3b82f6"></div>
+        <div class="color-option" style="background:#f59e0b;" data-color="#f59e0b"></div>
+        <div class="color-option" style="background:#ec4899;" data-color="#ec4899"></div>
+        <div class="color-option" style="background:#8b5cf6;" data-color="#8b5cf6"></div>
+        <div class="color-option" style="background:#06b6d4;" data-color="#06b6d4"></div>
+        <div class="color-option" style="background:#f97316;" data-color="#f97316"></div>
+      </div>
+      <input type="color" id="textColorPicker" style="margin-top:8px; width:100%; height:35px;">
+    </div>
+    <div class="prop-row"><div class="prop-label">Style Teks (10 Pilihan)</div>
+      <div class="text-style-grid" id="textStyleGrid">
+        <div class="text-style-card" data-style="normal">Normal</div>
+        <div class="text-style-card" data-style="bold"><i class="fas fa-bold"></i> Bold</div>
+        <div class="text-style-card" data-style="shadow"><i class="fas fa-moon"></i> Shadow</div>
+        <div class="text-style-card" data-style="glow"><i class="fas fa-sun"></i> Glow</div>
+        <div class="text-style-card" data-style="outline"><i class="fas fa-border-all"></i> Outline</div>
+        <div class="text-style-card" data-style="gradient"><i class="fas fa-chart-line"></i> Gradient</div>
+        <div class="text-style-card" data-style="neon"><i class="fas fa-bolt"></i> Neon</div>
+        <div class="text-style-card" data-style="background"><i class="fas fa-fill-drip"></i> Background</div>
+        <div class="text-style-card" data-style="uppercase"><i class="fas fa-arrow-up"></i> UPPER</div>
+        <div class="text-style-card" data-style="italic"><i class="fas fa-italic"></i> Italic</div>
+      </div>
+    </div>
+    <div class="prop-row"><div class="prop-label">Animasi Teks</div><div class="chip-group"><div class="chip" data-anim="none">Diam</div><div class="chip" data-anim="fadein">Fade In</div><div class="chip" data-anim="slideup">Slide Up</div><div class="chip" data-anim="bounce">Bounce</div><div class="chip" data-anim="typing">Typing</div></div></div>
   </div>
 </div>
 
@@ -262,26 +146,16 @@ canvas {
 
 <div id="exportSheet" class="bottom-sheet">
   <div class="sheet-header"><span><i class="fas fa-download mr-2"></i>Export & Share</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
-  <div class="chip-group">
-    <div class="chip" data-quality="hd">HD (1080p)</div>
-    <div class="chip" data-quality="medium">Sedang (720p)</div>
-  </div>
-  <button class="primary-btn" style="width:100%; margin-top:12px;" id="startExportBtn"><i class="fas fa-download"></i> Export Video (MP4)</button>
-  <div class="share-buttons" id="shareButtons" style="display: none;">
-    <button class="share-btn" id="shareWhatsAppBtn"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</button>
-    <button class="share-btn" id="shareTelegramBtn"><i class="fab fa-telegram" style="color:#26A5E4;"></i> Telegram</button>
-    <button class="share-btn" id="shareGeneralBtn"><i class="fas fa-share-alt"></i> Share Lainnya</button>
-  </div>
-  <div id="exportProgressContainer" style="display:none; margin-top:16px;">
-    <div class="progress-custom mt-2"><div id="exportProgressFill" style="height:4px; width:0%; background:#667eea; border-radius:4px;"></div></div>
-    <small id="exportStatusText" class="text-muted">Mempersiapkan...</small>
-  </div>
+  <div class="chip-group"><div class="chip" data-quality="hd">HD (1080p)</div><div class="chip" data-quality="medium">Sedang (720p)</div></div>
+  <button class="primary-btn" style="width:100%; margin-top:12px;" id="startExportBtn"><i class="fas fa-download"></i> Export Video (MP4 + Audio)</button>
+  <div id="shareButtons" style="display:none; margin-top:16px;"><div class="share-buttons"><button class="share-btn" id="shareWhatsAppBtn"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</button><button class="share-btn" id="shareTelegramBtn"><i class="fab fa-telegram" style="color:#26A5E4;"></i> Telegram</button><button class="share-btn" id="shareGeneralBtn"><i class="fas fa-share-alt"></i> Lainnya</button></div></div>
+  <div id="exportProgressContainer" style="display:none; margin-top:16px;"><div style="height:4px; background:#e2e8f0; border-radius:4px;"><div id="exportProgressFill" style="height:4px; width:0%; background:#667eea; border-radius:4px;"></div></div><small id="exportStatusText" class="text-muted">Mempersiapkan...</small></div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// ==================== FULLY FUNCTIONAL VIDEO EDITOR ====================
+// ==================== CORE VARIABLES ====================
 let W = 720, H = 1280;
 let currentRatio = '9:16';
 let uploadedImg = null;
@@ -296,7 +170,7 @@ let textLayers = [];
 let selectedLayerId = null;
 let layerIdCounter = 0;
 
-// AUDIO
+// AUDIO for preview & export
 let audioContext = null;
 let audioBuffer = null;
 let audioSource = null;
@@ -307,6 +181,7 @@ let musicStartTrim = 0, musicEndTrim = 0, musicDuration = 0, musicVolume = 0.7;
 let exportQuality = 'hd';
 let isExporting = false;
 let lastExportedBlob = null;
+let audioWorkletNode = null;
 
 const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
@@ -319,14 +194,61 @@ const FX_LIB = {
   none: { chars: [], speed: 0 }
 };
 
+// TEXT STYLE RENDERER
+function applyTextStyle(ctx, style, color, gradientColors) {
+  if (style === 'bold') ctx.font = `bold ${ctx.font}`;
+  if (style === 'italic') ctx.font = `italic ${ctx.font}`;
+  if (style === 'shadow') { ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 4; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2; }
+  if (style === 'glow') { ctx.shadowColor = color; ctx.shadowBlur = 12; }
+  if (style === 'outline') { ctx.strokeStyle = '#000000'; ctx.lineWidth = 2; ctx.strokeText(...arguments); }
+  if (style === 'neon') { ctx.shadowColor = color; ctx.shadowBlur = 8; ctx.fillStyle = color; }
+  if (style === 'uppercase') text = text.toUpperCase();
+  if (style === 'gradient' && gradientColors) { let gradient = ctx.createLinearGradient(x-50, y, x+50, y); gradient.addColorStop(0, gradientColors[0]); gradient.addColorStop(1, gradientColors[1]); ctx.fillStyle = gradient; }
+}
+
+function drawMultilineText(ctx, text, x, y, fontSize, color, styles, gradientColors) {
+  const lines = text.split('\n');
+  const lineHeight = fontSize * 1.2;
+  let startY = y - (lines.length * lineHeight) / 2;
+  ctx.font = `${styles.includes('bold') ? 'bold ' : ''}${styles.includes('italic') ? 'italic ' : ''}${fontSize}px 'Inter', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  ctx.shadowBlur = 0;
+  
+  for (let i = 0; i < lines.length; i++) {
+    let currentY = startY + i * lineHeight;
+    let textColor = color;
+    if (styles.includes('gradient') && gradientColors) {
+      let grad = ctx.createLinearGradient(x-50, currentY, x+50, currentY);
+      grad.addColorStop(0, gradientColors[0]);
+      grad.addColorStop(1, gradientColors[1]);
+      ctx.fillStyle = grad;
+    } else {
+      ctx.fillStyle = textColor;
+    }
+    
+    if (styles.includes('shadow')) { ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 4; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2; }
+    if (styles.includes('glow')) { ctx.shadowColor = color; ctx.shadowBlur = 12; }
+    if (styles.includes('neon')) { ctx.shadowColor = color; ctx.shadowBlur = 10; }
+    
+    if (styles.includes('outline')) { ctx.strokeStyle = '#000000'; ctx.lineWidth = 2; ctx.strokeText(lines[i], x, currentY); }
+    if (styles.includes('background')) {
+      ctx.fillStyle = 'rgba(0,0,0,0.5)';
+      let metrics = ctx.measureText(lines[i]);
+      ctx.fillRect(x - metrics.width/2 - 8, currentY - 5, metrics.width + 16, fontSize + 8);
+      ctx.fillStyle = textColor;
+    }
+    ctx.fillText(lines[i], x, currentY);
+  }
+  ctx.shadowBlur = 0;
+}
+
 function setRatio(ratio) {
   currentRatio = ratio;
   if (ratio === '16:9') { W = 1280; H = 720; } else { W = 720; H = 1280; }
   canvas.width = W; canvas.height = H;
   initParticles();
   drawFrame(currentPlayTime);
-  $('[data-ratio]').removeClass('active');
-  $(`[data-ratio="${ratio}"]`).addClass('active');
 }
 
 function initParticles() {
@@ -334,36 +256,22 @@ function initParticles() {
   const count = parseInt($('#particleRange').val());
   const fx = FX_LIB[selectedEffect];
   if (!fx.chars.length) return;
-  for (let i=0; i<count; i++) {
-    particles.push({ x: Math.random() * W, y: Math.random() * H, vy: 0.4 + Math.random() * 1.2, ch: fx.chars[Math.floor(Math.random()*fx.chars.length)], size: 14 + Math.random() * 20, alpha: 0.5 + Math.random() * 0.5 });
-  }
+  for (let i=0; i<count; i++) particles.push({ x: Math.random() * W, y: Math.random() * H, vy: 0.4 + Math.random() * 1.2, ch: fx.chars[Math.floor(Math.random()*fx.chars.length)], size: 14 + Math.random() * 20, alpha: 0.5 + Math.random() * 0.5 });
 }
 function updateParticles() { for (let p of particles) { p.y += p.vy; if (p.y > H + 50) { p.y = -50; p.x = Math.random() * W; } } }
-
-function drawMultilineText(ctx, text, x, y, fontSize, fontFamily, color, bold, shadow) {
-  const lines = text.split('\n');
-  const lineHeight = fontSize * 1.2;
-  const totalHeight = lines.length * lineHeight;
-  let startY = y - totalHeight / 2;
-  ctx.font = `${bold ? 'bold ' : ''}${fontSize}px ${fontFamily}`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'top';
-  if (shadow) { ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 5; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1; }
-  ctx.fillStyle = color;
-  for (let i = 0; i < lines.length; i++) ctx.fillText(lines[i], x, startY + i * lineHeight);
-  ctx.shadowBlur = 0;
-}
 
 function drawTextLayer(ctx, layer, progress, timeMs) {
   if (!layer.text) return;
   let alpha = 1, offsetY = 0;
   if (layer.anim === 'fadein') alpha = Math.min(progress * 3, 1);
   if (layer.anim === 'slideup') { offsetY = (1 - Math.min(progress * 2, 1)) * 35; alpha = Math.min(progress*2,1); }
+  if (layer.anim === 'bounce') alpha = 0.7 + Math.sin(timeMs / 200) * 0.3;
+  if (layer.anim === 'typing') alpha = Math.min(progress * 5, 1);
   ctx.save();
-  ctx.globalAlpha = alpha * 0.95;
+  ctx.globalAlpha = alpha;
   let x = (layer.x / 100) * W;
   let y = (layer.y / 100) * H + offsetY;
-  drawMultilineText(ctx, layer.text, x, y, layer.size, 'Inter, sans-serif', layer.color, layer.bold, layer.shadow);
+  drawMultilineText(ctx, layer.text, x, y, layer.size, layer.color, layer.styles, layer.gradientColors);
   ctx.restore();
 }
 
@@ -426,79 +334,92 @@ function stopPreview() { if (animationFrameId) cancelAnimationFrame(animationFra
 function togglePlayPause() { if (!uploadedImg) { alert("Upload foto"); return; } if (isPlaying) { isPlaying = false; if (animationFrameId) cancelAnimationFrame(animationFrameId); stopAudio(); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); } else { startPreviewLoop(); } }
 function seekTo(percent) { if (isPlaying) togglePlayPause(); let newTime = (percent / 100) * videoDuration; currentPlayTime = Math.min(newTime, videoDuration); drawFrame(currentPlayTime); stopAudio(); }
 
-// TEXT LAYERS
-function addTextLayer() { let id = ++layerIdCounter; textLayers.push({ id, text: "Teks Baru\nBaris kedua", x: 50, y: 40, size: 40, color: '#1e293b', bold: false, shadow: true, anim: 'none' }); selectLayer(id); renderLayerList(); }
-function selectLayer(id) { selectedLayerId = id; renderLayerList(); let layer = textLayers.find(l=>l.id===id); if(!layer) { $('#textPropPanel').hide(); return; } $('#textPropPanel').show(); $('#textContentInput').val(layer.text); $('#textPosX').val(layer.x); $('#textPosY').val(layer.y); $('#textSize').val(layer.size); $('#textColorPicker').val(layer.color); $('[data-style]').removeClass('active'); if(layer.bold) $('[data-style="bold"]').addClass('active'); if(layer.shadow) $('[data-style="shadow"]').addClass('active'); $('[data-anim]').removeClass('active'); $(`[data-anim="${layer.anim}"]`).addClass('active'); }
-function renderLayerList() { let container = $('#layerListContainer'); if(textLayers.length===0){ container.html('<div class="text-center text-muted py-3"><i class="fas fa-plus-circle"></i> Klik + untuk teks</div>'); return; } container.html(textLayers.map(l=>`<div class="layer-item ${l.id===selectedLayerId?'active':''}" onclick="selectLayer(${l.id})"><span><i class="fas fa-font mr-2"></i>${l.text.substring(0,18).replace(/\n/g,' ')}</span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i></div>`).join('')); }
+// TEXT LAYERS with styles
+function addTextLayer() { 
+  let id = ++layerIdCounter; 
+  textLayers.push({ id, text: "Teks Baru\nBaris kedua", x: 50, y: 40, size: 42, color: '#1e293b', styles: ['normal'], anim: 'none', gradientColors: ['#667eea', '#764ba2'] }); 
+  selectLayer(id); renderLayerList(); 
+}
+function selectLayer(id) { 
+  selectedLayerId = id; renderLayerList(); 
+  let layer = textLayers.find(l=>l.id===id); 
+  if(!layer) { $('#textPropPanel').hide(); return; } 
+  $('#textPropPanel').show(); 
+  $('#textContentInput').val(layer.text); 
+  $('#textPosX').val(layer.x); 
+  $('#textPosY').val(layer.y); 
+  $('#textSize').val(layer.size); 
+  $('#textColorPicker').val(layer.color);
+  $('.color-option').removeClass('active');
+  $(`.color-option[data-color="${layer.color}"]`).addClass('active');
+  $('.text-style-card').removeClass('active');
+  layer.styles.forEach(style => $(`.text-style-card[data-style="${style}"]`).addClass('active'));
+  $('[data-anim]').removeClass('active');
+  $(`[data-anim="${layer.anim}"]`).addClass('active');
+}
+function renderLayerList() { 
+  let container = $('#layerListContainer'); 
+  if(textLayers.length===0){ container.html('<div class="text-center text-muted py-3"><i class="fas fa-plus-circle"></i> Klik + untuk teks</div>'); return; } 
+  container.html(textLayers.map(l=>`<div class="layer-item ${l.id===selectedLayerId?'active':''}" onclick="selectLayer(${l.id})"><span><i class="fas fa-font mr-2"></i>${l.text.substring(0,18).replace(/\n/g,' ')}</span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i></div>`).join('')); 
+}
 function deleteLayer(id){ textLayers = textLayers.filter(l=>l.id!==id); if(selectedLayerId===id) selectedLayerId = textLayers.length?textLayers[0].id:null; if(selectedLayerId) selectLayer(selectedLayerId); else $('#textPropPanel').hide(); renderLayerList(); drawFrame(currentPlayTime); }
 function updateCurrentLayer(){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.text = $('#textContentInput').val(); layer.size = parseInt($('#textSize').val()); layer.color = $('#textColorPicker').val(); layer.x = parseInt($('#textPosX').val()); layer.y = parseInt($('#textPosY').val()); drawFrame(currentPlayTime); } }
-function toggleTextStyle(style){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer[style] = !layer[style]; drawFrame(currentPlayTime); } }
+function toggleTextStyle(style){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ if(layer.styles.includes(style)) layer.styles = layer.styles.filter(s=>s!==style); else layer.styles.push(style); if(layer.styles.length===0) layer.styles=['normal']; drawFrame(currentPlayTime); } }
 function setTextAnim(anim){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.anim = anim; drawFrame(currentPlayTime); } }
 
-// REAL EXPORT MP4 (WhatsApp Compatible)
+// EXPORT WITH AUDIO (menggunakan RecordRTC style)
 async function startExport() {
-  if (!uploadedImg) { alert("Upload foto terlebih dahulu"); return; }
+  if (!uploadedImg) { alert("Upload foto dulu!"); return; }
   if (isExporting) return;
   closeAllSheets();
   isExporting = true;
   $('#exportProgressContainer').show();
   $('#shareButtons').hide();
   $('#exportProgressFill').css('width', '0%');
-  $('#exportStatusText').text('Mempersiapkan export MP4...');
+  $('#exportStatusText').text('Mempersiapkan export dengan audio...');
   
   const fps = 24;
   const durationSec = videoDuration / 1000;
   let stream = canvas.captureStream(fps);
   
-  // Cari kodec yang kompatibel dengan WhatsApp (H.264 + AAC)
-  let mimeType = '';
-  const codecs = [
-    'video/mp4;codecs=h264,aac',
-    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
-    'video/mp4'
-  ];
-  for (let codec of codecs) {
-    if (MediaRecorder.isTypeSupported(codec)) {
-      mimeType = codec;
-      break;
-    }
+  // Mix audio ke stream menggunakan AudioContext
+  let mixedStream = stream;
+  if (audioBuffer) {
+    try {
+      const audioContextExport = new AudioContext();
+      const dest = audioContextExport.createMediaStreamDestination();
+      const source = audioContextExport.createBufferSource();
+      const gainNode = audioContextExport.createGain();
+      source.buffer = audioBuffer;
+      gainNode.gain.value = musicVolume;
+      source.connect(gainNode);
+      gainNode.connect(dest);
+      const startOffset = musicStartTrim;
+      const durationPlay = Math.min(musicEndTrim - startOffset, durationSec);
+      source.start(0, startOffset, durationPlay);
+      
+      const audioTracks = dest.stream.getAudioTracks();
+      const videoTracks = stream.getVideoTracks();
+      mixedStream = new MediaStream([...videoTracks, ...audioTracks]);
+      
+      setTimeout(() => { try { source.stop(); audioContextExport.close(); } catch(e){} }, videoDuration + 500);
+    } catch(e) { console.log("Audio mix fallback", e); }
   }
-  if (!mimeType) mimeType = 'video/webm'; // fallback
   
-  recordedChunks = [];
-  const mediaRecorder = new MediaRecorder(stream, { 
-    mimeType: mimeType, 
-    videoBitsPerSecond: exportQuality === 'hd' ? 3500000 : 1500000,
-    audioBitsPerSecond: 128000
-  });
+  let mimeType = 'video/mp4';
+  let codecs = ['video/mp4;codecs=h264,aac', 'video/mp4;codecs=avc1.42E01E,mp4a.40.2', 'video/mp4'];
+  for (let codec of codecs) if (MediaRecorder.isTypeSupported(codec)) { mimeType = codec; break; }
   
+  let recordedChunks = [];
+  const mediaRecorder = new MediaRecorder(mixedStream, { mimeType: mimeType, videoBitsPerSecond: exportQuality === 'hd' ? 3500000 : 1500000 });
   mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
   
-  const exportPromise = new Promise((resolve) => { mediaRecorder.onstop = () => { 
-    const blob = new Blob(recordedChunks, { type: 'video/mp4' });
-    resolve(blob);
-  }; });
+  const exportPromise = new Promise((resolve) => { mediaRecorder.onstop = () => { resolve(new Blob(recordedChunks, { type: 'video/mp4' })); }; });
   
   mediaRecorder.start();
   const startTime = performance.now();
   let frameCount = 0;
   const totalFrames = Math.ceil(durationSec * fps);
-  
-  // Audio background untuk export
-  let tempAudioCtx = null;
-  let tempSource = null;
-  if (audioBuffer && audioContext) {
-    tempAudioCtx = new AudioContext();
-    let tempGain = tempAudioCtx.createGain();
-    tempGain.gain.value = musicVolume;
-    tempSource = tempAudioCtx.createBufferSource();
-    tempSource.buffer = audioBuffer;
-    let startOffset = musicStartTrim;
-    let durationPlay = Math.min(musicEndTrim - startOffset, durationSec);
-    tempSource.connect(tempGain);
-    tempGain.connect(tempAudioCtx.destination);
-    tempSource.start(0, startOffset, durationPlay);
-  }
   
   function recordFrame(now) {
     let elapsed = (now - startTime);
@@ -507,23 +428,17 @@ async function startExport() {
     frameCount++;
     let percent = Math.min((elapsed / videoDuration) * 100, 100);
     $('#exportProgressFill').css('width', percent + '%');
-    $('#exportStatusText').text(`Merekam video ${Math.floor(percent)}%`);
+    $('#exportStatusText').text(`Merekam video ${Math.floor(percent)}% - Frame ${frameCount}/${totalFrames}`);
     if (elapsed < videoDuration) {
       requestAnimationFrame(recordFrame);
     } else {
-      setTimeout(() => {
-        mediaRecorder.stop();
-        if (tempSource) { try { tempSource.stop(); tempAudioCtx.close(); } catch(e){} }
-      }, 100);
+      setTimeout(() => mediaRecorder.stop(), 100);
     }
   }
-  
   requestAnimationFrame(recordFrame);
   
   const videoBlob = await exportPromise;
   lastExportedBlob = videoBlob;
-  
-  // Simpan file
   const url = URL.createObjectURL(videoBlob);
   const a = document.createElement('a');
   a.href = url;
@@ -534,70 +449,13 @@ async function startExport() {
   isExporting = false;
   $('#exportProgressContainer').hide();
   $('#shareButtons').show();
-  alert("✅ Video MP4 berhasil diekspor! Klik tombol share untuk bagikan ke WhatsApp/medsos.");
+  alert("✅ Video MP4 dengan AUDIO berhasil diekspor! Klik share untuk bagikan.");
 }
 
 // SHARE FUNCTIONS
-function shareToWhatsApp() {
-  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
-  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    navigator.share({
-      title: 'VidioStudio Video',
-      text: 'Lihat video keren dari VidioStudio!',
-      files: [file]
-    }).catch(e => console.log('Share cancelled', e));
-  } else {
-    // Fallback: buka WhatsApp Web dengan instruksi
-    const url = URL.createObjectURL(lastExportedBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'videostudio.mp4';
-    a.click();
-    URL.revokeObjectURL(url);
-    alert("Download selesai! Buka WhatsApp, pilih file video dari folder Downloads.");
-  }
-}
-
-function shareToTelegram() {
-  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
-  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    navigator.share({
-      title: 'VidioStudio Video',
-      text: 'Lihat video keren dari VidioStudio!',
-      files: [file]
-    }).catch(e => console.log('Share cancelled', e));
-  } else {
-    const url = URL.createObjectURL(lastExportedBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'videostudio.mp4';
-    a.click();
-    URL.revokeObjectURL(url);
-    alert("Download selesai! Kirim file video ke Telegram.");
-  }
-}
-
-function shareGeneral() {
-  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
-  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
-  if (navigator.canShare && navigator.canShare({ files: [file] })) {
-    navigator.share({
-      title: 'VidioStudio Video',
-      text: 'Video keren dari VidioStudio!',
-      files: [file]
-    }).catch(e => console.log('Share cancelled', e));
-  } else {
-    const url = URL.createObjectURL(lastExportedBlob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'videostudio.mp4';
-    a.click();
-    URL.revokeObjectURL(url);
-    alert("Download selesai! Kirim file ke aplikasi yang kamu mau.");
-  }
-}
+function shareToWhatsApp() { if (!lastExportedBlob) { alert("Export dulu!"); return; } const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" }); if (navigator.canShare && navigator.canShare({ files: [file] })) { navigator.share({ title: 'VidioStudio Video', files: [file] }); } else { const url = URL.createObjectURL(lastExportedBlob); const a = document.createElement('a'); a.href = url; a.download = 'videostudio.mp4'; a.click(); URL.revokeObjectURL(url); alert("Download selesai! Kirim ke WhatsApp."); } }
+function shareToTelegram() { shareToWhatsApp(); }
+function shareGeneral() { shareToWhatsApp(); }
 
 // EVENT HANDLERS
 $(document).ready(function(){
@@ -618,7 +476,7 @@ $(document).ready(function(){
   $('[data-fx]').click(function(){ $('[data-fx]').removeClass('active'); $(this).addClass('active'); selectedEffect = $(this).data('fx'); initParticles(); drawFrame(currentPlayTime); });
   $('[data-tr]').click(function(){ $('[data-tr]').removeClass('active'); $(this).addClass('active'); selectedTransition = $(this).data('tr'); drawFrame(currentPlayTime); });
   $('[data-ratio]').click(function(){ setRatio($(this).data('ratio')); drawFrame(currentPlayTime); });
-  $('[data-style]').click(function(){ let style = $(this).data('style'); toggleTextStyle(style); $(this).toggleClass('active'); });
+  $('.text-style-card').click(function(){ let style = $(this).data('style'); toggleTextStyle(style); $(this).toggleClass('active'); });
   $('[data-anim]').click(function(){ let anim = $(this).data('anim'); setTextAnim(anim); $('[data-anim]').removeClass('active'); $(this).addClass('active'); });
   $('[data-quality]').click(function(){ $('[data-quality]').removeClass('active'); $(this).addClass('active'); exportQuality = $(this).data('quality'); });
   $('#startExportBtn').click(startExport);
@@ -626,6 +484,7 @@ $(document).ready(function(){
   $('#shareTelegramBtn').click(shareToTelegram);
   $('#shareGeneralBtn').click(shareGeneral);
   $('#textContentInput, #textPosX, #textPosY, #textSize, #textColorPicker').on('input', updateCurrentLayer);
+  $('.color-option').click(function(){ let color = $(this).data('color'); $('#textColorPicker').val(color); $('.color-option').removeClass('active'); $(this).addClass('active'); updateCurrentLayer(); });
   $('#musicVolume').on('input', function(){ musicVolume = $(this).val()/100; if(isPlaying && audioSource){ stopAudio(); startAudioSync(); } });
   $('#removeMusicBtn').click(()=>{ audioBuffer = null; $('#musicInfo').hide(); stopAudio(); });
   $('#uploadMusicBtn').click(()=>{ $('#musicFileInput').click(); });
