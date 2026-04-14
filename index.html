@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Foto ke Video ✨</title>
+<title>VidioFoto ✨ — FFmpeg Export</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -189,7 +189,7 @@ input[type=color] {
   background: linear-gradient(135deg, #1a8f52, #0f6b3c);
   border-color: transparent; color: #fff; font-weight: 500;
 }
-.btn-export:hover { opacity: .88; background: linear-gradient(135deg, #1a8f52, #0f6b3c); }
+.btn-export:hover { opacity: .88; }
 .btn-sm { padding: 5px 10px; font-size: .72rem; }
 .btns-row { display: flex; gap: 6px; flex-wrap: wrap; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
@@ -230,7 +230,8 @@ canvas { display: block; cursor: default; }
   height: 3px; background: var(--border2); border-radius: 3px; overflow: hidden;
 }
 .prog-fill {
-  height: 100%; width: 0%; background: linear-gradient(90deg, var(--accent), var(--accent2));
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
   border-radius: 3px; transition: width .08s linear;
 }
 .time-display {
@@ -243,6 +244,8 @@ canvas { display: block; cursor: default; }
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 10px;
+  max-width: 260px;
+  text-align: center;
 }
 .drag-hint {
   position: absolute;
@@ -276,8 +279,6 @@ canvas { display: block; cursor: default; }
   transition: .15s;
 }
 .anim-badge.on { background: rgba(37,99,235,.1); color: var(--accent3); border-color: rgba(37,99,235,.35); }
-
-/* Rasio toggle */
 .ratio-toggle {
   display: flex;
   gap: 0;
@@ -310,8 +311,6 @@ canvas { display: block; cursor: default; }
   color: var(--accent);
 }
 .ratio-btn:first-child { border-right: 1px solid var(--border2); }
-
-/* HD badge */
 .hd-badge {
   display: inline-flex;
   align-items: center;
@@ -324,6 +323,112 @@ canvas { display: block; cursor: default; }
   padding: 2px 8px;
   font-weight: 600;
 }
+
+/* ─── Export Modal ─────────────────────────────── */
+#exportModal {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(6px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+}
+#exportModal.show { display: flex; }
+.modal-box {
+  background: var(--surface);
+  border-radius: 16px;
+  padding: 2rem;
+  width: 360px;
+  box-shadow: 0 32px 80px rgba(0,0,0,.4);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.modal-title {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+}
+.modal-sub {
+  font-size: .78rem;
+  color: var(--muted);
+  line-height: 1.5;
+}
+.exp-prog-track {
+  height: 8px;
+  background: var(--surface2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.exp-prog-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 8px;
+  transition: width .12s linear;
+}
+.exp-step {
+  font-size: .75rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.exp-cancel {
+  font-size: .75rem;
+  color: var(--muted);
+  background: none;
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  align-self: flex-start;
+}
+.exp-cancel:hover { background: var(--surface2); }
+.quality-row {
+  display: flex; gap: 6px;
+}
+.quality-opt {
+  flex: 1;
+  padding: 8px 6px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border2);
+  background: var(--surface2);
+  cursor: pointer;
+  text-align: center;
+  transition: .15s;
+}
+.quality-opt.sel {
+  border-color: rgba(124,58,237,.5);
+  background: rgba(124,58,237,.08);
+}
+.quality-opt .q-label {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: .78rem;
+  color: var(--text);
+}
+.quality-opt .q-sub {
+  font-size: .65rem;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.fps-row { display: flex; align-items: center; gap: 8px; }
+.fps-chip {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: .72rem;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--muted);
+  cursor: pointer;
+  transition: .15s;
+}
+.fps-chip.sel {
+  background: rgba(124,58,237,.1);
+  color: var(--accent);
+  border-color: rgba(124,58,237,.35);
+}
 </style>
 </head>
 <body>
@@ -331,10 +436,17 @@ canvas { display: block; cursor: default; }
 <header>
   <div class="logo">✦ VidioFoto</div>
   <div style="display:flex;align-items:center;gap:8px">
-    <span class="hd-badge">HD 1080p</span>
+    <span class="hd-badge">MP4 H.264</span>
     <div class="hint">Geser teks langsung di canvas</div>
   </div>
 </header>
+
+<!-- Export Modal -->
+<div id="exportModal">
+  <div class="modal-box" id="modalContent">
+    <!-- diisi JS -->
+  </div>
+</div>
 
 <div class="workspace">
 
@@ -402,7 +514,7 @@ canvas { display: block; cursor: default; }
     <div class="section">
       <div class="lbl">Durasi Video</div>
       <div class="sl-row">
-        <input type="range" min="5" max="10" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')">
+        <input type="range" min="5" max="30" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')">
         <span class="sl-val" id="durV">7s</span>
       </div>
       <div class="lbl" style="margin-top:10px">Warna Latar</div>
@@ -427,7 +539,7 @@ canvas { display: block; cursor: default; }
       <button class="btn" onclick="stopPrev()">■ Stop</button>
       <button class="btn btn-sm" onclick="resetTime()">⏮ Reset</button>
       <div id="status">Upload foto untuk mulai</div>
-      <button class="btn btn-export" onclick="doExport()">⬇ Export HD Video</button>
+      <button class="btn btn-export" onclick="showExportModal()">⬇ Export MP4</button>
     </div>
   </div>
 
@@ -525,9 +637,14 @@ canvas { display: block; cursor: default; }
   </div>
 </div>
 
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- FFmpeg.wasm via CDN (v0.12 — stable, SharedArrayBuffer -->
+<!-- tidak diperlukan di versi ini)                         -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script>
+
 <script>
 // ─── Dimensi HD ───────────────────────────────────────────
-// Selalu render di 1080p, scale untuk tampilan
 const RATIOS = {
   '16:9': { W: 1920, H: 1080, dispW: 580, dispH: 326 },
   '9:16': { W: 1080, H: 1920, dispW: 270, dispH: 480 }
@@ -539,63 +656,59 @@ let DISP_W = 580, DISP_H = 326;
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
 
+// Render canvas untuk export (tidak ditampilkan, ukuran sesuai output)
+const offCv = document.createElement('canvas');
+const offCtx = offCv.getContext('2d');
+
 function setRatio(ratio) {
   currentRatio = ratio;
   const r = RATIOS[ratio];
   W = r.W; H = r.H; DISP_W = r.dispW; DISP_H = r.dispH;
-
-  // Update canvas internal size (HD)
   cv.width = W; cv.height = H;
-
-  // Update canvas display size
   cv.style.width = DISP_W + 'px';
   cv.style.height = DISP_H + 'px';
-
-  // Update pos range limits
   document.getElementById('posX').max = W;
   document.getElementById('posY').max = H;
-
-  // Default text position to center
   document.getElementById('posX').value = Math.round(W / 2);
   document.getElementById('posY').value = Math.round(H * 0.08);
   sv('posXV', Math.round(W / 2));
   sv('posYV', Math.round(H * 0.08));
-
-  // Update info label
   document.getElementById('resInfo').textContent = ratio === '16:9'
     ? 'Output: 1920 × 1080 px (Full HD)'
     : 'Output: 1080 × 1920 px (Full HD Reels)';
-
-  // Update active button
   document.getElementById('ratio169').classList.toggle('active', ratio === '16:9');
   document.getElementById('ratio916').classList.toggle('active', ratio === '9:16');
-
   initParts();
   drawFrame(0);
 }
 
-// ─── State ───────────────────────────────────────────────
+// ─── State ─────────────────────────────────────────────────
 let img = null;
-let animId = null, recId = null;
-let isRec = false;
-let t0 = null, isPaused = true;
+let animId = null;
+let isPaused = true;
+let t0 = null;
 let selFx = 'flowers', selTr = 'zoom';
 let parts = [];
 let layers = [];
 let selLayerId = null;
 let layerIdCounter = 0;
 let dragState = null;
+let exportCancelled = false;
 
-// Init canvas
+// FFmpeg instance
+let ffmpegReady = false;
+let ffmpegLoading = false;
+let ffmpegInstance = null;
+
 cv.width = W; cv.height = H;
 cv.style.width = DISP_W + 'px';
 cv.style.height = DISP_H + 'px';
 
-// ─── Helpers ──────────────────────────────────────────────
+// ─── Helpers ───────────────────────────────────────────────
 function sv(id, val) { document.getElementById(id).textContent = val; }
 function el(id) { return document.getElementById(id); }
 
-// ─── File Upload ──────────────────────────────────────────
+// ─── File Upload ───────────────────────────────────────────
 el('fi').addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader();
@@ -625,7 +738,7 @@ uz.addEventListener('drop', e => {
   inp.dispatchEvent(new Event('change'));
 });
 
-// ─── Chips ────────────────────────────────────────────────
+// ─── Chips ─────────────────────────────────────────────────
 el('fxChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
   document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
   c.classList.add('on'); selFx = c.dataset.fx; initParts();
@@ -635,7 +748,7 @@ el('trChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click',
   c.classList.add('on'); selTr = c.dataset.tr;
 }));
 
-// ─── Particles ───────────────────────────────────────────
+// ─── Particles ─────────────────────────────────────────────
 const FXD = {
   flowers: { chars: ['🌸','🌺','🌼','💮'], cols: ['#ffb7c5','#ff69b4','#ffd1dc','#ff85a1'] },
   hearts:  { chars: ['❤️','💕','💖','💗','💓'], cols: ['#ff4d6d','#ff8fa3','#ff6b81'] },
@@ -671,7 +784,7 @@ function mkPart(top = false) {
 
 initParts();
 
-// ─── Text Layers ─────────────────────────────────────────
+// ─── Text Layers ───────────────────────────────────────────
 function addTextLayer() {
   const id = ++layerIdCounter;
   const layer = {
@@ -767,15 +880,11 @@ function setTextAnim(badge, anim) {
   document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === anim));
 }
 
-// ─── Canvas Drag (koordinat skala penuh) ──────────────────
+// ─── Canvas Drag ───────────────────────────────────────────
 function getCanvasPos(e) {
   const rect = cv.getBoundingClientRect();
-  // rect ukuran display, canvas internal = HD
   const scaleX = W / rect.width, scaleY = H / rect.height;
-  return {
-    x: (e.clientX - rect.left) * scaleX,
-    y: (e.clientY - rect.top) * scaleY
-  };
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
 }
 
 function hitTest(mx, my) {
@@ -802,8 +911,7 @@ cv.addEventListener('mousedown', e => {
     dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
     cv.style.cursor = 'grabbing';
   } else {
-    selLayerId = null;
-    el('txtProps').style.display = 'none';
+    selLayerId = null; el('txtProps').style.display = 'none';
     renderLayerList();
     el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret';
   }
@@ -812,8 +920,7 @@ cv.addEventListener('mousedown', e => {
 cv.addEventListener('mousemove', e => {
   if (!dragState) {
     const { x, y } = getCanvasPos(e);
-    const hit = hitTest(x, y);
-    cv.style.cursor = hit !== null ? 'grab' : 'default';
+    cv.style.cursor = hitTest(x, y) !== null ? 'grab' : 'default';
     return;
   }
   const { x, y } = getCanvasPos(e);
@@ -857,90 +964,102 @@ cv.addEventListener('touchmove', e => {
 
 cv.addEventListener('touchend', () => { dragState = null; });
 
-// ─── Draw Frame (di koordinat HD penuh) ──────────────────
-function drawFrame(t) {
+// ─── Draw Frame ─────────────────────────────────────────────
+// targetCtx & targetW/H untuk support offscreen render saat export
+function drawFrameOnCtx(targetCtx, targetW, targetH, t, isExporting) {
   const dur = parseInt(el('dur').value) * 1000;
   const prog = Math.min(t / dur, 1);
   const bg = el('bgCol').value;
 
-  ctx.clearRect(0, 0, W, H);
-  ctx.fillStyle = bg;
-  ctx.fillRect(0, 0, W, H);
+  targetCtx.clearRect(0, 0, targetW, targetH);
+  targetCtx.fillStyle = bg;
+  targetCtx.fillRect(0, 0, targetW, targetH);
 
   if (img) {
-    ctx.save();
+    targetCtx.save();
     const tr = selTr;
     if (tr === 'zoom') {
       const s = 1 + prog * .14;
-      ctx.translate(W/2, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+      targetCtx.translate(targetW/2, targetH/2); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
     } else if (tr === 'slide') {
-      ctx.translate(-prog * 80, 0);
+      targetCtx.translate(-prog * 80, 0);
     } else if (tr === 'fade') {
-      ctx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
+      targetCtx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
     } else if (tr === 'rotate') {
       const s = 1 + prog * .08;
-      ctx.translate(W/2, H/2); ctx.rotate(prog * .035); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+      targetCtx.translate(targetW/2, targetH/2); targetCtx.rotate(prog * .035); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
     } else if (tr === 'ken') {
       const s = 1 + prog * .12;
       const ox = -prog * 60;
-      ctx.translate(W/2 + ox, H/2); ctx.scale(s, s); ctx.translate(-W/2, -H/2);
+      targetCtx.translate(targetW/2 + ox, targetH/2); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
     }
-    const ir = img.width / img.height, cr = W / H;
+    const ir = img.width / img.height, cr = targetW / targetH;
     let dw, dh, dx, dy;
-    if (ir > cr) { dh = H; dw = dh * ir; dx = (W - dw) / 2; dy = 0; }
-    else { dw = W; dh = dw / ir; dx = 0; dy = (H - dh) / 2; }
-    ctx.drawImage(img, dx, dy, dw, dh);
-    ctx.restore();
-    const gr = ctx.createRadialGradient(W/2, H/2, H*.2, W/2, H/2, H*.85);
+    if (ir > cr) { dh = targetH; dw = dh * ir; dx = (targetW - dw) / 2; dy = 0; }
+    else { dw = targetW; dh = dw / ir; dx = 0; dy = (targetH - dh) / 2; }
+    targetCtx.drawImage(img, dx, dy, dw, dh);
+    targetCtx.restore();
+
+    // vignette
+    const gr = targetCtx.createRadialGradient(targetW/2, targetH/2, targetH*.2, targetW/2, targetH/2, targetH*.85);
     gr.addColorStop(0, 'rgba(0,0,0,0)');
     gr.addColorStop(1, 'rgba(0,0,0,.5)');
-    ctx.fillStyle = gr; ctx.fillRect(0, 0, W, H);
-    const grv = ctx.createLinearGradient(0, 0, 0, H);
+    targetCtx.fillStyle = gr; targetCtx.fillRect(0, 0, targetW, targetH);
+    const grv = targetCtx.createLinearGradient(0, 0, 0, targetH);
     grv.addColorStop(0, 'rgba(0,0,0,.35)');
     grv.addColorStop(.4, 'rgba(0,0,0,.0)');
     grv.addColorStop(1, 'rgba(0,0,0,.4)');
-    ctx.fillStyle = grv; ctx.fillRect(0, 0, W, H);
+    targetCtx.fillStyle = grv; targetCtx.fillRect(0, 0, targetW, targetH);
   }
 
-  // Particles (koordinat HD)
+  // Partikel
   const d = FXD[selFx];
   if (d && d.chars.length) {
-    ctx.save();
+    targetCtx.save();
     for (let p of parts) {
       if (p.dead) continue;
-      ctx.save();
-      ctx.globalAlpha = p.a;
-      ctx.font = p.size + 'px serif';
-      ctx.fillStyle = p.col;
-      ctx.translate(p.x, p.y);
-      ctx.rotate(p.rot * Math.PI / 180);
-      ctx.fillText(p.ch, -p.size / 2, -p.size / 2);
-      ctx.restore();
-      p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
-      p.wb += p.ws; p.rot += p.rv;
-      if (p.y > H + 80) Object.assign(p, mkPart(true));
+      targetCtx.save();
+      targetCtx.globalAlpha = p.a;
+      targetCtx.font = p.size + 'px serif';
+      targetCtx.fillStyle = p.col;
+      targetCtx.translate(p.x, p.y);
+      targetCtx.rotate(p.rot * Math.PI / 180);
+      targetCtx.fillText(p.ch, -p.size / 2, -p.size / 2);
+      targetCtx.restore();
+      // hanya update posisi saat preview (bukan export — export punya loop sendiri)
+      if (!isExporting) {
+        p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
+        p.wb += p.ws; p.rot += p.rv;
+        if (p.y > targetH + 80) Object.assign(p, mkPart(true));
+      }
     }
-    ctx.restore();
+    targetCtx.restore();
   }
 
   for (const layer of layers) {
-    drawTextLayer(layer, prog, t);
+    drawTextLayerOnCtx(targetCtx, targetW, targetH, layer, prog, t);
   }
 
-  if (selLayerId !== null && !isRec) {
+  if (!isExporting && selLayerId !== null) {
     const layer = layers.find(l => l.id === selLayerId);
-    if (layer) drawSelBox(layer);
+    if (layer) drawSelBoxOnCtx(targetCtx, layer);
   }
 
-  // Progress bar tipis di bawah
-  ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fillRect(0, H - 8, W, 8);
-  ctx.fillStyle = 'rgba(255,255,255,.5)'; ctx.fillRect(0, H - 8, W * prog, 8);
+  // progress bar kecil
+  targetCtx.fillStyle = 'rgba(255,255,255,.1)'; targetCtx.fillRect(0, targetH - 8, targetW, 8);
+  targetCtx.fillStyle = 'rgba(255,255,255,.5)'; targetCtx.fillRect(0, targetH - 8, targetW * prog, 8);
+}
 
+// Wrapper untuk canvas preview utama
+function drawFrame(t) {
+  drawFrameOnCtx(ctx, W, H, t, false);
+  const dur = parseInt(el('dur').value) * 1000;
+  const prog = Math.min(t / dur, 1);
   el('progFill').style.width = (prog * 100) + '%';
   el('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + el('dur').value + '.0s';
 }
 
-function drawTextLayer(layer, prog, t) {
+function drawTextLayerOnCtx(tCtx, tW, tH, layer, prog, t) {
   if (!layer.text) return;
   let alpha = layer.opacity;
   let offY = 0, scale = 1;
@@ -966,19 +1085,19 @@ function drawTextLayer(layer, prog, t) {
 
   const txt = layer.anim === 'typewriter' ? (layer._visText || '') : layer.text;
 
-  ctx.save();
-  ctx.globalAlpha = alpha;
-  ctx.translate(layer.x, layer.y + offY);
-  ctx.rotate(layer.rot * Math.PI / 180);
-  if (scale !== 1) ctx.scale(scale, scale);
+  tCtx.save();
+  tCtx.globalAlpha = alpha;
+  tCtx.translate(layer.x, layer.y + offY);
+  tCtx.rotate(layer.rot * Math.PI / 180);
+  if (scale !== 1) tCtx.scale(scale, scale);
 
   const fontStyle = layer.italic ? 'italic ' : '';
   const fontWeight = layer.bold ? '700' : '400';
-  ctx.font = `${fontStyle}${fontWeight} ${layer.size}px Syne, sans-serif`;
-  ctx.textAlign = layer.align === 'center' ? 'center' : layer.align === 'right' ? 'right' : 'left';
-  ctx.textBaseline = 'top';
+  tCtx.font = `${fontStyle}${fontWeight} ${layer.size}px Syne, sans-serif`;
+  tCtx.textAlign = layer.align === 'center' ? 'center' : layer.align === 'right' ? 'right' : 'left';
+  tCtx.textBaseline = 'top';
 
-  const tw = ctx.measureText(txt).width;
+  const tw = tCtx.measureText(txt).width;
   const th = layer.size * 1.2;
   const pad = 20;
   let bx = 0;
@@ -986,55 +1105,55 @@ function drawTextLayer(layer, prog, t) {
   if (layer.align === 'right') bx = -tw;
 
   if (layer.bg) {
-    ctx.fillStyle = layer.bgColor + 'cc';
-    ctx.beginPath();
-    ctx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
-    ctx.fill();
+    tCtx.fillStyle = layer.bgColor + 'cc';
+    tCtx.beginPath();
+    tCtx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
+    tCtx.fill();
   }
 
   if (layer.shadow) {
-    ctx.shadowColor = 'rgba(0,0,0,.85)';
-    ctx.shadowBlur = 30;
-    ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2;
+    tCtx.shadowColor = 'rgba(0,0,0,.85)';
+    tCtx.shadowBlur = 30;
+    tCtx.shadowOffsetX = 2; tCtx.shadowOffsetY = 2;
   }
 
   if (layer.outline) {
-    ctx.strokeStyle = 'rgba(0,0,0,.9)'; ctx.lineWidth = 6;
-    ctx.strokeText(txt, 0, 0);
+    tCtx.strokeStyle = 'rgba(0,0,0,.9)'; tCtx.lineWidth = 6;
+    tCtx.strokeText(txt, 0, 0);
   }
 
-  ctx.fillStyle = layer.color;
-  ctx.fillText(txt, 0, 0);
-  ctx.shadowBlur = 0; ctx.shadowOffsetX = 0; ctx.shadowOffsetY = 0;
-  ctx.restore();
+  tCtx.fillStyle = layer.color;
+  tCtx.fillText(txt, 0, 0);
+  tCtx.shadowBlur = 0; tCtx.shadowOffsetX = 0; tCtx.shadowOffsetY = 0;
+  tCtx.restore();
 }
 
-function drawSelBox(layer) {
-  ctx.save();
-  ctx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
-  const tw = ctx.measureText(layer.text).width;
+function drawSelBoxOnCtx(tCtx, layer) {
+  tCtx.save();
+  tCtx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
+  const tw = tCtx.measureText(layer.text).width;
   const th = layer.size * 1.2;
   const pad = 16;
-  ctx.translate(layer.x, layer.y);
-  ctx.rotate(layer.rot * Math.PI / 180);
+  tCtx.translate(layer.x, layer.y);
+  tCtx.rotate(layer.rot * Math.PI / 180);
   let bx = 0;
   if (layer.align === 'center') bx = -tw / 2;
   if (layer.align === 'right') bx = -tw;
-  ctx.strokeStyle = 'rgba(124,58,237,.8)';
-  ctx.lineWidth = 3;
-  ctx.setLineDash([12, 6]);
-  ctx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
-  ctx.setLineDash([]);
-  ctx.fillStyle = 'rgba(124,58,237,.9)';
+  tCtx.strokeStyle = 'rgba(124,58,237,.8)';
+  tCtx.lineWidth = 3;
+  tCtx.setLineDash([12, 6]);
+  tCtx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
+  tCtx.setLineDash([]);
+  tCtx.fillStyle = 'rgba(124,58,237,.9)';
   const hs = 10;
-  ctx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
-  ctx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
-  ctx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
-  ctx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
-  ctx.restore();
+  tCtx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
+  tCtx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
+  tCtx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
+  tCtx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
+  tCtx.restore();
 }
 
-// ─── Preview Loop ─────────────────────────────────────────
+// ─── Preview Loop ──────────────────────────────────────────
 function startPrev() {
   stopPrev();
   isPaused = false;
@@ -1060,53 +1179,424 @@ function stopPrev() {
 }
 
 function resetTime() {
-  stopPrev();
-  drawFrame(0);
+  stopPrev(); drawFrame(0);
   el('timeDisp').textContent = '0.0s / ' + el('dur').value + '.0s';
-}
-
-// ─── Export HD ────────────────────────────────────────────
-function doExport() {
-  if (isRec) { setStatus('Masih merekam...'); return; }
-  if (!window.MediaRecorder) { setStatus('Browser tidak support MediaRecorder'); return; }
-  stopPrev(); isRec = true; initParts();
-  const res = currentRatio === '16:9' ? '1920×1080' : '1080×1920';
-  setStatus('⏺ Merekam HD ' + res + '...');
-  const stream = cv.captureStream(30);
-  const mime = ['video/webm;codecs=vp9','video/webm;codecs=vp8','video/webm','video/mp4']
-    .find(m => MediaRecorder.isTypeSupported(m)) || 'video/webm';
-  const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: 16000000 });
-  const chunks = [];
-  rec.ondataavailable = e => { if (e.data.size > 0) chunks.push(e.data); };
-  rec.onstop = () => {
-    const blob = new Blob(chunks, { type: mime });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    const ext = mime.includes('mp4') ? 'mp4' : 'webm';
-    const ratio = currentRatio.replace(':', 'x');
-    a.href = url; a.download = `videofoto-hd-${ratio}-${Date.now()}.${ext}`; a.click();
-    URL.revokeObjectURL(url);
-    setStatus('✅ Video HD berhasil diunduh! (' + res + ' · ' + ext.toUpperCase() + ')');
-    isRec = false;
-    setTimeout(() => startPrev(), 400);
-  };
-  rec.start(100);
-  const dur = parseInt(el('dur').value) * 1000;
-  let r0 = null;
-  function recLoop(ts) {
-    if (!r0) r0 = ts;
-    const t = ts - r0;
-    drawFrame(t);
-    if (t < dur) recId = requestAnimationFrame(recLoop);
-    else { rec.stop(); cancelAnimationFrame(recId); }
-  }
-  recId = requestAnimationFrame(recLoop);
 }
 
 function setStatus(msg) { el('status').textContent = msg; }
 
 el('pCount').addEventListener('input', initParts);
 
+// ═══════════════════════════════════════════════════════════
+// ─── FFmpeg.wasm Export ────────────────────────────────────
+// ═══════════════════════════════════════════════════════════
+
+// Pilihan kualitas & FPS dari modal
+let expFps = 30;
+let expQuality = 'hd'; // 'hd' | 'fhd' | '4k'
+
+// Ukuran output sesuai kualitas
+const QUALITY_MAP = {
+  'hd':  { label: 'HD',     suffix: '1280x720',  scaleW: currentRatio === '16:9' ? 1280 : 720,  scaleH: currentRatio === '16:9' ? 720  : 1280 },
+  'fhd': { label: 'Full HD',suffix: '1920x1080', scaleW: currentRatio === '16:9' ? 1920 : 1080, scaleH: currentRatio === '16:9' ? 1080 : 1920 },
+};
+
+function showExportModal() {
+  if (!img) { alert('Upload foto dulu ya!'); return; }
+  stopPrev();
+
+  const modal = el('exportModal');
+  const box = el('modalContent');
+
+  box.innerHTML = `
+    <div class="modal-title">⬇ Export Video MP4</div>
+    <div class="modal-sub">File hasil akan dalam format <b>MP4 H.264</b> — kompatibel langsung dengan Instagram Reels, TikTok, YouTube, dan WhatsApp Status.</div>
+
+    <div>
+      <div class="lbl">Resolusi Output</div>
+      <div class="quality-row" id="qualityRow">
+        <div class="quality-opt sel" data-q="hd" onclick="selectQuality('hd')">
+          <div class="q-label">HD</div>
+          <div class="q-sub">${currentRatio === '16:9' ? '1280×720' : '720×1280'}</div>
+          <div class="q-sub" style="margin-top:2px;color:var(--success);font-weight:600">Cepat</div>
+        </div>
+        <div class="quality-opt" data-q="fhd" onclick="selectQuality('fhd')">
+          <div class="q-label">Full HD</div>
+          <div class="q-sub">${currentRatio === '16:9' ? '1920×1080' : '1080×1920'}</div>
+          <div class="q-sub" style="margin-top:2px;color:var(--accent3);font-weight:600">Lebih lama</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="lbl">Frame Rate</div>
+      <div class="fps-row">
+        <span class="fps-chip" data-fps="24" onclick="selectFps(24)">24 fps</span>
+        <span class="fps-chip sel" data-fps="30" onclick="selectFps(30)">30 fps</span>
+        <span class="fps-chip" data-fps="60" onclick="selectFps(60)">60 fps</span>
+      </div>
+    </div>
+
+    <div style="font-size:.72rem;color:var(--muted);background:var(--surface2);padding:8px 12px;border-radius:8px;line-height:1.6;">
+      ⏱ Estimasi waktu render: <b id="estTime">~${estimateRenderTime('hd', 30)}</b>
+      <br>📦 FFmpeg akan diunduh sekali (~7 MB) dan di-cache browser.
+    </div>
+
+    <div style="display:flex;gap:8px;margin-top:.25rem">
+      <button class="btn btn-export" style="flex:1" onclick="doExportFFmpeg()">🎬 Mulai Export</button>
+      <button class="exp-cancel" onclick="closeExportModal()">Batal</button>
+    </div>
+  `;
+
+  expFps = 30; expQuality = 'hd';
+  modal.classList.add('show');
+}
+
+function closeExportModal() {
+  el('exportModal').classList.remove('show');
+  exportCancelled = true;
+  setTimeout(() => startPrev(), 300);
+}
+
+function estimateRenderTime(q, fps) {
+  const dur = parseInt(el('dur').value);
+  const totalFrames = dur * fps;
+  // Estimasi kasar: ~30ms per frame untuk HD, 60ms untuk FHD
+  const msPerFrame = q === 'hd' ? 30 : 60;
+  const encMs = totalFrames * msPerFrame;
+  const secs = Math.round(encMs / 1000 + dur * 2); // +2x durasi untuk FFmpeg encode
+  if (secs < 60) return secs + ' detik';
+  return Math.round(secs / 60) + ' menit ' + (secs % 60) + ' detik';
+}
+
+function selectQuality(q) {
+  expQuality = q;
+  document.querySelectorAll('[data-q]').forEach(el2 => el2.classList.toggle('sel', el2.dataset.q === q));
+  el('estTime').textContent = '~' + estimateRenderTime(q, expFps);
+}
+
+function selectFps(fps) {
+  expFps = fps;
+  document.querySelectorAll('[data-fps]').forEach(el2 => el2.classList.toggle('sel', parseInt(el2.dataset.fps) === fps));
+  el('estTime').textContent = '~' + estimateRenderTime(expQuality, fps);
+}
+
+// ─── Core FFmpeg Export ────────────────────────────────────
+async function doExportFFmpeg() {
+  exportCancelled = false;
+  const box = el('modalContent');
+  const dur = parseInt(el('dur').value);
+  const fps = expFps;
+  const totalFrames = dur * fps;
+
+  // Tentukan ukuran output
+  const outW = expQuality === 'fhd'
+    ? (currentRatio === '16:9' ? 1920 : 1080)
+    : (currentRatio === '16:9' ? 1280 : 720);
+  const outH = expQuality === 'fhd'
+    ? (currentRatio === '16:9' ? 1080 : 1920)
+    : (currentRatio === '16:9' ? 720 : 1280);
+
+  // UI loading
+  box.innerHTML = `
+    <div class="modal-title">🎬 Memproses Video...</div>
+    <div id="expPhase" class="modal-sub">Mempersiapkan render frame...</div>
+    <div class="exp-prog-track" style="margin:.5rem 0">
+      <div class="exp-prog-fill" id="expProg"></div>
+    </div>
+    <div class="exp-step" id="expStep">Frame 0 / ${totalFrames}</div>
+    <div class="exp-step" id="expExtra" style="margin-top:4px;font-size:.7rem"></div>
+    <button class="exp-cancel" onclick="cancelExport()">✕ Batalkan</button>
+  `;
+
+  function setPhase(msg) { el('expPhase').textContent = msg; }
+  function setProg(pct) { el('expProg').style.width = pct + '%'; }
+  function setStep(msg) { el('expStep').textContent = msg; }
+  function setExtra(msg) { el('expExtra').textContent = msg; }
+
+  // ── 1. Render semua frame ke offscreen canvas & kumpulkan PNG ──
+  setPhase('🖼 Rendering frame...');
+
+  // Reset partikel dengan seed deterministik
+  initParts();
+  // Buat snapshot posisi partikel awal
+  const partsSnapshot = parts.map(p => ({ ...p }));
+
+  const frameBlobs = [];
+  const frameDurMs = (dur * 1000) / totalFrames;
+
+  // Offscreen canvas ukuran output
+  const expCv = document.createElement('canvas');
+  expCv.width = outW; expCv.height = outH;
+  const expCtx = expCv.getContext('2d');
+
+  // Faktor skala partikel dari HD ke output
+  const scaleX = outW / W;
+  const scaleY = outH / H;
+
+  // Clone partikel untuk simulasi deterministik
+  let simParts = partsSnapshot.map(p => ({
+    ...p,
+    x: p.x * scaleX, y: p.y * scaleY,
+    vy: p.vy * scaleY, vx: p.vx * scaleX,
+    size: p.size * ((scaleX + scaleY) / 2)
+  }));
+
+  for (let f = 0; f < totalFrames; f++) {
+    if (exportCancelled) { setPhase('❌ Dibatalkan'); return; }
+
+    const t = f * frameDurMs;
+    const prog = Math.min(t / (dur * 1000), 1);
+
+    // Render frame di ukuran output
+    expCtx.clearRect(0, 0, outW, outH);
+    expCtx.fillStyle = el('bgCol').value;
+    expCtx.fillRect(0, 0, outW, outH);
+
+    // Foto + animasi
+    if (img) {
+      expCtx.save();
+      const tr = selTr;
+      if (tr === 'zoom') {
+        const s = 1 + prog * .14;
+        expCtx.translate(outW/2, outH/2); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
+      } else if (tr === 'slide') {
+        expCtx.translate(-prog * 80 * scaleX, 0);
+      } else if (tr === 'fade') {
+        expCtx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
+      } else if (tr === 'rotate') {
+        const s = 1 + prog * .08;
+        expCtx.translate(outW/2, outH/2); expCtx.rotate(prog * .035); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
+      } else if (tr === 'ken') {
+        const s = 1 + prog * .12;
+        const ox = -prog * 60 * scaleX;
+        expCtx.translate(outW/2 + ox, outH/2); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
+      }
+      const ir = img.width / img.height, cr = outW / outH;
+      let dw, dh, dx, dy;
+      if (ir > cr) { dh = outH; dw = dh * ir; dx = (outW - dw) / 2; dy = 0; }
+      else { dw = outW; dh = dw / ir; dx = 0; dy = (outH - dh) / 2; }
+      expCtx.drawImage(img, dx, dy, dw, dh);
+      expCtx.restore();
+
+      // vignette
+      const gr = expCtx.createRadialGradient(outW/2, outH/2, outH*.2, outW/2, outH/2, outH*.85);
+      gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.5)');
+      expCtx.fillStyle = gr; expCtx.fillRect(0, 0, outW, outH);
+      const grv = expCtx.createLinearGradient(0, 0, 0, outH);
+      grv.addColorStop(0, 'rgba(0,0,0,.35)'); grv.addColorStop(.4, 'rgba(0,0,0,0)'); grv.addColorStop(1, 'rgba(0,0,0,.4)');
+      expCtx.fillStyle = grv; expCtx.fillRect(0, 0, outW, outH);
+    }
+
+    // Partikel
+    const d = FXD[selFx];
+    if (d && d.chars.length) {
+      expCtx.save();
+      for (let p of simParts) {
+        if (p.dead) continue;
+        expCtx.save();
+        expCtx.globalAlpha = p.a;
+        expCtx.font = p.size + 'px serif';
+        expCtx.fillStyle = p.col;
+        expCtx.translate(p.x, p.y);
+        expCtx.rotate(p.rot * Math.PI / 180);
+        expCtx.fillText(p.ch, -p.size / 2, -p.size / 2);
+        expCtx.restore();
+        p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
+        p.wb += p.ws; p.rot += p.rv;
+        if (p.y > outH + 80) {
+          const fresh = mkPart(true);
+          Object.assign(p, {
+            ...fresh,
+            x: fresh.x * scaleX, y: -60,
+            vy: fresh.vy * scaleY, vx: fresh.vx * scaleX,
+            size: fresh.size * ((scaleX + scaleY) / 2)
+          });
+        }
+      }
+      expCtx.restore();
+    }
+
+    // Teks (skala koordinat ke output)
+    for (const layer of layers) {
+      const scaledLayer = {
+        ...layer,
+        x: layer.x * scaleX,
+        y: layer.y * scaleY,
+        size: Math.round(layer.size * ((scaleX + scaleY) / 2))
+      };
+      drawTextLayerOnCtx(expCtx, outW, outH, scaledLayer, prog, t);
+    }
+
+    // Progress bar
+    expCtx.fillStyle = 'rgba(255,255,255,.1)'; expCtx.fillRect(0, outH - 8, outW, 8);
+    expCtx.fillStyle = 'rgba(255,255,255,.5)'; expCtx.fillRect(0, outH - 8, outW * prog, 8);
+
+    // Ambil PNG blob
+    const blob = await new Promise(res => expCv.toBlob(res, 'image/png'));
+    frameBlobs.push(blob);
+
+    const pct = Math.round(((f + 1) / totalFrames) * 60);
+    setProg(pct);
+    setStep(`Frame ${f + 1} / ${totalFrames}`);
+
+    // Yield ke event loop tiap 5 frame supaya UI tidak hang
+    if (f % 5 === 0) await new Promise(r => setTimeout(r, 0));
+  }
+
+  if (exportCancelled) return;
+
+  // ── 2. Load FFmpeg ──
+  setPhase('⚙️ Memuat FFmpeg encoder...');
+  setStep('Downloading FFmpeg WebAssembly (~7 MB)...');
+  setProg(62);
+
+  let ffmpeg;
+  try {
+    const { createFFmpeg, fetchFile } = FFmpeg;
+
+    if (!ffmpegInstance) {
+      ffmpeg = createFFmpeg({
+        log: false,
+        corePath: 'https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg-core.js',
+      });
+      await ffmpeg.load();
+      ffmpegInstance = ffmpeg;
+    } else {
+      ffmpeg = ffmpegInstance;
+    }
+  } catch (err) {
+    // Fallback jika CDN ffmpeg gagal: coba unpkg
+    try {
+      const { createFFmpeg } = window.FFmpeg || await import('https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js');
+      ffmpeg = createFFmpeg({ log: false });
+      await ffmpeg.load();
+      ffmpegInstance = ffmpeg;
+    } catch (err2) {
+      box.innerHTML = `
+        <div class="modal-title">❌ Gagal Load FFmpeg</div>
+        <div class="modal-sub">Error: ${err2.message || err.message}<br><br>Pastikan koneksi internet aktif dan browser mendukung WebAssembly (Chrome / Edge / Firefox terbaru).</div>
+        <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+      `;
+      return;
+    }
+  }
+
+  if (exportCancelled) return;
+
+  // ── 3. Tulis frame ke FS virtual FFmpeg ──
+  setPhase('📁 Memuat frame ke FFmpeg...');
+  setProg(65);
+
+  const { fetchFile } = FFmpeg;
+  for (let i = 0; i < frameBlobs.length; i++) {
+    if (exportCancelled) return;
+    const fname = `frame${String(i).padStart(5, '0')}.png`;
+    ffmpeg.FS('writeFile', fname, await fetchFile(frameBlobs[i]));
+    if (i % 10 === 0) {
+      const pct = 65 + Math.round((i / frameBlobs.length) * 15);
+      setProg(pct);
+      setStep(`Upload frame ${i + 1} / ${frameBlobs.length}`);
+      await new Promise(r => setTimeout(r, 0));
+    }
+  }
+
+  if (exportCancelled) return;
+
+  // ── 4. Encode dengan FFmpeg ──
+  setPhase('🎬 Encoding MP4 H.264...');
+  setExtra('Ini mungkin butuh beberapa detik...');
+  setProg(80);
+  setStep('Running FFmpeg encoder...');
+
+  try {
+    await ffmpeg.run(
+      '-framerate', String(fps),
+      '-i', 'frame%05d.png',
+      '-c:v', 'libx264',
+      '-preset', 'fast',
+      '-crf', '23',
+      '-pix_fmt', 'yuv420p',    // kompatibel semua player & sosmed
+      '-movflags', '+faststart', // streaming ready
+      '-vf', `scale=${outW}:${outH}`,
+      'output.mp4'
+    );
+  } catch (encErr) {
+    box.innerHTML = `
+      <div class="modal-title">❌ Encoding Gagal</div>
+      <div class="modal-sub">FFmpeg error: ${encErr.message || encErr}<br><br>Coba kurangi durasi atau pilih resolusi HD.</div>
+      <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+    `;
+    return;
+  }
+
+  if (exportCancelled) return;
+
+  // ── 5. Ambil hasil & download ──
+  setPhase('✅ Selesai! Mengunduh...');
+  setProg(98);
+
+  let data;
+  try {
+    data = ffmpeg.FS('readFile', 'output.mp4');
+  } catch (e) {
+    box.innerHTML = `
+      <div class="modal-title">❌ File Tidak Ditemukan</div>
+      <div class="modal-sub">FFmpeg selesai tapi file output tidak terbaca. Coba lagi.</div>
+      <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+    `;
+    return;
+  }
+
+  const blob = new Blob([data.buffer], { type: 'video/mp4' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const ratio = currentRatio.replace(':', 'x');
+  const q = expQuality.toUpperCase();
+  a.href = url;
+  a.download = `videofoto-${ratio}-${q}-${fps}fps-${Date.now()}.mp4`;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  // Bersihkan FS virtual
+  for (let i = 0; i < frameBlobs.length; i++) {
+    try { ffmpeg.FS('unlink', `frame${String(i).padStart(5, '0')}.png`); } catch {}
+  }
+  try { ffmpeg.FS('unlink', 'output.mp4'); } catch {}
+
+  setProg(100);
+  const sizeMB = (blob.size / 1024 / 1024).toFixed(1);
+
+  box.innerHTML = `
+    <div class="modal-title">🎉 Video Berhasil Diexport!</div>
+    <div class="modal-sub">
+      File MP4 H.264 telah diunduh.<br><br>
+      📐 Resolusi: <b>${outW} × ${outH}</b><br>
+      🎞 Frame Rate: <b>${fps} fps</b><br>
+      📦 Ukuran File: <b>${sizeMB} MB</b><br><br>
+      ✅ Siap upload ke <b>Instagram Reels, TikTok, YouTube, WhatsApp Status</b> dan platform lainnya.
+    </div>
+    <div style="display:flex;gap:8px;margin-top:.25rem">
+      <button class="btn btn-export" style="flex:1" onclick="showExportModal()">Export Lagi</button>
+      <button class="exp-cancel" onclick="closeExportModal()">Selesai</button>
+    </div>
+  `;
+
+  setStatus('✅ Video MP4 berhasil diekspor! (' + outW + '×' + outH + ' · ' + fps + 'fps · ' + sizeMB + ' MB)');
+}
+
+function cancelExport() {
+  exportCancelled = true;
+  el('expPhase').textContent = '❌ Dibatalkan';
+  setTimeout(() => closeExportModal(), 800);
+}
+
+// ─── Tutup modal dengan klik luar ─────────────────────────
+el('exportModal').addEventListener('click', e => {
+  if (e.target === el('exportModal')) closeExportModal();
+});
+
+// ─── Init ──────────────────────────────────────────────────
 drawFrame(0);
 </script>
 </body>
