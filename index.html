@@ -1454,8 +1454,8 @@ setProg(62);
 let ffmpeg;
 
 try {
-  // ambil dari global
-  const { createFFmpeg, fetchFile } = FFmpeg;
+  const ffmpeg = await loadFFmpeg(box);
+if (!ffmpeg) return;
 
   if (!ffmpegInstance) {
     ffmpeg = createFFmpeg({
@@ -1633,6 +1633,54 @@ el('exportModal').addEventListener('click', e => {
 
 // ─── Init ──────────────────────────────────────────────────
 drawFrame(0);
+</script>
+  <script>
+let ffmpegInstance = null;
+let fetchFileFF = null;
+
+async function loadFFmpeg(box) {
+  let ffmpeg;
+
+  try {
+    if (!ffmpegInstance) {
+      const FFmpeg = await import("https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js");
+
+      const createFFmpeg = FFmpeg.createFFmpeg;
+      const fetchFile = FFmpeg.fetchFile;
+
+      ffmpeg = createFFmpeg({
+        log: false,
+        corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js",
+      });
+
+      await ffmpeg.load();
+
+      ffmpegInstance = ffmpeg;
+      fetchFileFF = fetchFile;
+
+    } else {
+      ffmpeg = ffmpegInstance;
+    }
+
+    return ffmpeg;
+
+  } catch (err) {
+    console.error(err);
+
+    if (box) {
+      box.innerHTML = `
+        <div class="modal-title">❌ Gagal Load FFmpeg</div>
+        <div class="modal-sub">
+          ${err.message}<br><br>
+          Coba pakai Chrome terbaru / koneksi stabil.
+        </div>
+        <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+      `;
+    }
+
+    return null;
+  }
+}
 </script>
 </body>
 </html>
