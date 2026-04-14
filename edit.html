@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>VidioStudio Pro — Editor Video Lengkap</title>
+<!-- Bootstrap 4 + Font Awesome + Google Fonts -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f5f7fb;
+  overflow-x: hidden;
+}
+
+.editor-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+.preview-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #eef2f6;
+  position: relative;
+  padding: 16px;
+  min-height: 0;
+}
+
+.canvas-wrapper {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+  max-width: 100%;
+  max-height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgba(0,0,0,0.05);
+}
+
+canvas {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  cursor: pointer;
+  border-radius: 20px;
+}
+
+.bottom-editor {
+  background: #ffffff;
+  border-top: 1px solid #e9edf2;
+  padding: 12px 16px 20px;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.03);
+}
+
+.tools-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+
+.tool-icon-btn {
+  background: #f1f5f9;
+  border: none;
+  border-radius: 40px;
+  padding: 10px 18px;
+  color: #1e293b;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tool-icon-btn i { color: #667eea; font-size: 0.95rem; }
+.tool-icon-btn:active { transform: scale(0.96); background: #e2e8f0; }
+.tool-icon-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.tool-icon-btn.active i { color: white; }
+
+.primary-btn { background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 10px 20px; border-radius: 40px; color: white; font-weight: 600; font-size: 0.85rem; box-shadow: 0 2px 8px rgba(102,126,234,0.3); }
+
+.progress-timeline {
+  background: #f8fafc;
+  border-radius: 20px;
+  padding: 8px 12px;
+  margin-top: 6px;
+}
+
+.custom-range {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: #e2e8f0;
+  border-radius: 4px;
+  outline: none;
+}
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #667eea;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(102,126,234,0.4);
+  border: 2px solid white;
+}
+
+.bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 28px 28px 0 0;
+  z-index: 1050;
+  transform: translateY(100%);
+  transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 20px;
+  border-top: 1px solid #eef2f6;
+  box-shadow: 0 -8px 30px rgba(0,0,0,0.1);
+}
+.bottom-sheet.show { transform: translateY(0); }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 700; color: #0f172a; }
+.chip-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.chip {
+  background: #f1f5f9;
+  padding: 8px 16px;
+  border-radius: 40px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: #334155;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.chip.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.layer-item {
+  background: #f8fafc;
+  border-radius: 16px;
+  padding: 12px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  border: 1px solid #eef2f6;
+}
+.layer-item.active { background: #ede9fe; border-left: 3px solid #667eea; }
+.prop-row { margin-bottom: 16px; }
+.prop-label { font-size: 0.7rem; text-transform: uppercase; color: #64748b; margin-bottom: 6px; font-weight: 600; }
+.music-wave { background: #f8fafc; border-radius: 16px; padding: 12px; margin-top: 10px; border: 1px solid #eef2f6; }
+.close-sheet { cursor: pointer; font-size: 1.2rem; color: #94a3b8; }
+.share-buttons { display: flex; gap: 12px; margin-top: 16px; justify-content: center; }
+.share-btn { background: #f1f5f9; border: none; border-radius: 40px; padding: 10px 20px; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+
+<div class="editor-container">
+  <div class="preview-area">
+    <div class="canvas-wrapper">
+      <canvas id="mainCanvas"></canvas>
+    </div>
+  </div>
+
+  <div class="bottom-editor">
+    <div class="tools-row">
+      <button class="tool-icon-btn" id="uploadBtn"><i class="fas fa-image"></i> <span>Foto</span></button>
+      <button class="tool-icon-btn" id="musicBtn"><i class="fas fa-music"></i> <span>Musik</span></button>
+      <button class="tool-icon-btn" id="effectsBtn"><i class="fas fa-sparkles"></i> <span>Efek</span></button>
+      <button class="tool-icon-btn" id="textBtn"><i class="fas fa-font"></i> <span>Teks</span></button>
+      <button class="tool-icon-btn" id="aspectBtn"><i class="fas fa-crop-alt"></i> <span>Rasio</span></button>
+      <button class="tool-icon-btn" id="exportBtn"><i class="fas fa-download"></i> <span>Export</span></button>
+    </div>
+    
+    <div class="progress-timeline">
+      <div class="d-flex justify-content-between align-items-center mb-1">
+        <span style="font-size: 0.7rem; color:#64748b;"><i class="fas fa-play-circle"></i> Preview</span>
+        <div class="d-flex gap-2">
+          <button class="btn btn-sm" style="background: #f1f5f9; border-radius: 30px; padding: 4px 12px;" id="playPauseBtn"><i class="fas fa-play" style="color:#667eea;"></i></button>
+          <button class="btn btn-sm" style="background: #f1f5f9; border-radius: 30px; padding: 4px 12px;" id="stopBtn"><i class="fas fa-stop" style="color:#667eea;"></i></button>
+        </div>
+      </div>
+      <input type="range" id="timelineSlider" class="custom-range" min="0" max="100" value="0" step="0.1">
+      <div class="d-flex justify-content-between mt-1">
+        <small class="text-muted" id="currentTimeLabel">0.0s</small>
+        <small class="text-muted" id="totalDurationLabel">6.0s</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- BOTTOM SHEETS -->
+<div id="musicSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-music mr-2"></i>Audio & Musik</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
+  <div class="chip-group">
+    <div class="chip" id="uploadMusicBtn"><i class="fas fa-upload"></i> Upload Musik</div>
+    <div class="chip" id="extractVideoAudioBtn"><i class="fas fa-video"></i> Ekstrak dari Video</div>
+  </div>
+  <div id="musicInfo" class="music-wave" style="display:none;">
+    <div class="d-flex justify-content-between"><span><i class="fas fa-headphones"></i> <span id="musicName">-</span></span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" id="removeMusicBtn"></i></div>
+    <div class="prop-row mt-2"><div class="prop-label">Potong Musik</div><div class="d-flex gap-2 align-items-center"><input type="range" id="musicStartTrim" class="custom-range" min="0" max="100" value="0" style="width:45%"><span>→</span><input type="range" id="musicEndTrim" class="custom-range" min="0" max="100" value="100" style="width:45%"></div><div class="d-flex justify-content-between mt-1"><small id="startTrimLabel">0.0s</small><small id="endTrimLabel">0.0s</small></div></div>
+    <div class="prop-row"><div class="prop-label">Volume</div><input type="range" id="musicVolume" class="custom-range" min="0" max="100" value="70"></div>
+  </div>
+  <input type="file" id="musicFileInput" accept="audio/*,video/*" style="display:none">
+</div>
+
+<div id="effectsSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-sparkles mr-2"></i>Efek Visual</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
+  <div class="chip-group"><div class="chip" data-fx="flowers"><i class="fas fa-fan"></i> Bunga</div><div class="chip" data-fx="hearts"><i class="fas fa-heart"></i> Hati</div><div class="chip" data-fx="stars"><i class="fas fa-star"></i> Bintang</div><div class="chip" data-fx="snow"><i class="fas fa-snowflake"></i> Salju</div><div class="chip" data-fx="none"><i class="fas fa-ban"></i> Off</div></div>
+  <div class="prop-row"><div class="prop-label">Jumlah Partikel</div><input type="range" id="particleRange" class="custom-range" min="0" max="40" value="20"><small id="particleVal" class="text-muted">20</small></div>
+  <div class="prop-row"><div class="prop-label">Animasi Foto</div><div class="chip-group"><div class="chip" data-tr="zoom">Zoom</div><div class="chip" data-tr="slide">Slide</div><div class="chip" data-tr="fade">Fade</div></div></div>
+  <div class="prop-row"><div class="prop-label">Warna Background</div><input type="color" id="bgColorPicker" value="#f0f4f8" class="form-control form-control-sm" style="width:100%; border-radius:12px;"></div>
+</div>
+
+<div id="textSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-font mr-2"></i>Teks (Multiline)</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
+  <button class="tool-icon-btn" style="width:100%; justify-content:center; margin-bottom:12px;" id="addTextLayerBtn"><i class="fas fa-plus"></i> Tambah Teks</button>
+  <div id="layerListContainer" style="max-height:180px; overflow-y:auto;"></div>
+  <div id="textPropPanel" style="display: none; margin-top: 16px;">
+    <div class="prop-row"><div class="prop-label">Teks (Enter baris baru)</div><textarea id="textContentInput" rows="3" class="form-control" style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px;"></textarea></div>
+    <div class="prop-row"><div class="prop-label">Posisi X</div><input type="range" id="textPosX" class="custom-range" min="0" max="100" value="50"></div>
+    <div class="prop-row"><div class="prop-label">Posisi Y</div><input type="range" id="textPosY" class="custom-range" min="0" max="100" value="30"></div>
+    <div class="prop-row"><div class="prop-label">Ukuran</div><input type="range" id="textSize" class="custom-range" min="20" max="90" value="42"></div>
+    <div class="prop-row d-flex justify-content-between"><div><div class="prop-label">Warna</div><input type="color" id="textColorPicker" value="#1e293b"></div><div><div class="prop-label">Style</div><div class="d-flex gap-2"><div class="chip" data-style="bold">Bold</div><div class="chip" data-style="shadow">Shadow</div></div></div></div>
+    <div class="prop-row"><div class="prop-label">Animasi Teks</div><div class="chip-group"><div class="chip" data-anim="none">Diam</div><div class="chip" data-anim="fadein">Fade In</div><div class="chip" data-anim="slideup">Slide Up</div></div></div>
+  </div>
+</div>
+
+<div id="aspectSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-crop-alt mr-2"></i>Aspek Rasio & Durasi</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
+  <div class="chip-group"><div class="chip" data-ratio="16:9"><i class="fas fa-tv"></i> 16:9</div><div class="chip" data-ratio="9:16"><i class="fas fa-mobile-alt"></i> 9:16</div></div>
+  <div class="prop-row mt-2"><div class="prop-label">Durasi Video (detik)</div><input type="range" id="durationSlider" class="custom-range" min="3" max="15" value="6" step="0.5"><small id="durationValDisplay">6.0 s</small></div>
+</div>
+
+<div id="exportSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-download mr-2"></i>Export & Share</span><i class="fas fa-times close-sheet" onclick="closeAllSheets()"></i></div>
+  <div class="chip-group">
+    <div class="chip" data-quality="hd">HD (1080p)</div>
+    <div class="chip" data-quality="medium">Sedang (720p)</div>
+  </div>
+  <button class="primary-btn" style="width:100%; margin-top:12px;" id="startExportBtn"><i class="fas fa-download"></i> Export Video (MP4)</button>
+  <div class="share-buttons" id="shareButtons" style="display: none;">
+    <button class="share-btn" id="shareWhatsAppBtn"><i class="fab fa-whatsapp" style="color:#25D366;"></i> WhatsApp</button>
+    <button class="share-btn" id="shareTelegramBtn"><i class="fab fa-telegram" style="color:#26A5E4;"></i> Telegram</button>
+    <button class="share-btn" id="shareGeneralBtn"><i class="fas fa-share-alt"></i> Share Lainnya</button>
+  </div>
+  <div id="exportProgressContainer" style="display:none; margin-top:16px;">
+    <div class="progress-custom mt-2"><div id="exportProgressFill" style="height:4px; width:0%; background:#667eea; border-radius:4px;"></div></div>
+    <small id="exportStatusText" class="text-muted">Mempersiapkan...</small>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// ==================== FULLY FUNCTIONAL VIDEO EDITOR ====================
+let W = 720, H = 1280;
+let currentRatio = '9:16';
+let uploadedImg = null;
+let animationFrameId = null;
+let isPlaying = false;
+let currentPlayTime = 0;
+let videoDuration = 6000;
+let selectedEffect = 'flowers';
+let selectedTransition = 'zoom';
+let particles = [];
+let textLayers = [];
+let selectedLayerId = null;
+let layerIdCounter = 0;
+
+// AUDIO
+let audioContext = null;
+let audioBuffer = null;
+let audioSource = null;
+let isAudioPlaying = false;
+let musicStartTrim = 0, musicEndTrim = 0, musicDuration = 0, musicVolume = 0.7;
+
+// Export
+let exportQuality = 'hd';
+let isExporting = false;
+let lastExportedBlob = null;
+
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
+
+const FX_LIB = {
+  flowers: { chars: ['🌸','🌺','🌼','🌻'], speed: 0.8 },
+  hearts: { chars: ['❤️','💖','💕','💗'], speed: 0.9 },
+  stars: { chars: ['✨','⭐','🌟','💫'], speed: 0.7 },
+  snow: { chars: ['❄️','❅','❆','·'], speed: 0.5 },
+  none: { chars: [], speed: 0 }
+};
+
+function setRatio(ratio) {
+  currentRatio = ratio;
+  if (ratio === '16:9') { W = 1280; H = 720; } else { W = 720; H = 1280; }
+  canvas.width = W; canvas.height = H;
+  initParticles();
+  drawFrame(currentPlayTime);
+  $('[data-ratio]').removeClass('active');
+  $(`[data-ratio="${ratio}"]`).addClass('active');
+}
+
+function initParticles() {
+  particles = [];
+  const count = parseInt($('#particleRange').val());
+  const fx = FX_LIB[selectedEffect];
+  if (!fx.chars.length) return;
+  for (let i=0; i<count; i++) {
+    particles.push({ x: Math.random() * W, y: Math.random() * H, vy: 0.4 + Math.random() * 1.2, ch: fx.chars[Math.floor(Math.random()*fx.chars.length)], size: 14 + Math.random() * 20, alpha: 0.5 + Math.random() * 0.5 });
+  }
+}
+function updateParticles() { for (let p of particles) { p.y += p.vy; if (p.y > H + 50) { p.y = -50; p.x = Math.random() * W; } } }
+
+function drawMultilineText(ctx, text, x, y, fontSize, fontFamily, color, bold, shadow) {
+  const lines = text.split('\n');
+  const lineHeight = fontSize * 1.2;
+  const totalHeight = lines.length * lineHeight;
+  let startY = y - totalHeight / 2;
+  ctx.font = `${bold ? 'bold ' : ''}${fontSize}px ${fontFamily}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  if (shadow) { ctx.shadowColor = 'rgba(0,0,0,0.2)'; ctx.shadowBlur = 5; ctx.shadowOffsetX = 1; ctx.shadowOffsetY = 1; }
+  ctx.fillStyle = color;
+  for (let i = 0; i < lines.length; i++) ctx.fillText(lines[i], x, startY + i * lineHeight);
+  ctx.shadowBlur = 0;
+}
+
+function drawTextLayer(ctx, layer, progress, timeMs) {
+  if (!layer.text) return;
+  let alpha = 1, offsetY = 0;
+  if (layer.anim === 'fadein') alpha = Math.min(progress * 3, 1);
+  if (layer.anim === 'slideup') { offsetY = (1 - Math.min(progress * 2, 1)) * 35; alpha = Math.min(progress*2,1); }
+  ctx.save();
+  ctx.globalAlpha = alpha * 0.95;
+  let x = (layer.x / 100) * W;
+  let y = (layer.y / 100) * H + offsetY;
+  drawMultilineText(ctx, layer.text, x, y, layer.size, 'Inter, sans-serif', layer.color, layer.bold, layer.shadow);
+  ctx.restore();
+}
+
+function drawFrame(timeMs) {
+  let progress = Math.min(timeMs / videoDuration, 1);
+  ctx.fillStyle = $('#bgColorPicker').val();
+  ctx.fillRect(0,0,W,H);
+  if (uploadedImg) {
+    ctx.save();
+    if (selectedTransition === 'zoom') { let scale = 1 + progress * 0.1; let dx = (W - W*scale)/2; let dy = (H - H*scale)/2; ctx.translate(dx, dy); ctx.scale(scale, scale); }
+    else if (selectedTransition === 'slide') { ctx.translate(-progress * 50, 0); }
+    else if (selectedTransition === 'fade') { ctx.globalAlpha = 0.6 + progress*0.4; }
+    let imgRatio = uploadedImg.width / uploadedImg.height;
+    let canvasRatio = W / H;
+    let drawW, drawH, drawX, drawY;
+    if (imgRatio > canvasRatio) { drawH = H; drawW = drawH * imgRatio; drawX = (W - drawW)/2; drawY = 0; }
+    else { drawW = W; drawH = drawW / imgRatio; drawX = 0; drawY = (H - drawH)/2; }
+    ctx.drawImage(uploadedImg, drawX, drawY, drawW, drawH);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(0,0,0,0.1)'; ctx.fillRect(0,0,W,H);
+  }
+  let fxData = FX_LIB[selectedEffect];
+  if (fxData.chars.length && particles.length) { for (let p of particles) { ctx.font = `${p.size}px "Segoe UI Emoji"`; ctx.fillStyle = `rgba(0,0,0,${p.alpha*0.6})`; ctx.fillText(p.ch, p.x, p.y); } updateParticles(); }
+  for (let layer of textLayers) drawTextLayer(ctx, layer, progress, timeMs);
+  ctx.fillStyle = 'rgba(0,0,0,0.1)'; ctx.fillRect(0, H-4, W, 3);
+  ctx.fillStyle = '#667eea'; ctx.fillRect(0, H-4, W * progress, 3);
+  $('#timelineSlider').val((timeMs/videoDuration)*100);
+  $('#currentTimeLabel').text((timeMs/1000).toFixed(1)+'s');
+}
+
+// AUDIO FUNCTIONS
+async function initAudioContext() { if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)(); return audioContext; }
+async function loadAudioFromBlob(blob, filename) {
+  try { const ctxAudio = await initAudioContext(); const arrayBuffer = await blob.arrayBuffer(); const buffer = await ctxAudio.decodeAudioData(arrayBuffer); audioBuffer = buffer; musicDuration = buffer.duration; musicStartTrim = 0; musicEndTrim = musicDuration; updateTrimSliders(); $('#musicInfo').show(); $('#musicName').text(filename || 'Audio'); musicVolume = 0.7; $('#musicVolume').val(70); if (isPlaying) { stopAudio(); startAudioSync(); } return true; } catch(e){ alert("Gagal load audio"); return false; }
+}
+function updateTrimSliders() { $('#musicStartTrim').attr('max', musicDuration); $('#musicEndTrim').attr('max', musicDuration); $('#musicStartTrim').val(musicStartTrim); $('#musicEndTrim').val(musicEndTrim); $('#startTrimLabel').text(musicStartTrim.toFixed(1)+'s'); $('#endTrimLabel').text(musicEndTrim.toFixed(1)+'s'); }
+function startAudioSync() { if (!audioBuffer || !isPlaying) return; stopAudio(); const startOffset = musicStartTrim + (currentPlayTime/1000); if (startOffset >= musicEndTrim) return; const durationPlay = Math.min(musicEndTrim - startOffset, (videoDuration-currentPlayTime)/1000); if (durationPlay <= 0) return; audioSource = audioContext.createBufferSource(); let gainNode = audioContext.createGain(); gainNode.gain.value = musicVolume; audioSource.buffer = audioBuffer; audioSource.connect(gainNode); gainNode.connect(audioContext.destination); audioSource.start(0, startOffset, durationPlay); isAudioPlaying = true; }
+function stopAudio() { if (audioSource) { try { audioSource.stop(); } catch(e){} audioSource = null; } isAudioPlaying = false; }
+
+// PREVIEW
+function startPreviewLoop() {
+  if (!uploadedImg) { alert("Upload foto dulu!"); return false; }
+  if (animationFrameId) cancelAnimationFrame(animationFrameId);
+  isPlaying = true;
+  const startTime = performance.now() - currentPlayTime;
+  function update(now) {
+    if (!isPlaying) return;
+    let elapsed = (now - startTime);
+    if (elapsed >= videoDuration) { elapsed = videoDuration; isPlaying = false; currentPlayTime = videoDuration; drawFrame(currentPlayTime); stopAudio(); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); return; }
+    currentPlayTime = elapsed; drawFrame(currentPlayTime);
+    if (audioBuffer && !isAudioPlaying && elapsed < videoDuration) startAudioSync();
+    animationFrameId = requestAnimationFrame(update);
+  }
+  if (audioBuffer) { stopAudio(); startAudioSync(); }
+  animationFrameId = requestAnimationFrame(update);
+  $('#playPauseBtn').html('<i class="fas fa-pause"></i>');
+  return true;
+}
+function stopPreview() { if (animationFrameId) cancelAnimationFrame(animationFrameId); isPlaying = false; stopAudio(); currentPlayTime = 0; drawFrame(0); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); }
+function togglePlayPause() { if (!uploadedImg) { alert("Upload foto"); return; } if (isPlaying) { isPlaying = false; if (animationFrameId) cancelAnimationFrame(animationFrameId); stopAudio(); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); } else { startPreviewLoop(); } }
+function seekTo(percent) { if (isPlaying) togglePlayPause(); let newTime = (percent / 100) * videoDuration; currentPlayTime = Math.min(newTime, videoDuration); drawFrame(currentPlayTime); stopAudio(); }
+
+// TEXT LAYERS
+function addTextLayer() { let id = ++layerIdCounter; textLayers.push({ id, text: "Teks Baru\nBaris kedua", x: 50, y: 40, size: 40, color: '#1e293b', bold: false, shadow: true, anim: 'none' }); selectLayer(id); renderLayerList(); }
+function selectLayer(id) { selectedLayerId = id; renderLayerList(); let layer = textLayers.find(l=>l.id===id); if(!layer) { $('#textPropPanel').hide(); return; } $('#textPropPanel').show(); $('#textContentInput').val(layer.text); $('#textPosX').val(layer.x); $('#textPosY').val(layer.y); $('#textSize').val(layer.size); $('#textColorPicker').val(layer.color); $('[data-style]').removeClass('active'); if(layer.bold) $('[data-style="bold"]').addClass('active'); if(layer.shadow) $('[data-style="shadow"]').addClass('active'); $('[data-anim]').removeClass('active'); $(`[data-anim="${layer.anim}"]`).addClass('active'); }
+function renderLayerList() { let container = $('#layerListContainer'); if(textLayers.length===0){ container.html('<div class="text-center text-muted py-3"><i class="fas fa-plus-circle"></i> Klik + untuk teks</div>'); return; } container.html(textLayers.map(l=>`<div class="layer-item ${l.id===selectedLayerId?'active':''}" onclick="selectLayer(${l.id})"><span><i class="fas fa-font mr-2"></i>${l.text.substring(0,18).replace(/\n/g,' ')}</span><i class="fas fa-trash-alt" style="cursor:pointer; color:#ef4444;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i></div>`).join('')); }
+function deleteLayer(id){ textLayers = textLayers.filter(l=>l.id!==id); if(selectedLayerId===id) selectedLayerId = textLayers.length?textLayers[0].id:null; if(selectedLayerId) selectLayer(selectedLayerId); else $('#textPropPanel').hide(); renderLayerList(); drawFrame(currentPlayTime); }
+function updateCurrentLayer(){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.text = $('#textContentInput').val(); layer.size = parseInt($('#textSize').val()); layer.color = $('#textColorPicker').val(); layer.x = parseInt($('#textPosX').val()); layer.y = parseInt($('#textPosY').val()); drawFrame(currentPlayTime); } }
+function toggleTextStyle(style){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer[style] = !layer[style]; drawFrame(currentPlayTime); } }
+function setTextAnim(anim){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.anim = anim; drawFrame(currentPlayTime); } }
+
+// REAL EXPORT MP4 (WhatsApp Compatible)
+async function startExport() {
+  if (!uploadedImg) { alert("Upload foto terlebih dahulu"); return; }
+  if (isExporting) return;
+  closeAllSheets();
+  isExporting = true;
+  $('#exportProgressContainer').show();
+  $('#shareButtons').hide();
+  $('#exportProgressFill').css('width', '0%');
+  $('#exportStatusText').text('Mempersiapkan export MP4...');
+  
+  const fps = 24;
+  const durationSec = videoDuration / 1000;
+  let stream = canvas.captureStream(fps);
+  
+  // Cari kodec yang kompatibel dengan WhatsApp (H.264 + AAC)
+  let mimeType = '';
+  const codecs = [
+    'video/mp4;codecs=h264,aac',
+    'video/mp4;codecs=avc1.42E01E,mp4a.40.2',
+    'video/mp4'
+  ];
+  for (let codec of codecs) {
+    if (MediaRecorder.isTypeSupported(codec)) {
+      mimeType = codec;
+      break;
+    }
+  }
+  if (!mimeType) mimeType = 'video/webm'; // fallback
+  
+  recordedChunks = [];
+  const mediaRecorder = new MediaRecorder(stream, { 
+    mimeType: mimeType, 
+    videoBitsPerSecond: exportQuality === 'hd' ? 3500000 : 1500000,
+    audioBitsPerSecond: 128000
+  });
+  
+  mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+  
+  const exportPromise = new Promise((resolve) => { mediaRecorder.onstop = () => { 
+    const blob = new Blob(recordedChunks, { type: 'video/mp4' });
+    resolve(blob);
+  }; });
+  
+  mediaRecorder.start();
+  const startTime = performance.now();
+  let frameCount = 0;
+  const totalFrames = Math.ceil(durationSec * fps);
+  
+  // Audio background untuk export
+  let tempAudioCtx = null;
+  let tempSource = null;
+  if (audioBuffer && audioContext) {
+    tempAudioCtx = new AudioContext();
+    let tempGain = tempAudioCtx.createGain();
+    tempGain.gain.value = musicVolume;
+    tempSource = tempAudioCtx.createBufferSource();
+    tempSource.buffer = audioBuffer;
+    let startOffset = musicStartTrim;
+    let durationPlay = Math.min(musicEndTrim - startOffset, durationSec);
+    tempSource.connect(tempGain);
+    tempGain.connect(tempAudioCtx.destination);
+    tempSource.start(0, startOffset, durationPlay);
+  }
+  
+  function recordFrame(now) {
+    let elapsed = (now - startTime);
+    if (elapsed >= videoDuration) elapsed = videoDuration;
+    drawFrame(elapsed);
+    frameCount++;
+    let percent = Math.min((elapsed / videoDuration) * 100, 100);
+    $('#exportProgressFill').css('width', percent + '%');
+    $('#exportStatusText').text(`Merekam video ${Math.floor(percent)}%`);
+    if (elapsed < videoDuration) {
+      requestAnimationFrame(recordFrame);
+    } else {
+      setTimeout(() => {
+        mediaRecorder.stop();
+        if (tempSource) { try { tempSource.stop(); tempAudioCtx.close(); } catch(e){} }
+      }, 100);
+    }
+  }
+  
+  requestAnimationFrame(recordFrame);
+  
+  const videoBlob = await exportPromise;
+  lastExportedBlob = videoBlob;
+  
+  // Simpan file
+  const url = URL.createObjectURL(videoBlob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `videostudio_${Date.now()}.mp4`;
+  a.click();
+  URL.revokeObjectURL(url);
+  
+  isExporting = false;
+  $('#exportProgressContainer').hide();
+  $('#shareButtons').show();
+  alert("✅ Video MP4 berhasil diekspor! Klik tombol share untuk bagikan ke WhatsApp/medsos.");
+}
+
+// SHARE FUNCTIONS
+function shareToWhatsApp() {
+  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
+  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({
+      title: 'VidioStudio Video',
+      text: 'Lihat video keren dari VidioStudio!',
+      files: [file]
+    }).catch(e => console.log('Share cancelled', e));
+  } else {
+    // Fallback: buka WhatsApp Web dengan instruksi
+    const url = URL.createObjectURL(lastExportedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'videostudio.mp4';
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("Download selesai! Buka WhatsApp, pilih file video dari folder Downloads.");
+  }
+}
+
+function shareToTelegram() {
+  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
+  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({
+      title: 'VidioStudio Video',
+      text: 'Lihat video keren dari VidioStudio!',
+      files: [file]
+    }).catch(e => console.log('Share cancelled', e));
+  } else {
+    const url = URL.createObjectURL(lastExportedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'videostudio.mp4';
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("Download selesai! Kirim file video ke Telegram.");
+  }
+}
+
+function shareGeneral() {
+  if (!lastExportedBlob) { alert("Export video dulu ya!"); return; }
+  const file = new File([lastExportedBlob], "videostudio.mp4", { type: "video/mp4" });
+  if (navigator.canShare && navigator.canShare({ files: [file] })) {
+    navigator.share({
+      title: 'VidioStudio Video',
+      text: 'Video keren dari VidioStudio!',
+      files: [file]
+    }).catch(e => console.log('Share cancelled', e));
+  } else {
+    const url = URL.createObjectURL(lastExportedBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'videostudio.mp4';
+    a.click();
+    URL.revokeObjectURL(url);
+    alert("Download selesai! Kirim file ke aplikasi yang kamu mau.");
+  }
+}
+
+// EVENT HANDLERS
+$(document).ready(function(){
+  setRatio('9:16'); videoDuration = 6000; $('#durationSlider').val(6); $('#durationValDisplay').text('6.0 s');
+  $('#uploadBtn').click(()=>{ let input = $('<input type="file" accept="image/*">'); input.on('change',(e)=>{ if(e.target.files[0]){ let reader = new FileReader(); reader.onload = (ev)=>{ let img = new Image(); img.onload = ()=>{ uploadedImg = img; stopPreview(); initParticles(); drawFrame(0); }; img.src = ev.target.result; }; reader.readAsDataURL(e.target.files[0]); } }); input.click(); });
+  $('#musicBtn').click(()=>{ closeAllSheets(); $('#musicSheet').addClass('show'); });
+  $('#effectsBtn').click(()=>{ closeAllSheets(); $('#effectsSheet').addClass('show'); });
+  $('#textBtn').click(()=>{ closeAllSheets(); $('#textSheet').addClass('show'); renderLayerList(); if(selectedLayerId) selectLayer(selectedLayerId); });
+  $('#aspectBtn').click(()=>{ closeAllSheets(); $('#aspectSheet').addClass('show'); });
+  $('#exportBtn').click(()=>{ closeAllSheets(); $('#exportSheet').addClass('show'); });
+  $('#playPauseBtn').click(togglePlayPause);
+  $('#stopBtn').click(stopPreview);
+  $('#timelineSlider').on('input', function(){ seekTo($(this).val()); });
+  $('#durationSlider').on('input', function(){ let dur = parseFloat($(this).val()); videoDuration = dur * 1000; $('#durationValDisplay').text(dur.toFixed(1)+' s'); if(!isPlaying) drawFrame(currentPlayTime); $('#totalDurationLabel').text('/ '+dur.toFixed(1)+'s'); });
+  $('#bgColorPicker').on('input',()=>drawFrame(currentPlayTime));
+  $('#particleRange').on('input',function(){ $('#particleVal').text($(this).val()); initParticles(); drawFrame(currentPlayTime); });
+  $('#addTextLayerBtn').click(()=>{ addTextLayer(); });
+  $('[data-fx]').click(function(){ $('[data-fx]').removeClass('active'); $(this).addClass('active'); selectedEffect = $(this).data('fx'); initParticles(); drawFrame(currentPlayTime); });
+  $('[data-tr]').click(function(){ $('[data-tr]').removeClass('active'); $(this).addClass('active'); selectedTransition = $(this).data('tr'); drawFrame(currentPlayTime); });
+  $('[data-ratio]').click(function(){ setRatio($(this).data('ratio')); drawFrame(currentPlayTime); });
+  $('[data-style]').click(function(){ let style = $(this).data('style'); toggleTextStyle(style); $(this).toggleClass('active'); });
+  $('[data-anim]').click(function(){ let anim = $(this).data('anim'); setTextAnim(anim); $('[data-anim]').removeClass('active'); $(this).addClass('active'); });
+  $('[data-quality]').click(function(){ $('[data-quality]').removeClass('active'); $(this).addClass('active'); exportQuality = $(this).data('quality'); });
+  $('#startExportBtn').click(startExport);
+  $('#shareWhatsAppBtn').click(shareToWhatsApp);
+  $('#shareTelegramBtn').click(shareToTelegram);
+  $('#shareGeneralBtn').click(shareGeneral);
+  $('#textContentInput, #textPosX, #textPosY, #textSize, #textColorPicker').on('input', updateCurrentLayer);
+  $('#musicVolume').on('input', function(){ musicVolume = $(this).val()/100; if(isPlaying && audioSource){ stopAudio(); startAudioSync(); } });
+  $('#removeMusicBtn').click(()=>{ audioBuffer = null; $('#musicInfo').hide(); stopAudio(); });
+  $('#uploadMusicBtn').click(()=>{ $('#musicFileInput').click(); });
+  $('#extractVideoAudioBtn').click(()=>{ let input = $('<input type="file" accept="video/*">'); input.on('change',(e)=>{ if(e.target.files[0]){ let file = e.target.files[0]; let reader = new FileReader(); reader.onload = async (ev)=>{ let blob = new Blob([ev.target.result], {type: 'audio/mp4'}); await loadAudioFromBlob(blob, file.name.replace(/\.(mp4|mov|avi)$/i,'')+'_audio'); }; reader.readAsArrayBuffer(file); } }); input.click(); });
+  $('#musicFileInput').on('change', function(e){ if(e.target.files[0]){ let file = e.target.files[0]; const reader = new FileReader(); reader.onload = async (ev)=>{ const blob = new Blob([ev.target.result], {type: 'audio/mpeg'}); await loadAudioFromBlob(blob, file.name); }; reader.readAsArrayBuffer(file); } });
+  $('#musicStartTrim, #musicEndTrim').on('input', function(){ let start = parseFloat($('#musicStartTrim').val()); let end = parseFloat($('#musicEndTrim').val()); if(start>=end) { alert("Start harus kurang dari End"); return; } musicStartTrim = start; musicEndTrim = end; updateTrimSliders(); if(isPlaying){ stopAudio(); startAudioSync(); } });
+  
+  $('[data-fx="flowers"]').addClass('active'); $('[data-tr="zoom"]').addClass('active'); $('[data-quality="hd"]').addClass('active'); initParticles(); drawFrame(0);
+});
+function closeAllSheets(){ $('.bottom-sheet').removeClass('show'); }
+</script>
+</body>
+</html>
