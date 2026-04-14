@@ -1446,41 +1446,76 @@ async function doExportFFmpeg() {
 
   if (exportCancelled) return;
 
-  // ── 2. Load FFmpeg ──
-  setPhase('⚙️ Memuat FFmpeg encoder...');
-  setStep('Downloading FFmpeg WebAssembly (~7 MB)...');
-  setProg(62);
+ // ── 2. Load FFmpeg ──
+setPhase('⚙️ Memuat FFmpeg encoder...');
+setStep('Menyiapkan engine video...');
+setProg(62);
 
-  let ffmpeg;
-  try {
-    const { createFFmpeg, fetchFile } = FFmpeg;
+let ffmpeg;
 
-    if (!ffmpegInstance) {
-      ffmpeg = createFFmpeg({
-        log: false,
-        corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js',
-      });
-      await ffmpeg.load();
-      ffmpegInstance = ffmpeg;
-    } else {
-      ffmpeg = ffmpegInstance;
-    }
-  } catch (err) {
-    // Fallback jika CDN ffmpeg gagal: coba unpkg
-    try {
-      const { createFFmpeg } = window.FFmpeg || await import('https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js');
-      ffmpeg = createFFmpeg({ log: false });
-      await ffmpeg.load();
-      ffmpegInstance = ffmpeg;
-    } catch (err2) {
-      box.innerHTML = `
-        <div class="modal-title">❌ Gagal Load FFmpeg</div>
-        <div class="modal-sub">Error: ${err2.message || err.message}<br><br>Pastikan koneksi internet aktif dan browser mendukung WebAssembly (Chrome / Edge / Firefox terbaru).</div>
-        <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
-      `;
-      return;
-    }
+try {
+  // ambil dari global
+  const { createFFmpeg, fetchFile } = FFmpeg;
+
+  if (!ffmpegInstance) {
+    ffmpeg = createFFmpeg({
+      log: false,
+      corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js",
+    });
+
+    // 🔥 load manual (WAJIB untuk GitHub Pages)
+    await ffmpeg.load({
+      coreURL: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js",
+      wasmURL: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.wasm",
+    });
+
+    ffmpegInstance = ffmpeg;
+  } else {
+    ffmpeg = ffmpegInstance;
   }
+
+} catch (err) {
+  console.error("FFmpeg load error:", err);
+
+  // fallback ke versi lebih ringan
+  try {
+    const FFmpegModule = await import("https://unpkg.com/@ffmpeg/ffmpeg@0.10.0/dist/ffmpeg.min.js");
+    const createFFmpeg = FFmpegModule.createFFmpeg;
+
+    ffmpeg = createFFmpeg({
+      log: false,
+      corePath: "https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js",
+    });
+
+    await ffmpeg.load();
+
+    ffmpegInstance = ffmpeg;
+
+  } catch (err2) {
+    console.error("Fallback gagal:", err2);
+
+    box.innerHTML = `
+      <div class="modal-title">❌ Gagal Load FFmpeg</div>
+      <div class="modal-sub">
+        ${err2.message || err.message}<br><br>
+        Browser kamu kemungkinan tidak support atau jaringan bermasalah.<br>
+        Coba gunakan Chrome terbaru.
+      </div>
+      <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+    `;
+    return;
+  }
+}
+
+// safety check
+if (!ffmpeg) {
+  box.innerHTML = `
+    <div class="modal-title">❌ FFmpeg Tidak Tersedia</div>
+    <div class="modal-sub">Gagal inisialisasi engine video.</div>
+    <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+  `;
+  return;
+}
 
   if (exportCancelled) return;
 
