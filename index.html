@@ -3,611 +3,578 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>VidioFoto ✨ — Light & Fast</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<title>VidioStudio — Video Editor Professional</title>
+<!-- Bootstrap 4 + Font Awesome + Google Fonts -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  -webkit-tap-highlight-color: transparent;
-}
-
-:root {
-  --bg: #f4f4f8;
-  --surface: #ffffff;
-  --surface2: #f0f0f5;
-  --border: rgba(0,0,0,.08);
-  --border2: rgba(0,0,0,.13);
-  --accent: #7c3aed;
-  --accent2: #db2777;
-  --text: #18181b;
-  --muted: #71717a;
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+  background: #f8f9fa;
   overflow-x: hidden;
 }
 
-header {
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid var(--border);
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(8px);
+/* Sidebar Styling */
+.sidebar {
+  background: white;
+  border-right: 1px solid #e9ecef;
+  height: 100vh;
   position: sticky;
   top: 0;
-  z-index: 100;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.02);
 }
 
-header .logo {
-  font-family: 'Syne', sans-serif;
+.sidebar-header {
+  padding: 1.25rem;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.logo {
+  font-size: 1.25rem;
   font-weight: 800;
-  font-size: 1rem;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-.hd-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.65rem;
-  background: rgba(37,99,235,.1);
-  color: #2563eb;
-  border-radius: 20px;
-  padding: 4px 10px;
+.logo i {
+  background: none;
+  -webkit-text-fill-color: #667eea;
+  margin-right: 8px;
 }
 
-.workspace {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+.sidebar-section {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f3f5;
 }
 
-.panel-left {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
+.section-title {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6c757d;
+  margin-bottom: 1rem;
 }
 
-.panel-left.open {
-  max-height: 80vh;
-  overflow-y: auto;
-}
-
-.panel-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
-
-.toggle-icon {
-  transition: transform 0.2s;
-}
-
-.panel-left.open .toggle-icon {
-  transform: rotate(180deg);
-}
-
-.canvas-area {
+/* Canvas Area */
+.canvas-container {
   background: #1a1a2e;
+  min-height: 100vh;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  gap: 0.75rem;
-  min-height: 55vh;
+  padding: 2rem;
 }
 
-.canvas-wrap {
-  position: relative;
-  border-radius: 12px;
+.canvas-wrapper {
+  background: #000;
+  border-radius: 16px;
   overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0,0,0,.3);
-  max-width: 100%;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  display: inline-block;
 }
 
 canvas {
   display: block;
   width: 100%;
   height: auto;
-  cursor: default;
+  cursor: pointer;
 }
 
-.canvas-controls {
-  display: flex;
-  gap: 8px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.prog-wrap {
-  width: 100%;
-  max-width: 500px;
-}
-
-.prog-track {
-  height: 3px;
-  background: rgba(255,255,255,.2);
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.prog-fill {
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 3px;
-  transition: width 0.05s linear;
-}
-
-.time-display {
-  font-size: 0.7rem;
-  color: rgba(255,255,255,.6);
-  text-align: center;
-  margin-top: 4px;
-}
-
-.panel-right {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-radius: 20px 20px 0 0;
-  max-height: 45vh;
-  overflow-y: auto;
-  transition: max-height 0.3s ease;
-}
-
-.panel-right.collapsed {
-  max-height: 48px;
-  overflow: hidden;
-}
-
-.right-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.75rem 1rem;
-  background: var(--surface);
+/* Right Panel */
+.right-panel {
+  background: white;
+  border-left: 1px solid #e9ecef;
+  height: 100vh;
   position: sticky;
   top: 0;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.85rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.right-content {
-  padding: 0.75rem;
-}
-
-.section {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.section:last-child {
-  border-bottom: none;
-}
-
-.lbl {
-  font-size: 0.7rem;
-  color: var(--muted);
-  margin-bottom: 6px;
-  font-weight: 500;
-}
-
-input, select, textarea {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 0.8rem;
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 3px;
-  background: var(--border2);
-  border-radius: 3px;
-  padding: 0;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-}
-
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.chip {
-  font-size: 0.7rem;
-  padding: 5px 12px;
-  border-radius: 20px;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  cursor: pointer;
-  transition: all 0.1s;
-}
-
-.chip.on {
-  background: rgba(124,58,237,.15);
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.btn {
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  transition: all 0.1s;
-}
-
-.btn:active {
-  transform: scale(0.97);
-}
-
-.btn-accent {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border: none;
-  color: white;
-}
-
-.btn-export {
-  background: linear-gradient(135deg, #1a8f52, #0f6b3c);
-  border: none;
-  color: white;
-}
-
-.layer-list {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.layer-item {
-  background: var(--surface2);
-  border-radius: 10px;
-  padding: 8px 12px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-}
-
-.layer-item.active {
-  border-left: 3px solid var(--accent);
-  background: rgba(124,58,237,.08);
-}
-
-#exportModal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.7);
-  backdrop-filter: blur(4px);
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-#exportModal.show {
-  display: flex;
-}
-
-.modal-box {
-  background: var(--surface);
-  border-radius: 20px;
-  padding: 1.5rem;
-  width: 100%;
-  max-width: 380px;
-  max-height: 90vh;
   overflow-y: auto;
 }
 
-#status {
-  font-size: 0.7rem;
-  color: var(--muted);
-  background: rgba(0,0,0,.5);
-  backdrop-filter: blur(4px);
-  padding: 4px 10px;
-  border-radius: 20px;
-  color: white;
+.property-group {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f3f5;
 }
 
-@media (min-width: 768px) {
-  .workspace {
-    display: grid;
-    grid-template-columns: 280px 1fr 300px;
-    height: calc(100vh - 57px);
-  }
-  
-  .panel-left {
-    max-height: none !important;
-    overflow-y: auto;
-    border-right: 1px solid var(--border);
-  }
-  
-  .panel-toggle {
-    display: none;
-  }
-  
-  .panel-right {
-    max-height: none !important;
-    border-left: 1px solid var(--border);
-    border-radius: 0;
-    overflow-y: auto;
-  }
-  
-  .right-header {
-    display: none;
-  }
-  
-  .right-content {
-    padding: 1rem;
-  }
-  
-  .canvas-area {
-    padding: 1.5rem;
-  }
+.property-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 0.5rem;
 }
 
-.sl-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* Controls Bar */
+.controls-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #e9ecef;
+  padding: 0.75rem 1.5rem;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
 }
 
-.sl-val {
-  font-size: 0.7rem;
-  min-width: 35px;
-  text-align: right;
-}
-
-.row2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.btns-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-#uploadZone {
-  border: 1.5px dashed var(--border2);
+/* Upload Zone */
+.upload-zone {
+  border: 2px dashed #dee2e6;
   border-radius: 12px;
-  padding: 1rem;
+  padding: 1.5rem;
   text-align: center;
   cursor: pointer;
-  background: var(--surface2);
-  position: relative;
+  transition: all 0.2s;
+  background: #f8f9fa;
 }
 
-#uploadZone.has-img {
+.upload-zone:hover {
+  border-color: #667eea;
+  background: #f8f9fa;
+}
+
+.upload-zone.has-img {
   padding: 0;
-  height: 100px;
+  height: 120px;
 }
 
-#uploadZone.has-img img {
+.upload-zone.has-img img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
 }
 
-#uploadZone .overlay-btn {
-  position: absolute;
-  inset: 0;
-  background: rgba(0,0,0,.5);
-  display: flex;
+/* Chips / Badges */
+.chip {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  opacity: 0;
-  border-radius: 10px;
-  color: white;
+  gap: 6px;
+  padding: 6px 14px;
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 30px;
   font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #495057;
 }
 
-#uploadZone.has-img:hover .overlay-btn {
-  opacity: 1;
+.chip i {
+  font-size: 0.8rem;
+}
+
+.chip:hover {
+  background: #e9ecef;
+}
+
+.chip.active {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-color: transparent;
+  color: white;
+}
+
+/* Layer List */
+.layer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 1px solid transparent;
+}
+
+.layer-item:hover {
+  background: #e9ecef;
+}
+
+.layer-item.active {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  border-color: #667eea;
+}
+
+.layer-name {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #212529;
+}
+
+/* Slider */
+.custom-range {
+  width: 100%;
+  height: 4px;
+  -webkit-appearance: none;
+  background: #e9ecef;
+  border-radius: 2px;
+  outline: none;
+}
+
+.custom-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #667eea;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(102,126,234,0.4);
+}
+
+/* Buttons */
+.btn-modern {
+  padding: 8px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 0.8rem;
+  transition: all 0.2s;
+}
+
+.btn-modern:active {
+  transform: scale(0.96);
+}
+
+.btn-primary-custom {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  color: white;
+}
+
+.btn-primary-custom:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102,126,234,0.4);
+  color: white;
+}
+
+/* Progress */
+.progress-custom {
+  height: 4px;
+  background: #e9ecef;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* Modal */
+.modal-custom {
+  border-radius: 20px;
+  border: none;
+}
+
+.modal-custom .modal-content {
+  border-radius: 20px;
+  border: none;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f3f5;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 0;
+    z-index: 1050;
+    transition: left 0.3s ease;
+    width: 280px;
+  }
+  
+  .sidebar.show {
+    left: 0;
+  }
+  
+  .right-panel {
+    position: fixed;
+    right: -300px;
+    top: 0;
+    z-index: 1050;
+    transition: right 0.3s ease;
+    width: 300px;
+  }
+  
+  .right-panel.show {
+    right: 0;
+  }
+  
+  .canvas-container {
+    padding: 1rem;
+  }
+  
+  .controls-bar {
+    padding: 0.5rem 1rem;
+  }
+}
+
+.color-preview {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 2px solid white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  cursor: pointer;
 }
 </style>
 </head>
 <body>
 
-<header>
-  <div class="logo">✦ VidioFoto</div>
-  <div class="hd-badge">WebM/MP4 via MediaRecorder</div>
-</header>
-
-<div class="workspace">
-  <div class="panel-left" id="panelLeft">
-    <div class="panel-toggle" onclick="toggleLeftPanel()">
-      <span>📷 Media & Efek</span>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="right-content">
-      <div class="section">
-        <div class="lbl">Rasio</div>
-        <div class="chips">
-          <span class="chip on" data-ratio="16:9" onclick="setRatio('16:9')">16:9</span>
-          <span class="chip" data-ratio="9:16" onclick="setRatio('9:16')">9:16</span>
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    
+    <!-- LEFT SIDEBAR -->
+    <div class="col-md-3 col-lg-2 sidebar" id="leftSidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <i class="fas fa-film"></i> VidioStudio
         </div>
-      </div>
-
-      <div class="section">
-        <div class="lbl">Foto</div>
-        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fi').click()">
-          <div>📷</div>
-          <div style="font-size:0.7rem">Klik untuk upload</div>
-          <div class="overlay-btn">Ganti</div>
-        </div>
-        <input type="file" id="fi" accept="image/*" style="display:none">
-      </div>
-
-      <div class="section">
-        <div class="lbl">Efek</div>
-        <div class="chips" id="fxChips">
-          <span class="chip on" data-fx="flowers">🌸</span>
-          <span class="chip" data-fx="hearts">❤️</span>
-          <span class="chip" data-fx="stars">✨</span>
-          <span class="chip" data-fx="snow">❄️</span>
-          <span class="chip" data-fx="none">Off</span>
-        </div>
-        <div class="lbl" style="margin-top:8px">Jumlah</div>
-        <div class="sl-row">
-          <input type="range" min="0" max="30" value="20" id="pCount">
-          <span class="sl-val" id="pcV">20</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="lbl">Animasi Foto</div>
-        <div class="chips">
-          <span class="chip on" data-tr="zoom">Zoom</span>
-          <span class="chip" data-tr="slide">Slide</span>
-          <span class="chip" data-tr="fade">Fade</span>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="lbl">Durasi (detik)</div>
-        <div class="sl-row">
-          <input type="range" min="3" max="12" value="6" id="dur">
-          <span class="sl-val" id="durV">6s</span>
-        </div>
-        <div class="lbl">Latar</div>
-        <input type="color" id="bgCol" value="#1a1a2e">
+        <small class="text-muted d-block mt-1" style="font-size: 0.7rem;">Professional Video Editor</small>
       </div>
       
-      <div class="section">
-        <div class="lbl">Format Export</div>
-        <div class="chips">
-          <span class="chip on" data-format="webm">WebM (Ringan)</span>
-          <span class="chip" data-format="mp4">MP4 (H.264)</span>
+      <div class="sidebar-section">
+        <div class="section-title">
+          <i class="fas fa-crop-alt mr-1"></i> ASPEK RATIO
+        </div>
+        <div class="d-flex gap-2">
+          <div class="chip" data-ratio="16:9" onclick="setRatio('16:9')">
+            <i class="fas fa-tv"></i> 16:9
+          </div>
+          <div class="chip" data-ratio="9:16" onclick="setRatio('9:16')">
+            <i class="fas fa-mobile-alt"></i> 9:16
+          </div>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="section-title">
+          <i class="fas fa-image mr-1"></i> MEDIA
+        </div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fileInput').click()">
+          <i class="fas fa-cloud-upload-alt fa-2x mb-2" style="color: #667eea;"></i>
+          <div style="font-size: 0.75rem;">Klik untuk upload foto</div>
+          <div class="overlay-btn" style="display: none;">Ganti Foto</div>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="section-title">
+          <i class="fas fa-sparkles mr-1"></i> VISUAL EFFECTS
+        </div>
+        <div class="d-flex flex-wrap gap-2" style="gap: 6px;">
+          <div class="chip" data-fx="flowers"><i class="fas fa-fan"></i> Bunga</div>
+          <div class="chip" data-fx="hearts"><i class="fas fa-heart"></i> Hati</div>
+          <div class="chip" data-fx="stars"><i class="fas fa-star"></i> Bintang</div>
+          <div class="chip" data-fx="snow"><i class="fas fa-snowflake"></i> Salju</div>
+          <div class="chip" data-fx="none"><i class="fas fa-ban"></i> Off</div>
+        </div>
+        <div class="mt-2">
+          <div class="property-label">Jumlah Partikel</div>
+          <input type="range" class="custom-range" min="0" max="30" value="20" id="particleCount">
+          <small class="text-muted" id="particleValue">20</small>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="section-title">
+          <i class="fas fa-film mr-1"></i> ANIMASI FOTO
+        </div>
+        <div class="d-flex flex-wrap gap-2" style="gap: 6px;">
+          <div class="chip" data-tr="zoom"><i class="fas fa-search-plus"></i> Zoom</div>
+          <div class="chip" data-tr="slide"><i class="fas fa-arrows-alt-h"></i> Slide</div>
+          <div class="chip" data-tr="fade"><i class="fas fa-adjust"></i> Fade</div>
+        </div>
+      </div>
+      
+      <div class="sidebar-section">
+        <div class="section-title">
+          <i class="fas fa-sliders-h mr-1"></i> TIMING & COLOR
+        </div>
+        <div class="mb-2">
+          <div class="property-label">Durasi Video</div>
+          <input type="range" class="custom-range" min="3" max="12" value="6" id="duration">
+          <small class="text-muted" id="durationValue">6 detik</small>
+        </div>
+        <div>
+          <div class="property-label">Warna Background</div>
+          <input type="color" id="bgColor" value="#1a1a2e" class="form-control form-control-sm" style="height: 38px;">
         </div>
       </div>
     </div>
-  </div>
-
-  <div class="canvas-area">
-    <div class="canvas-wrap">
-      <canvas id="cv"></canvas>
-    </div>
-
-    <div class="prog-wrap">
-      <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
-      <div class="time-display" id="timeDisp">0.0s / 6.0s</div>
-    </div>
-
-    <div class="canvas-controls">
-      <button class="btn btn-accent" onclick="startPreview()">▶ Preview</button>
-      <button class="btn" onclick="stopPreview()">■ Stop</button>
-      <div id="status">Upload foto</div>
-      <button class="btn btn-export" onclick="showExportModal()">⬇ Export</button>
-    </div>
-  </div>
-
-  <div class="panel-right" id="panelRight">
-    <div class="right-header" onclick="toggleRightPanel()">
-      <span>✏️ Teks</span>
-      <span class="toggle-icon">▲</span>
-    </div>
-    <div class="right-content">
-      <div class="btns-row">
-        <button class="btn btn-accent" style="flex:1" onclick="addTextLayer()">+ Tambah Teks</button>
+    
+    <!-- CENTER CANVAS -->
+    <div class="col-md-6 col-lg-8 canvas-container">
+      <div class="canvas-wrapper">
+        <canvas id="mainCanvas"></canvas>
       </div>
-      <div class="lbl" style="margin-top:10px">Layer</div>
-      <div class="layer-list" id="layerList">
-        <div style="font-size:0.7rem;color:var(--muted);text-align:center;padding:0.5rem">Belum ada teks</div>
+    </div>
+    
+    <!-- RIGHT PANEL -->
+    <div class="col-md-3 col-lg-2 right-panel" id="rightPanel">
+      <div class="sidebar-header">
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="section-title mb-0">
+            <i class="fas fa-layer-group"></i> TEXT LAYERS
+          </span>
+          <button class="btn btn-sm btn-primary-custom" onclick="addTextLayer()">
+            <i class="fas fa-plus"></i>
+          </button>
+        </div>
       </div>
-
-      <div id="txtProps" style="display:none; margin-top:12px">
-        <div class="lbl">Teks</div>
-        <textarea id="txtContent" rows="2" placeholder="Tulis teks..."></textarea>
-
-        <div class="row2">
-          <div>
-            <div class="lbl">X</div>
-            <input type="range" min="0" max="100" value="50" id="posXp">
-          </div>
-          <div>
-            <div class="lbl">Y</div>
-            <input type="range" min="0" max="100" value="20" id="posYp">
+      
+      <div id="layerListContainer" class="p-3">
+        <div class="text-center text-muted py-4" style="font-size: 0.75rem;">
+          <i class="fas fa-font fa-2x mb-2 d-block"></i>
+          Belum ada teks<br>Klik + untuk menambah
+        </div>
+      </div>
+      
+      <div id="textProperties" style="display: none;">
+        <div class="property-group">
+          <div class="property-label">TEKS</div>
+          <textarea id="textContent" class="form-control form-control-sm" rows="2" placeholder="Tulis teks..."></textarea>
+        </div>
+        
+        <div class="property-group">
+          <div class="row">
+            <div class="col-6">
+              <div class="property-label">POSISI X</div>
+              <input type="range" class="custom-range" min="0" max="100" value="50" id="posX">
+            </div>
+            <div class="col-6">
+              <div class="property-label">POSISI Y</div>
+              <input type="range" class="custom-range" min="0" max="100" value="20" id="posY">
+            </div>
           </div>
         </div>
-
-        <div class="row2">
-          <div>
-            <div class="lbl">Ukuran</div>
-            <input type="range" min="24" max="100" value="48" id="txtSize">
-          </div>
-          <div>
-            <div class="lbl">Warna</div>
-            <input type="color" id="txtColor" value="#ffffff">
+        
+        <div class="property-group">
+          <div class="row">
+            <div class="col-6">
+              <div class="property-label">UKURAN</div>
+              <input type="range" class="custom-range" min="24" max="100" value="48" id="textSize">
+            </div>
+            <div class="col-6">
+              <div class="property-label">WARNA</div>
+              <input type="color" id="textColor" value="#ffffff" class="form-control form-control-sm">
+            </div>
           </div>
         </div>
-
-        <div class="lbl">Gaya</div>
-        <div class="chips">
-          <span class="chip" data-style="bold" onclick="toggleTextStyle('bold')">Bold</span>
-          <span class="chip" data-style="shadow" onclick="toggleTextStyle('shadow')">Shadow</span>
+        
+        <div class="property-group">
+          <div class="property-label">STYLE</div>
+          <div class="d-flex gap-2" style="gap: 6px;">
+            <div class="chip" data-style="bold" onclick="toggleTextStyle('bold')">
+              <i class="fas fa-bold"></i> Bold
+            </div>
+            <div class="chip" data-style="shadow" onclick="toggleTextStyle('shadow')">
+              <i class="fas fa-moon"></i> Shadow
+            </div>
+          </div>
         </div>
-
-        <div class="lbl">Animasi</div>
-        <div class="chips">
-          <span class="chip on" data-anim="none">Diam</span>
-          <span class="chip" data-anim="fadein">Fade</span>
-          <span class="chip" data-anim="slideup">Slide</span>
+        
+        <div class="property-group">
+          <div class="property-label">ANIMASI TEKS</div>
+          <div class="d-flex flex-wrap gap-2" style="gap: 6px;">
+            <div class="chip active" data-anim="none">Diam</div>
+            <div class="chip" data-anim="fadein">Fade In</div>
+            <div class="chip" data-anim="slideup">Slide Up</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<div id="exportModal">
-  <div class="modal-box" id="modalContent"></div>
+<!-- BOTTOM CONTROLS BAR -->
+<div class="controls-bar">
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+    <div class="d-flex gap-2">
+      <button class="btn btn-modern btn-primary-custom" onclick="startPreview()">
+        <i class="fas fa-play mr-1"></i> Preview
+      </button>
+      <button class="btn btn-modern btn-outline-secondary" onclick="stopPreview()">
+        <i class="fas fa-stop mr-1"></i> Stop
+      </button>
+    </div>
+    
+    <div class="flex-grow-1 px-3" style="max-width: 400px;">
+      <div class="progress-custom">
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+      <div class="d-flex justify-content-between mt-1">
+        <small class="text-muted" id="timeDisplay">0.0s</small>
+        <small class="text-muted" id="totalTime">/ 6.0s</small>
+      </div>
+    </div>
+    
+    <div class="d-flex gap-2">
+      <div class="chip" data-format="webm" onclick="setFormat('webm')">
+        <i class="fas fa-file-video"></i> WebM
+      </div>
+      <div class="chip active" data-format="mp4" onclick="setFormat('mp4')">
+        <i class="fab fa-chrome"></i> MP4
+      </div>
+      <button class="btn btn-modern btn-primary-custom" onclick="showExportModal()">
+        <i class="fas fa-download mr-1"></i> Export
+      </button>
+    </div>
+  </div>
 </div>
+
+<!-- EXPORT MODAL -->
+<div class="modal fade" id="exportModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content modal-custom">
+      <div class="modal-body p-4" id="exportModalBody">
+        <div class="text-center">
+          <i class="fas fa-spinner fa-pulse fa-2x text-primary mb-3"></i>
+          <h6>Memproses Video...</h6>
+          <div class="progress-custom mt-3">
+            <div class="progress-fill" id="exportProgress" style="width: 0%;"></div>
+          </div>
+          <small class="text-muted d-block mt-2" id="exportStatus">Mempersiapkan...</small>
+          <button class="btn btn-sm btn-outline-secondary mt-3" onclick="cancelExport()">Batal</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
 // ==================== KONFIGURASI ====================
@@ -622,10 +589,12 @@ let particles = [];
 let textLayers = [];
 let selectedLayerId = null;
 let layerIdCounter = 0;
-let exportFormat = 'webm';
+let exportFormat = 'mp4';
+let exportCancelled = false;
+let mediaRecorder = null;
 
-const cv = document.getElementById('cv');
-const ctx = cv.getContext('2d');
+const canvas = document.getElementById('mainCanvas');
+const ctx = canvas.getContext('2d');
 
 // ==================== RESOLUSI ====================
 function setRatio(ratio) {
@@ -636,13 +605,13 @@ function setRatio(ratio) {
     W = 720; H = 1280;
   }
   
-  cv.width = W;
-  cv.height = H;
-  cv.style.width = '100%';
-  cv.style.height = 'auto';
+  canvas.width = W;
+  canvas.height = H;
+  canvas.style.width = '100%';
+  canvas.style.height = 'auto';
   
-  document.querySelectorAll('[data-ratio]').forEach(c => c.classList.remove('on'));
-  document.querySelector(`[data-ratio="${ratio}"]`).classList.add('on');
+  $('[data-ratio]').removeClass('active');
+  $(`[data-ratio="${ratio}"]`).addClass('active');
   
   initParticles();
   drawFrame(0);
@@ -659,7 +628,7 @@ const FX_LIST = {
 
 function initParticles() {
   particles = [];
-  const count = parseInt(document.getElementById('pCount').value);
+  const count = parseInt($('#particleCount').val());
   const fx = FX_LIST[selFx];
   if (!fx.chars.length) return;
   
@@ -707,39 +676,43 @@ function selectLayer(id) {
   renderLayerList();
   const layer = textLayers.find(l => l.id === id);
   if (!layer) {
-    document.getElementById('txtProps').style.display = 'none';
+    $('#textProperties').hide();
     return;
   }
   
-  document.getElementById('txtProps').style.display = 'block';
-  document.getElementById('txtContent').value = layer.text;
-  document.getElementById('posXp').value = layer.x;
-  document.getElementById('posYp').value = layer.y;
-  document.getElementById('txtSize').value = layer.size;
-  document.getElementById('txtColor').value = layer.color;
+  $('#textProperties').show();
+  $('#textContent').val(layer.text);
+  $('#posX').val(layer.x);
+  $('#posY').val(layer.y);
+  $('#textSize').val(layer.size);
+  $('#textColor').val(layer.color);
   
-  document.querySelectorAll('[data-style]').forEach(c => {
-    c.classList.toggle('on', layer[c.dataset.style]);
-  });
+  $('[data-style]').removeClass('active');
+  if (layer.bold) $('[data-style="bold"]').addClass('active');
+  if (layer.shadow) $('[data-style="shadow"]').addClass('active');
   
-  document.querySelectorAll('[data-anim]').forEach(c => {
-    c.classList.toggle('on', c.dataset.anim === layer.anim);
-  });
+  $('[data-anim]').removeClass('active');
+  $(`[data-anim="${layer.anim}"]`).addClass('active');
 }
 
 function renderLayerList() {
-  const list = document.getElementById('layerList');
+  const container = $('#layerListContainer');
   if (textLayers.length === 0) {
-    list.innerHTML = '<div style="font-size:0.7rem;color:var(--muted);text-align:center;padding:0.5rem">Belum ada teks</div>';
+    container.html(`
+      <div class="text-center text-muted py-4" style="font-size: 0.75rem;">
+        <i class="fas fa-font fa-2x mb-2 d-block"></i>
+        Belum ada teks<br>Klik + untuk menambah
+      </div>
+    `);
     return;
   }
   
-  list.innerHTML = textLayers.map(l => `
+  container.html(textLayers.map(l => `
     <div class="layer-item ${l.id === selectedLayerId ? 'active' : ''}" onclick="selectLayer(${l.id})">
-      <span>${l.text.substring(0, 20)}</span>
-      <span style="color:#ff6464;cursor:pointer" onclick="event.stopPropagation();deleteLayer(${l.id})">✕</span>
+      <span class="layer-name"><i class="fas fa-font mr-2"></i>${l.text.substring(0, 20)}</span>
+      <i class="fas fa-trash-alt text-muted" style="cursor: pointer;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i>
     </div>
-  `).join('');
+  `).join(''));
 }
 
 function deleteLayer(id) {
@@ -747,7 +720,7 @@ function deleteLayer(id) {
   if (selectedLayerId === id) {
     selectedLayerId = textLayers.length ? textLayers[0].id : null;
     if (selectedLayerId) selectLayer(selectedLayerId);
-    else document.getElementById('txtProps').style.display = 'none';
+    else $('#textProperties').hide();
   }
   renderLayerList();
 }
@@ -755,48 +728,46 @@ function deleteLayer(id) {
 function updateLayer() {
   const layer = textLayers.find(l => l.id === selectedLayerId);
   if (!layer) return;
-  layer.text = document.getElementById('txtContent').value;
-  layer.size = parseInt(document.getElementById('txtSize').value);
-  layer.color = document.getElementById('txtColor').value;
+  layer.text = $('#textContent').val();
+  layer.size = parseInt($('#textSize').val());
+  layer.color = $('#textColor').val();
 }
 
 function updateLayerPos() {
   const layer = textLayers.find(l => l.id === selectedLayerId);
   if (!layer) return;
-  layer.x = parseInt(document.getElementById('posXp').value);
-  layer.y = parseInt(document.getElementById('posYp').value);
+  layer.x = parseInt($('#posX').val());
+  layer.y = parseInt($('#posY').val());
 }
 
 function toggleTextStyle(style) {
   const layer = textLayers.find(l => l.id === selectedLayerId);
   if (!layer) return;
   layer[style] = !layer[style];
-  document.querySelector(`[data-style="${style}"]`).classList.toggle('on', layer[style]);
+  $(`[data-style="${style}"]`).toggleClass('active', layer[style]);
 }
 
 function setTextAnim(anim) {
   const layer = textLayers.find(l => l.id === selectedLayerId);
   if (!layer) return;
   layer.anim = anim;
-  document.querySelectorAll('[data-anim]').forEach(c => {
-    c.classList.toggle('on', c.dataset.anim === anim);
-  });
+  $('[data-anim]').removeClass('active');
+  $(`[data-anim="${anim}"]`).addClass('active');
 }
 
-// Format export
-document.querySelectorAll('[data-format]').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('[data-format]').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-    exportFormat = c.dataset.format;
-  });
-});
+function setFormat(format) {
+  exportFormat = format;
+  $('[data-format]').removeClass('active');
+  $(`[data-format="${format}"]`).addClass('active');
+}
 
-document.getElementById('txtContent')?.addEventListener('input', updateLayer);
-document.getElementById('txtSize')?.addEventListener('input', updateLayer);
-document.getElementById('txtColor')?.addEventListener('input', updateLayer);
-document.getElementById('posXp')?.addEventListener('input', updateLayerPos);
-document.getElementById('posYp')?.addEventListener('input', updateLayerPos);
+// Event listeners
+$('#textContent').on('input', updateLayer);
+$('#textSize').on('input', updateLayer);
+$('#textColor').on('input', updateLayer);
+$('#posX').on('input', updateLayerPos);
+$('#posY').on('input', updateLayerPos);
+$('[data-anim]').on('click', function() { setTextAnim($(this).data('anim')); });
 
 // ==================== DRAWING ====================
 function drawTextLayer(ctx, layer, progress, time) {
@@ -816,8 +787,7 @@ function drawTextLayer(ctx, layer, progress, time) {
   const x = (layer.x / 100) * W;
   const y = (layer.y / 100) * H + offsetY;
   
-  const fontStyle = layer.bold ? 'bold ' : '';
-  ctx.font = `${fontStyle}${layer.size}px 'Syne', sans-serif`;
+  ctx.font = `${layer.bold ? 'bold ' : ''}${layer.size}px 'Inter', sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
   
@@ -836,10 +806,10 @@ function drawTextLayer(ctx, layer, progress, time) {
 }
 
 function drawFrame(t) {
-  const duration = parseInt(document.getElementById('dur').value) * 1000;
+  const duration = parseInt($('#duration').val()) * 1000;
   const progress = Math.min(t / duration, 1);
   
-  ctx.fillStyle = document.getElementById('bgCol').value;
+  ctx.fillStyle = $('#bgColor').val();
   ctx.fillRect(0, 0, W, H);
   
   if (img) {
@@ -896,23 +866,24 @@ function drawFrame(t) {
   
   ctx.fillStyle = 'rgba(255,255,255,0.15)';
   ctx.fillRect(0, H - 4, W, 4);
-  ctx.fillStyle = 'rgba(124,58,237,0.8)';
+  ctx.fillStyle = 'rgba(102,126,234,0.8)';
   ctx.fillRect(0, H - 4, W * progress, 4);
   
-  document.getElementById('progFill').style.width = (progress * 100) + '%';
-  document.getElementById('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + document.getElementById('dur').value + '.0s';
+  $('#progressFill').css('width', (progress * 100) + '%');
+  $('#timeDisplay').text((t / 1000).toFixed(1) + 's');
+  $('#totalTime').text('/ ' + $('#duration').val() + '.0s');
 }
 
 // ==================== PREVIEW ====================
 function startPreview() {
   if (!img) {
-    document.getElementById('status').textContent = 'Upload foto dulu';
+    alert('Upload foto terlebih dahulu');
     return;
   }
   stopPreview();
   isPlaying = true;
   const startTime = performance.now();
-  const duration = parseInt(document.getElementById('dur').value) * 1000;
+  const duration = parseInt($('#duration').val()) * 1000;
   
   function loop(now) {
     if (!isPlaying) return;
@@ -922,7 +893,6 @@ function startPreview() {
   }
   
   animationId = requestAnimationFrame(loop);
-  document.getElementById('status').textContent = '▶ Playing';
 }
 
 function stopPreview() {
@@ -932,37 +902,23 @@ function stopPreview() {
   }
   isPlaying = false;
   drawFrame(0);
-  document.getElementById('status').textContent = '■ Stopped';
 }
 
-// ==================== EXPORT MENGGUNAKAN MediaRecorder ====================
-let exportCancelled = false;
-
+// ==================== EXPORT ====================
 async function doExport() {
   exportCancelled = false;
-  const modal = document.getElementById('modalContent');
-  const duration = parseInt(document.getElementById('dur').value);
+  const duration = parseInt($('#duration').val());
   const fps = 24;
-  const totalFrames = duration * fps;
   
-  modal.innerHTML = `
-    <div style="font-weight:600">🎬 Export Video</div>
-    <div id="expStatus" style="font-size:0.75rem;color:var(--muted);margin:12px 0">Mempersiapkan...</div>
-    <div style="height:4px;background:var(--border2);border-radius:4px;overflow:hidden">
-      <div id="expProg" style="width:0%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2))"></div>
-    </div>
-    <div id="expStep" style="font-size:0.7rem;color:var(--muted);margin-top:8px">Frame 0/${totalFrames}</div>
-    <button class="btn" style="margin-top:12px" onclick="cancelExport()">Batal</button>
-  `;
+  $('#exportModal').modal('show');
   
   try {
-    document.getElementById('expStatus').textContent = 'Membuat video...';
+    const stream = canvas.captureStream(fps);
+    const mimeType = exportFormat === 'webm' ? 'video/webm' : 'video/webm';
     
-    // Setup MediaRecorder
-    const stream = cv.captureStream(fps);
-    const mediaRecorder = new MediaRecorder(stream, {
-      mimeType: exportFormat === 'webm' ? 'video/webm' : 'video/mp4',
-      videoBitsPerSecond: 2500000 // 2.5 Mbps
+    mediaRecorder = new MediaRecorder(stream, {
+      mimeType: mimeType,
+      videoBitsPerSecond: 2500000
     });
     
     const chunks = [];
@@ -972,18 +928,17 @@ async function doExport() {
     
     const videoPromise = new Promise((resolve) => {
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunks, { type: exportFormat === 'webm' ? 'video/webm' : 'video/mp4' });
+        const blob = new Blob(chunks, { type: mimeType });
         resolve(blob);
       };
     });
     
-    // Start recording
     mediaRecorder.start();
     
-    // Animate and record
     const startTime = performance.now();
     const frameInterval = 1000 / fps;
     let frame = 0;
+    const totalFrames = duration * fps;
     
     function recordFrame(now) {
       if (exportCancelled) {
@@ -997,53 +952,36 @@ async function doExport() {
       
       frame++;
       const pct = Math.round((t / (duration * 1000)) * 100);
-      document.getElementById('expProg').style.width = pct + '%';
-      document.getElementById('expStep').textContent = `Frame ${frame}/${totalFrames}`;
+      $('#exportProgress').css('width', pct + '%');
+      $('#exportStatus').text(`Frame ${frame}/${totalFrames} - ${pct}%`);
       
       if (t < duration * 1000) {
         setTimeout(() => requestAnimationFrame(recordFrame), frameInterval);
       } else {
-        // Selesai
         mediaRecorder.stop();
       }
     }
     
     requestAnimationFrame(recordFrame);
     
-    // Wait for video
     const videoBlob = await videoPromise;
     
     if (exportCancelled) throw new Error('Dibatalkan');
     
-    // Download
     const url = URL.createObjectURL(videoBlob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `videofoto_${Date.now()}.${exportFormat === 'webm' ? 'webm' : 'mp4'}`;
+    a.download = `videostudio_${Date.now()}.${exportFormat === 'webm' ? 'webm' : 'mp4'}`;
     a.click();
     URL.revokeObjectURL(url);
     
-    const sizeMB = (videoBlob.size / 1024 / 1024).toFixed(1);
-    
-    modal.innerHTML = `
-      <div style="font-weight:600">✅ Selesai!</div>
-      <div style="font-size:0.75rem;margin:12px 0">
-        Video berhasil diekspor!<br>
-        Format: ${exportFormat.toUpperCase()}<br>
-        Ukuran: ${sizeMB} MB
-      </div>
-      <button class="btn btn-accent" onclick="closeExportModal()">Tutup</button>
-    `;
-    
-    document.getElementById('status').textContent = '✅ Export selesai!';
+    $('#exportModal').modal('hide');
+    alert('✅ Video berhasil diekspor!');
     
   } catch(err) {
     if (err.message !== 'Dibatalkan') {
-      modal.innerHTML = `
-        <div style="font-weight:600">❌ Gagal</div>
-        <div style="font-size:0.75rem;margin:12px 0">${err.message || 'Error saat export'}</div>
-        <button class="btn" onclick="closeExportModal()">Tutup</button>
-      `;
+      $('#exportModal').modal('hide');
+      alert('❌ Gagal export: ' + err.message);
     }
   }
 }
@@ -1054,39 +992,31 @@ function showExportModal() {
     return;
   }
   stopPreview();
-  document.getElementById('exportModal').classList.add('show');
   doExport();
-}
-
-function closeExportModal() {
-  document.getElementById('exportModal').classList.remove('show');
-  exportCancelled = true;
 }
 
 function cancelExport() {
   exportCancelled = true;
+  if (mediaRecorder && mediaRecorder.state === 'recording') {
+    mediaRecorder.stop();
+  }
+  $('#exportModal').modal('hide');
 }
 
-// ==================== UI ====================
-function toggleLeftPanel() {
-  document.getElementById('panelLeft').classList.toggle('open');
-}
-
-function toggleRightPanel() {
-  document.getElementById('panelRight').classList.toggle('collapsed');
-}
-
-document.getElementById('fi').addEventListener('change', e => {
+// ==================== FILE UPLOAD ====================
+$('#fileInput').on('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
+  
   const reader = new FileReader();
-  reader.onload = ev => {
+  reader.onload = function(ev) {
     const imgEl = new Image();
-    imgEl.onload = () => {
+    imgEl.onload = function() {
       img = imgEl;
-      const zone = document.getElementById('uploadZone');
-      zone.classList.add('has-img');
-      zone.innerHTML = `<img src="${ev.target.result}"><div class="overlay-btn">Ganti</div>`;
+      const zone = $('#uploadZone');
+      zone.addClass('has-img');
+      zone.html(`<img src="${ev.target.result}"><div class="overlay-btn">Ganti Foto</div>`);
+      zone.css('padding', '0');
       initParticles();
       startPreview();
     };
@@ -1095,43 +1025,67 @@ document.getElementById('fi').addEventListener('change', e => {
   reader.readAsDataURL(file);
 });
 
-document.getElementById('pCount').addEventListener('input', (e) => {
-  document.getElementById('pcV').textContent = e.target.value;
+// ==================== EVENT LISTENERS ====================
+$('#particleCount').on('input', function() {
+  $('#particleValue').text($(this).val());
   initParticles();
 });
 
-document.getElementById('dur').addEventListener('input', (e) => {
-  document.getElementById('durV').textContent = e.target.value + 's';
+$('#duration').on('input', function() {
+  $('#durationValue').text($(this).val() + ' detik');
   if (!isPlaying) drawFrame(0);
 });
 
-document.querySelectorAll('[data-fx]').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-    selFx = c.dataset.fx;
-    initParticles();
-  });
+$('#bgColor').on('input', function() {
+  if (!isPlaying) drawFrame(0);
 });
 
-document.querySelectorAll('[data-tr]').forEach(c => {
-  c.addEventListener('click', () => {
-    document.querySelectorAll('[data-tr]').forEach(x => x.classList.remove('on'));
-    c.classList.add('on');
-    selTr = c.dataset.tr;
-  });
+$('[data-fx]').on('click', function() {
+  $('[data-fx]').removeClass('active');
+  $(this).addClass('active');
+  selFx = $(this).data('fx');
+  initParticles();
 });
 
-document.querySelectorAll('[data-anim]').forEach(c => {
-  c.addEventListener('click', () => setTextAnim(c.dataset.anim));
+$('[data-tr]').on('click', function() {
+  $('[data-tr]').removeClass('active');
+  $(this).addClass('active');
+  selTr = $(this).data('tr');
 });
 
-document.getElementById('exportModal').addEventListener('click', e => {
-  if (e.target === document.getElementById('exportModal')) closeExportModal();
-});
+// Mobile sidebar toggle
+let leftSidebarOpen = false;
+let rightPanelOpen = false;
 
+function toggleLeftSidebar() {
+  leftSidebarOpen = !leftSidebarOpen;
+  $('#leftSidebar').toggleClass('show', leftSidebarOpen);
+}
+
+function toggleRightPanel() {
+  rightPanelOpen = !rightPanelOpen;
+  $('#rightPanel').toggleClass('show', rightPanelOpen);
+}
+
+// Initialize
 setRatio('16:9');
 drawFrame(0);
+
+// Update display for mobile
+if (window.innerWidth < 768) {
+  $('body').append(`
+    <div style="position: fixed; bottom: 80px; right: 16px; z-index: 1000;">
+      <button class="btn btn-primary-custom rounded-circle" style="width: 48px; height: 48px;" onclick="toggleLeftSidebar()">
+        <i class="fas fa-sliders-h"></i>
+      </button>
+    </div>
+    <div style="position: fixed; bottom: 80px; left: 16px; z-index: 1000;">
+      <button class="btn btn-primary-custom rounded-circle" style="width: 48px; height: 48px;" onclick="toggleRightPanel()">
+        <i class="fas fa-layer-group"></i>
+      </button>
+    </div>
+  `);
+}
 </script>
 </body>
 </html>
