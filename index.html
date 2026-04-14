@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>VidioStudio — Video Editor Professional</title>
+<title>VidioStudio Pro — Editor Video Lengkap</title>
 <!-- Bootstrap 4 + Font Awesome + Google Fonts -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,10 +20,8 @@ body {
   font-family: 'Inter', sans-serif;
   background: #0a0a0f;
   overflow-x: hidden;
-  background: linear-gradient(145deg, #0f0f1a 0%, #0a0a0f 100%);
 }
 
-/* MAIN EDITOR LAYOUT - CAPCUT STYLE */
 .editor-container {
   display: flex;
   flex-direction: column;
@@ -32,7 +30,6 @@ body {
   overflow: hidden;
 }
 
-/* Preview Area - Full focus, no obstruction */
 .preview-area {
   flex: 1;
   display: flex;
@@ -67,13 +64,11 @@ canvas {
   border-radius: 16px;
 }
 
-/* Bottom Toolbar - like CapCut timeline area */
 .bottom-editor {
   background: rgba(18, 18, 24, 0.98);
   backdrop-filter: blur(20px);
   border-top: 1px solid rgba(255,255,255,0.08);
   padding: 12px 16px 20px;
-  box-shadow: 0 -4px 20px rgba(0,0,0,0.3);
 }
 
 .tools-row {
@@ -99,29 +94,9 @@ canvas {
   gap: 8px;
 }
 
-.tool-icon-btn i {
-  font-size: 1.1rem;
-}
-
-.tool-icon-btn:active {
-  transform: scale(0.95);
-  background: rgba(102,126,234,0.4);
-}
-
-.tool-icon-btn.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 40px;
-  color: white;
-  font-weight: 600;
-  font-size: 0.85rem;
-}
+.tool-icon-btn:active { transform: scale(0.95); background: rgba(102,126,234,0.4); }
+.tool-icon-btn.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
+.primary-btn { background: linear-gradient(135deg, #667eea, #764ba2); border: none; padding: 10px 20px; border-radius: 40px; color: white; font-weight: 600; font-size: 0.85rem; }
 
 .progress-timeline {
   background: rgba(255,255,255,0.1);
@@ -130,7 +105,6 @@ canvas {
   margin-top: 6px;
 }
 
-/* Slider & range styling */
 .custom-range {
   width: 100%;
   height: 4px;
@@ -139,7 +113,6 @@ canvas {
   border-radius: 4px;
   outline: none;
 }
-
 .custom-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 18px;
@@ -151,7 +124,6 @@ canvas {
   border: 2px solid white;
 }
 
-/* Modal / Bottom sheets untuk effect */
 .bottom-sheet {
   position: fixed;
   bottom: 0;
@@ -163,33 +135,15 @@ canvas {
   z-index: 1050;
   transform: translateY(100%);
   transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-  max-height: 70vh;
+  max-height: 75vh;
   overflow-y: auto;
   padding: 20px;
   border-top: 1px solid rgba(255,255,255,0.1);
   box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
 }
-
-.bottom-sheet.show {
-  transform: translateY(0);
-}
-
-.sheet-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
-  font-weight: 700;
-  color: white;
-}
-
-.chip-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 12px 0;
-}
-
+.bottom-sheet.show { transform: translateY(0); }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; font-weight: 700; color: white; }
+.chip-group { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
 .chip {
   background: rgba(255,255,255,0.1);
   padding: 8px 16px;
@@ -200,20 +154,10 @@ canvas {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  transition: all 0.2s;
   cursor: pointer;
+  transition: all 0.2s;
 }
-
-.chip i {
-  font-size: 0.8rem;
-}
-
-.chip.active {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: white;
-}
-
-/* layer items */
+.chip.active { background: linear-gradient(135deg, #667eea, #764ba2); color: white; }
 .layer-item {
   background: rgba(255,255,255,0.05);
   border-radius: 16px;
@@ -224,100 +168,26 @@ canvas {
   align-items: center;
   cursor: pointer;
 }
-
-.layer-item.active {
-  background: rgba(102,126,234,0.3);
-  border-left: 3px solid #667eea;
-}
-
-/* property group */
-.prop-row {
-  margin-bottom: 16px;
-}
-
-.prop-label {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  color: #aaa;
-  margin-bottom: 6px;
-}
-
-.color-preview {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  border: 2px solid white;
-  cursor: pointer;
-}
-
-/* Responsive: no sidebars overlapping preview */
-@media (max-width: 768px) {
-  .bottom-editor {
-    padding: 10px 12px 18px;
-  }
-  
-  .tool-icon-btn {
-    padding: 8px 14px;
-    font-size: 0.7rem;
-  }
-  
-  .tool-icon-btn i {
-    font-size: 1rem;
-  }
-  
-  .primary-btn {
-    padding: 8px 16px;
-    font-size: 0.75rem;
-  }
-  
-  .chip {
-    padding: 6px 12px;
-    font-size: 0.7rem;
-  }
-  
-  .canvas-wrapper {
-    border-radius: 16px;
-  }
-}
-
-/* Upload Zone mini */
-.upload-mini {
-  background: rgba(255,255,255,0.1);
-  border-radius: 40px;
-  padding: 6px 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  font-size: 0.7rem;
-}
-
-.text-layer-control {
-  max-height: 180px;
-  overflow-y: auto;
-}
-
-/* Animation */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px);}
-  to { opacity: 1; transform: translateY(0);}
-}
+.layer-item.active { background: rgba(102,126,234,0.3); border-left: 3px solid #667eea; }
+.prop-row { margin-bottom: 16px; }
+.prop-label { font-size: 0.7rem; text-transform: uppercase; color: #aaa; margin-bottom: 6px; }
+.music-wave { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; margin-top: 10px; }
+.text-multiline { white-space: pre-wrap; word-break: break-word; }
 </style>
 </head>
 <body>
 
 <div class="editor-container">
-  <!-- PREVIEW AREA (FULL FOCUS) -->
   <div class="preview-area">
     <div class="canvas-wrapper">
       <canvas id="mainCanvas"></canvas>
     </div>
   </div>
 
-  <!-- BOTTOM EDITOR (CapCut Style) -->
   <div class="bottom-editor">
     <div class="tools-row">
-      <button class="tool-icon-btn" id="uploadBtn"><i class="fas fa-image"></i> <span>Upload</span></button>
+      <button class="tool-icon-btn" id="uploadBtn"><i class="fas fa-image"></i> <span>Foto</span></button>
+      <button class="tool-icon-btn" id="musicBtn"><i class="fas fa-music"></i> <span>Musik</span></button>
       <button class="tool-icon-btn" id="effectsBtn"><i class="fas fa-sparkles"></i> <span>Efek</span></button>
       <button class="tool-icon-btn" id="textBtn"><i class="fas fa-font"></i> <span>Teks</span></button>
       <button class="tool-icon-btn" id="aspectBtn"><i class="fas fa-crop-alt"></i> <span>Rasio</span></button>
@@ -341,12 +211,43 @@ canvas {
   </div>
 </div>
 
-<!-- BOTTOM SHEETS (Modal-style, tidak menghalangi preview secara permanen) -->
-<div id="effectsSheet" class="bottom-sheet">
+<!-- BOTTOM SHEETS -->
+<div id="musicSheet" class="bottom-sheet">
   <div class="sheet-header">
-    <span><i class="fas fa-sparkles mr-2"></i>Efek Visual</span>
+    <span><i class="fas fa-music mr-2"></i>Audio & Musik</span>
     <i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i>
   </div>
+  <div class="chip-group">
+    <div class="chip" id="uploadMusicBtn"><i class="fas fa-upload"></i> Upload Musik</div>
+    <div class="chip" id="extractVideoAudioBtn"><i class="fas fa-video"></i> Ekstrak dari Video</div>
+  </div>
+  <div id="musicInfo" class="music-wave" style="display:none;">
+    <div class="d-flex justify-content-between">
+      <span><i class="fas fa-headphones"></i> <span id="musicName">-</span></span>
+      <i class="fas fa-trash-alt" style="cursor:pointer;" id="removeMusicBtn"></i>
+    </div>
+    <div class="prop-row mt-2">
+      <div class="prop-label">Potong Musik (Start - End)</div>
+      <div class="d-flex gap-2 align-items-center">
+        <input type="range" id="musicStartTrim" class="custom-range" min="0" max="100" value="0" style="width:45%">
+        <span style="font-size:0.7rem;">→</span>
+        <input type="range" id="musicEndTrim" class="custom-range" min="0" max="100" value="100" style="width:45%">
+      </div>
+      <div class="d-flex justify-content-between mt-1">
+        <small id="startTrimLabel">0.0s</small>
+        <small id="endTrimLabel">0.0s</small>
+      </div>
+    </div>
+    <div class="prop-row">
+      <div class="prop-label">Volume</div>
+      <input type="range" id="musicVolume" class="custom-range" min="0" max="100" value="70">
+    </div>
+  </div>
+  <input type="file" id="musicFileInput" accept="audio/*,video/*" style="display:none">
+</div>
+
+<div id="effectsSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-sparkles mr-2"></i>Efek Visual</span><i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i></div>
   <div class="chip-group" id="fxGroup">
     <div class="chip" data-fx="flowers"><i class="fas fa-fan"></i> Bunga</div>
     <div class="chip" data-fx="hearts"><i class="fas fa-heart"></i> Hati</div>
@@ -354,99 +255,74 @@ canvas {
     <div class="chip" data-fx="snow"><i class="fas fa-snowflake"></i> Salju</div>
     <div class="chip" data-fx="none"><i class="fas fa-ban"></i> Off</div>
   </div>
-  <div class="prop-row">
-    <div class="prop-label">Jumlah Partikel</div>
-    <input type="range" id="particleRange" class="custom-range" min="0" max="40" value="20">
-    <small id="particleVal" class="text-muted">20</small>
-  </div>
-  <div class="prop-row">
-    <div class="prop-label">Animasi Foto</div>
-    <div class="chip-group">
-      <div class="chip" data-tr="zoom">Zoom</div>
-      <div class="chip" data-tr="slide">Slide</div>
-      <div class="chip" data-tr="fade">Fade</div>
-    </div>
-  </div>
-  <div class="prop-row">
-    <div class="prop-label">Warna Background</div>
-    <input type="color" id="bgColorPicker" value="#1a1a2e" class="form-control form-control-sm" style="background:#222; border:0; width:100%;">
-  </div>
+  <div class="prop-row"><div class="prop-label">Jumlah Partikel</div><input type="range" id="particleRange" class="custom-range" min="0" max="40" value="20"><small id="particleVal" class="text-muted">20</small></div>
+  <div class="prop-row"><div class="prop-label">Animasi Foto</div><div class="chip-group"><div class="chip" data-tr="zoom">Zoom</div><div class="chip" data-tr="slide">Slide</div><div class="chip" data-tr="fade">Fade</div></div></div>
+  <div class="prop-row"><div class="prop-label">Warna Background</div><input type="color" id="bgColorPicker" value="#1a1a2e" class="form-control form-control-sm" style="background:#222; border:0;"></div>
 </div>
 
 <div id="textSheet" class="bottom-sheet">
-  <div class="sheet-header">
-    <span><i class="fas fa-font mr-2"></i>Teks & Layer</span>
-    <i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i>
-  </div>
+  <div class="sheet-header"><span><i class="fas fa-font mr-2"></i>Teks (Multiline)</span><i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i></div>
   <button class="tool-icon-btn" style="width:100%; margin-bottom:12px;" id="addTextLayerBtn"><i class="fas fa-plus"></i> Tambah Teks</button>
-  <div id="layerListContainer" class="text-layer-control" style="max-height:200px; overflow-y:auto;"></div>
-  
+  <div id="layerListContainer" style="max-height:180px; overflow-y:auto;"></div>
   <div id="textPropPanel" style="display: none; margin-top: 16px;">
-    <div class="prop-row">
-      <div class="prop-label">Teks</div>
-      <textarea id="textContentInput" rows="2" class="form-control form-control-sm" style="background:#1e1e2a; color:white; border:0;"></textarea>
-    </div>
-    <div class="prop-row">
-      <div class="prop-label">Posisi X</div>
-      <input type="range" id="textPosX" class="custom-range" min="0" max="100" value="50">
-    </div>
-    <div class="prop-row">
-      <div class="prop-label">Posisi Y</div>
-      <input type="range" id="textPosY" class="custom-range" min="0" max="100" value="20">
-    </div>
-    <div class="prop-row">
-      <div class="prop-label">Ukuran</div>
-      <input type="range" id="textSize" class="custom-range" min="20" max="90" value="42">
-    </div>
-    <div class="prop-row d-flex justify-content-between">
-      <div><div class="prop-label">Warna</div><input type="color" id="textColorPicker" value="#ffffff"></div>
-      <div><div class="prop-label">Style</div><div class="d-flex gap-2"><div class="chip" data-style="bold">Bold</div><div class="chip" data-style="shadow">Shadow</div></div></div>
-    </div>
-    <div class="prop-row">
-      <div class="prop-label">Animasi Teks</div>
-      <div class="chip-group">
-        <div class="chip" data-anim="none">Diam</div>
-        <div class="chip" data-anim="fadein">Fade In</div>
-        <div class="chip" data-anim="slideup">Slide Up</div>
-      </div>
-    </div>
+    <div class="prop-row"><div class="prop-label">Teks (Enter untuk baris baru)</div><textarea id="textContentInput" rows="3" class="form-control form-control-sm" style="background:#1e1e2a; color:white; border:0;" placeholder="Tulis teks&#10;Baris kedua&#10;Baris ketiga"></textarea></div>
+    <div class="prop-row"><div class="prop-label">Posisi X</div><input type="range" id="textPosX" class="custom-range" min="0" max="100" value="50"></div>
+    <div class="prop-row"><div class="prop-label">Posisi Y</div><input type="range" id="textPosY" class="custom-range" min="0" max="100" value="30"></div>
+    <div class="prop-row"><div class="prop-label">Ukuran</div><input type="range" id="textSize" class="custom-range" min="20" max="90" value="42"></div>
+    <div class="prop-row d-flex justify-content-between"><div><div class="prop-label">Warna</div><input type="color" id="textColorPicker" value="#ffffff"></div><div><div class="prop-label">Style</div><div class="d-flex gap-2"><div class="chip" data-style="bold">Bold</div><div class="chip" data-style="shadow">Shadow</div></div></div></div>
+    <div class="prop-row"><div class="prop-label">Animasi Teks</div><div class="chip-group"><div class="chip" data-anim="none">Diam</div><div class="chip" data-anim="fadein">Fade In</div><div class="chip" data-anim="slideup">Slide Up</div></div></div>
   </div>
 </div>
 
 <div id="aspectSheet" class="bottom-sheet">
-  <div class="sheet-header">
-    <span><i class="fas fa-crop-alt mr-2"></i>Aspek Rasio</span>
-    <i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i>
-  </div>
+  <div class="sheet-header"><span><i class="fas fa-crop-alt mr-2"></i>Aspek Rasio & Durasi</span><i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i></div>
+  <div class="chip-group"><div class="chip" data-ratio="16:9"><i class="fas fa-tv"></i> 16:9</div><div class="chip" data-ratio="9:16"><i class="fas fa-mobile-alt"></i> 9:16</div></div>
+  <div class="prop-row mt-2"><div class="prop-label">Durasi Video (detik)</div><input type="range" id="durationSlider" class="custom-range" min="3" max="15" value="6" step="0.5"><small id="durationValDisplay">6.0 s</small></div>
+</div>
+
+<div id="exportSheet" class="bottom-sheet">
+  <div class="sheet-header"><span><i class="fas fa-download mr-2"></i>Export Video</span><i class="fas fa-times" style="cursor:pointer;" onclick="closeAllSheets()"></i></div>
   <div class="chip-group">
-    <div class="chip" data-ratio="16:9"><i class="fas fa-tv"></i> 16:9 (Landscape)</div>
-    <div class="chip" data-ratio="9:16"><i class="fas fa-mobile-alt"></i> 9:16 (Story)</div>
+    <div class="chip" data-quality="hd">HD (1080p, ~3 Mbps)</div>
+    <div class="chip" data-quality="medium">Sedang (720p, ~1.5 Mbps)</div>
   </div>
-  <div class="prop-row mt-2">
-    <div class="prop-label">Durasi Video (detik)</div>
-    <input type="range" id="durationSlider" class="custom-range" min="3" max="12" value="6" step="0.5">
-    <small id="durationValDisplay">6.0 s</small>
+  <button class="primary-btn" style="width:100%; margin-top:12px;" id="startExportBtn"><i class="fas fa-play-circle"></i> Proses Export</button>
+  <div id="exportProgressContainer" style="display:none; margin-top:16px;">
+    <div class="progress-custom mt-2"><div class="progress-fill" id="exportProgressFill" style="height:4px; width:0%; background:#667eea;"></div></div>
+    <small id="exportStatusText" class="text-muted">Mempersiapkan...</small>
   </div>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-
 <script>
-// ==================== KONFIGURASI CORE ====================
-let W = 1280, H = 720;
-let currentRatio = '16:9';
+// ==================== CORE VARIABLES ====================
+let W = 720, H = 1280;
+let currentRatio = '9:16';
 let uploadedImg = null;
 let animationFrameId = null;
 let isPlaying = false;
-let currentPlayTime = 0; // ms
-let videoDuration = 6000; // ms
+let currentPlayTime = 0;
+let videoDuration = 6000;
 let selectedEffect = 'flowers';
 let selectedTransition = 'zoom';
 let particles = [];
 let textLayers = [];
 let selectedLayerId = null;
 let layerIdCounter = 0;
+
+// AUDIO VARIABLES
+let audioContext = null;
+let audioBuffer = null;
+let audioSource = null;
+let audioStartTime = 0;
+let audioPausedAt = 0;
+let isAudioPlaying = false;
+let musicStartTrim = 0; // in seconds
+let musicEndTrim = 0;
+let musicDuration = 0;
+let musicVolume = 0.7;
+let musicFileName = "";
 
 const canvas = document.getElementById('mainCanvas');
 const ctx = canvas.getContext('2d');
@@ -464,10 +340,8 @@ function setRatio(ratio) {
   currentRatio = ratio;
   if (ratio === '16:9') { W = 1280; H = 720; }
   else { W = 720; H = 1280; }
-  canvas.width = W;
-  canvas.height = H;
-  canvas.style.width = 'auto';
-  canvas.style.maxHeight = '100%';
+  canvas.width = W; canvas.height = H;
+  canvas.style.width = 'auto'; canvas.style.maxHeight = '100%';
   initParticles();
   drawFrame(currentPlayTime);
   $('[data-ratio]').removeClass('active');
@@ -480,123 +354,81 @@ function initParticles() {
   const fx = FX_LIB[selectedEffect];
   if (!fx.chars.length) return;
   for (let i=0; i<count; i++) {
-    particles.push({
-      x: Math.random() * W,
-      y: Math.random() * H,
-      vy: 0.4 + Math.random() * 1.2,
-      ch: fx.chars[Math.floor(Math.random()*fx.chars.length)],
-      size: 14 + Math.random() * 20,
-      alpha: 0.5 + Math.random() * 0.5
-    });
+    particles.push({ x: Math.random() * W, y: Math.random() * H, vy: 0.4 + Math.random() * 1.2, ch: fx.chars[Math.floor(Math.random()*fx.chars.length)], size: 14 + Math.random() * 20, alpha: 0.5 + Math.random() * 0.5 });
   }
 }
+function updateParticles() { for (let p of particles) { p.y += p.vy; if (p.y > H + 50) { p.y = -50; p.x = Math.random() * W; } } }
 
-function updateParticles() {
-  for (let p of particles) {
-    p.y += p.vy;
-    if (p.y > H + 50) { p.y = -50; p.x = Math.random() * W; }
+// DRAW MULTILINE TEXT
+function drawMultilineText(ctx, text, x, y, fontSize, fontFamily, color, bold, shadow) {
+  const lines = text.split('\n');
+  const lineHeight = fontSize * 1.2;
+  const totalHeight = lines.length * lineHeight;
+  let startY = y - totalHeight / 2;
+  ctx.font = `${bold ? 'bold ' : ''}${fontSize}px ${fontFamily}`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'top';
+  if (shadow) { ctx.shadowColor = 'rgba(0,0,0,0.6)'; ctx.shadowBlur = 6; ctx.shadowOffsetX = 2; ctx.shadowOffsetY = 2; }
+  ctx.fillStyle = color;
+  for (let i = 0; i < lines.length; i++) {
+    ctx.fillText(lines[i], x, startY + i * lineHeight);
   }
-}
-
-// DRAW FRAME with time-based animation
-function drawFrame(timeMs) {
-  const durationMs = videoDuration;
-  let progress = Math.min(timeMs / durationMs, 1);
-  
-  // BG color
-  ctx.fillStyle = $('#bgColorPicker').val();
-  ctx.fillRect(0,0,W,H);
-  
-  // Draw Image with animation
-  if (uploadedImg) {
-    ctx.save();
-    if (selectedTransition === 'zoom') {
-      let scale = 1 + progress * 0.12;
-      let dx = (W - W*scale)/2;
-      let dy = (H - H*scale)/2;
-      ctx.translate(dx, dy);
-      ctx.scale(scale, scale);
-    } else if (selectedTransition === 'slide') {
-      ctx.translate(-progress * 60, 0);
-    } else if (selectedTransition === 'fade') {
-      ctx.globalAlpha = 0.5 + progress*0.5;
-    }
-    let imgRatio = uploadedImg.width / uploadedImg.height;
-    let canvasRatio = W / H;
-    let drawW, drawH, drawX, drawY;
-    if (imgRatio > canvasRatio) {
-      drawH = H;
-      drawW = drawH * imgRatio;
-      drawX = (W - drawW)/2;
-      drawY = 0;
-    } else {
-      drawW = W;
-      drawH = drawW / imgRatio;
-      drawX = 0;
-      drawY = (H - drawH)/2;
-    }
-    ctx.drawImage(uploadedImg, drawX, drawY, drawW, drawH);
-    ctx.restore();
-    ctx.fillStyle = 'rgba(0,0,0,0.25)';
-    ctx.fillRect(0,0,W,H);
-  }
-  
-  // Particles
-  let fxData = FX_LIB[selectedEffect];
-  if (fxData.chars.length && particles.length) {
-    for (let p of particles) {
-      ctx.font = `${p.size}px "Segoe UI Emoji", "Apple Color Emoji"`;
-      ctx.fillStyle = `rgba(255,240,200,${p.alpha})`;
-      ctx.fillText(p.ch, p.x, p.y);
-    }
-    updateParticles();
-  }
-  
-  // Draw Text Layers
-  for (let layer of textLayers) {
-    drawTextLayer(ctx, layer, progress, timeMs);
-  }
-  
-  // Timeline indicator on canvas bottom (optional)
-  ctx.fillStyle = 'rgba(255,255,255,0.2)';
-  ctx.fillRect(0, H-5, W, 3);
-  ctx.fillStyle = '#667eea';
-  ctx.fillRect(0, H-5, W * progress, 3);
-  
-  // update timeline slider UI
-  let sliderVal = (timeMs / durationMs) * 100;
-  $('#timelineSlider').val(sliderVal);
-  $('#currentTimeLabel').text((timeMs/1000).toFixed(1)+'s');
-  $('#totalDurationLabel').text('/ '+(videoDuration/1000).toFixed(1)+'s');
+  ctx.shadowBlur = 0;
 }
 
 function drawTextLayer(ctx, layer, progress, timeMs) {
   if (!layer.text) return;
-  let alpha = 1;
-  let offsetY = 0;
+  let alpha = 1, offsetY = 0;
   if (layer.anim === 'fadein') alpha = Math.min(progress * 3, 1);
   if (layer.anim === 'slideup') { offsetY = (1 - Math.min(progress * 2, 1)) * 35; alpha = Math.min(progress*2,1); }
   ctx.save();
   ctx.globalAlpha = alpha * 0.95;
   let x = (layer.x / 100) * W;
   let y = (layer.y / 100) * H + offsetY;
-  let fontStyle = layer.bold ? 'bold ' : '';
-  ctx.font = `${fontStyle}${layer.size}px 'Inter', sans-serif`;
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  if (layer.shadow) {
-    ctx.shadowColor = 'rgba(0,0,0,0.6)';
-    ctx.shadowBlur = 6;
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-  }
-  ctx.fillStyle = layer.color;
-  ctx.fillText(layer.text, x, y);
-  ctx.shadowBlur = 0;
+  drawMultilineText(ctx, layer.text, x, y, layer.size, 'Inter, sans-serif', layer.color, layer.bold, layer.shadow);
   ctx.restore();
 }
 
-// PREVIEW LOOP
+function drawFrame(timeMs) {
+  let progress = Math.min(timeMs / videoDuration, 1);
+  ctx.fillStyle = $('#bgColorPicker').val();
+  ctx.fillRect(0,0,W,H);
+  if (uploadedImg) {
+    ctx.save();
+    if (selectedTransition === 'zoom') { let scale = 1 + progress * 0.12; let dx = (W - W*scale)/2; let dy = (H - H*scale)/2; ctx.translate(dx, dy); ctx.scale(scale, scale); }
+    else if (selectedTransition === 'slide') { ctx.translate(-progress * 60, 0); }
+    else if (selectedTransition === 'fade') { ctx.globalAlpha = 0.5 + progress*0.5; }
+    let imgRatio = uploadedImg.width / uploadedImg.height;
+    let canvasRatio = W / H;
+    let drawW, drawH, drawX, drawY;
+    if (imgRatio > canvasRatio) { drawH = H; drawW = drawH * imgRatio; drawX = (W - drawW)/2; drawY = 0; }
+    else { drawW = W; drawH = drawW / imgRatio; drawX = 0; drawY = (H - drawH)/2; }
+    ctx.drawImage(uploadedImg, drawX, drawY, drawW, drawH);
+    ctx.restore();
+    ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(0,0,W,H);
+  }
+  let fxData = FX_LIB[selectedEffect];
+  if (fxData.chars.length && particles.length) { for (let p of particles) { ctx.font = `${p.size}px "Segoe UI Emoji"`; ctx.fillStyle = `rgba(255,240,200,${p.alpha})`; ctx.fillText(p.ch, p.x, p.y); } updateParticles(); }
+  for (let layer of textLayers) drawTextLayer(ctx, layer, progress, timeMs);
+  ctx.fillStyle = 'rgba(255,255,255,0.2)'; ctx.fillRect(0, H-5, W, 3);
+  ctx.fillStyle = '#667eea'; ctx.fillRect(0, H-5, W * progress, 3);
+  $('#timelineSlider').val((timeMs/videoDuration)*100);
+  $('#currentTimeLabel').text((timeMs/1000).toFixed(1)+'s');
+  $('#totalDurationLabel').text('/ '+(videoDuration/1000).toFixed(1)+'s');
+}
+
+// AUDIO MANAGEMENT
+async function initAudioContext() { if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)(); return audioContext; }
+async function loadAudioFromBlob(blob, filename) {
+  try { const ctxAudio = await initAudioContext(); const arrayBuffer = await blob.arrayBuffer(); const buffer = await ctxAudio.decodeAudioData(arrayBuffer); audioBuffer = buffer; musicDuration = buffer.duration; musicStartTrim = 0; musicEndTrim = musicDuration; updateTrimSliders(); $('#musicInfo').show(); $('#musicName').text(filename || 'Audio Track'); musicVolume = 0.7; $('#musicVolume').val(70); if (isPlaying) { stopAudio(); startAudioSync(); } return true; } catch(e){ console.error(e); alert("Gagal load audio"); return false; }
+}
+function updateTrimSliders() { $('#musicStartTrim').attr('max', musicDuration); $('#musicEndTrim').attr('max', musicDuration); $('#musicStartTrim').val(musicStartTrim); $('#musicEndTrim').val(musicEndTrim); $('#startTrimLabel').text(musicStartTrim.toFixed(1)+'s'); $('#endTrimLabel').text(musicEndTrim.toFixed(1)+'s'); }
+function startAudioSync() { if (!audioBuffer || !isPlaying) return; stopAudio(); const ctxAudio = audioContext; const startOffset = musicStartTrim + (currentPlayTime/1000); if (startOffset >= musicEndTrim) return; const durationPlay = Math.min(musicEndTrim - startOffset, (videoDuration-currentPlayTime)/1000); if (durationPlay <= 0) return; audioSource = ctxAudio.createBufferSource(); let gainNode = ctxAudio.createGain(); gainNode.gain.value = musicVolume; audioSource.buffer = audioBuffer; audioSource.connect(gainNode); gainNode.connect(ctxAudio.destination); audioSource.start(0, startOffset, durationPlay); audioStartTime = ctxAudio.currentTime; isAudioPlaying = true; audioSource.onended = () => { if(isPlaying && currentPlayTime < videoDuration) { } }; }
+function stopAudio() { if (audioSource) { try { audioSource.stop(); } catch(e){} audioSource = null; } isAudioPlaying = false; }
+function updateMusicVolume() { musicVolume = $('#musicVolume').val() / 100; if (audioSource && audioContext) { /* dynamic gain not simple, will reapply on next play */ } }
+async function extractAudioFromVideo(file) { const formData = new FormData(); alert("Ekstraksi audio dari video... (simulasi processing)"); const reader = new FileReader(); reader.onload = async (e) => { const blob = new Blob([e.target.result], {type: 'audio/mp4'}); await loadAudioFromBlob(blob, file.name.replace(/\.(mp4|mov|avi)$/i,'')+'_audio.mp3'); }; reader.readAsArrayBuffer(file); }
+
+// PREVIEW LOOP WITH AUDIO SYNC
 function startPreviewLoop() {
   if (!uploadedImg) { alert("Upload foto dulu ya!"); return false; }
   if (animationFrameId) cancelAnimationFrame(animationFrameId);
@@ -605,185 +437,68 @@ function startPreviewLoop() {
   function update(now) {
     if (!isPlaying) return;
     let elapsed = (now - startTime);
-    if (elapsed >= videoDuration) {
-      elapsed = videoDuration;
-      isPlaying = false;
-      currentPlayTime = videoDuration;
-      drawFrame(currentPlayTime);
-      $('#playPauseBtn').html('<i class="fas fa-play"></i>');
-      return;
-    }
+    if (elapsed >= videoDuration) { elapsed = videoDuration; isPlaying = false; currentPlayTime = videoDuration; drawFrame(currentPlayTime); stopAudio(); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); return; }
     currentPlayTime = elapsed;
     drawFrame(currentPlayTime);
+    if (audioBuffer && !isAudioPlaying && elapsed < videoDuration) { startAudioSync(); }
     animationFrameId = requestAnimationFrame(update);
   }
+  if (audioBuffer) { stopAudio(); startAudioSync(); }
   animationFrameId = requestAnimationFrame(update);
   $('#playPauseBtn').html('<i class="fas fa-pause"></i>');
   return true;
 }
+function stopPreview() { if (animationFrameId) cancelAnimationFrame(animationFrameId); isPlaying = false; stopAudio(); currentPlayTime = 0; drawFrame(0); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); }
+function togglePlayPause() { if (!uploadedImg) { alert("Upload foto"); return; } if (isPlaying) { isPlaying = false; if (animationFrameId) cancelAnimationFrame(animationFrameId); stopAudio(); $('#playPauseBtn').html('<i class="fas fa-play"></i>'); } else { startPreviewLoop(); } }
+function seekTo(percent) { if (isPlaying) togglePlayPause(); let newTime = (percent / 100) * videoDuration; currentPlayTime = Math.min(newTime, videoDuration); drawFrame(currentPlayTime); stopAudio(); }
 
-function stopPreview() {
-  if (animationFrameId) cancelAnimationFrame(animationFrameId);
-  isPlaying = false;
-  currentPlayTime = 0;
-  drawFrame(0);
-  $('#timelineSlider').val(0);
-  $('#playPauseBtn').html('<i class="fas fa-play"></i>');
-}
+// TEXT LAYERS (Multiline support)
+function addTextLayer() { let id = ++layerIdCounter; textLayers.push({ id, text: "Teks Baru\nBaris kedua", x: 50, y: 40, size: 40, color: '#ffffff', bold: false, shadow: true, anim: 'none' }); selectLayer(id); renderLayerList(); }
+function selectLayer(id) { selectedLayerId = id; renderLayerList(); let layer = textLayers.find(l=>l.id===id); if(!layer) { $('#textPropPanel').hide(); return; } $('#textPropPanel').show(); $('#textContentInput').val(layer.text); $('#textPosX').val(layer.x); $('#textPosY').val(layer.y); $('#textSize').val(layer.size); $('#textColorPicker').val(layer.color); $('[data-style]').removeClass('active'); if(layer.bold) $('[data-style="bold"]').addClass('active'); if(layer.shadow) $('[data-style="shadow"]').addClass('active'); $('[data-anim]').removeClass('active'); $(`[data-anim="${layer.anim}"]`).addClass('active'); }
+function renderLayerList() { let container = $('#layerListContainer'); if(textLayers.length===0){ container.html('<div class="text-center text-muted py-3"><i class="fas fa-plus-circle"></i> Klik + untuk teks multiline</div>'); return; } container.html(textLayers.map(l=>`<div class="layer-item ${l.id===selectedLayerId?'active':''}" onclick="selectLayer(${l.id})"><span><i class="fas fa-font mr-2"></i>${l.text.substring(0,18).replace(/\n/g,' ')}</span><i class="fas fa-trash-alt" style="cursor:pointer;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i></div>`).join('')); }
+function deleteLayer(id){ textLayers = textLayers.filter(l=>l.id!==id); if(selectedLayerId===id) selectedLayerId = textLayers.length?textLayers[0].id:null; if(selectedLayerId) selectLayer(selectedLayerId); else $('#textPropPanel').hide(); renderLayerList(); drawFrame(currentPlayTime); }
+function updateCurrentLayer(){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.text = $('#textContentInput').val(); layer.size = parseInt($('#textSize').val()); layer.color = $('#textColorPicker').val(); layer.x = parseInt($('#textPosX').val()); layer.y = parseInt($('#textPosY').val()); drawFrame(currentPlayTime); } }
+function toggleTextStyle(style){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer[style] = !layer[style]; drawFrame(currentPlayTime); } }
+function setTextAnim(anim){ let layer = textLayers.find(l=>l.id===selectedLayerId); if(layer){ layer.anim = anim; drawFrame(currentPlayTime); } }
 
-function togglePlayPause() {
-  if (!uploadedImg) { alert("Upload foto terlebih dahulu"); return; }
-  if (isPlaying) {
-    isPlaying = false;
-    if (animationFrameId) cancelAnimationFrame(animationFrameId);
-    $('#playPauseBtn').html('<i class="fas fa-play"></i>');
-  } else {
-    if (currentPlayTime >= videoDuration) currentPlayTime = 0;
-    startPreviewLoop();
-  }
-}
+// EXPORT (simulasi dengan kualitas)
+let exportQuality = 'hd';
+function startExport() { if(!uploadedImg){ alert("Upload foto"); return; } closeAllSheets(); let bitrate = exportQuality === 'hd' ? 3000000 : 1500000; alert(`🚀 Export ${exportQuality.toUpperCase()} dimulai!\n\nFitur export lengkap membutuhkan MediaRecorder API. Demo ini menunjukkan konsep dengan kualitas ${exportQuality === 'hd' ? 'HD 1080p' : 'Sedang 720p'} dan musik ${audioBuffer ? 'TERSEDIA' : 'TANPA MUSIK'}.\n\nVideo akan diproses dengan durasi ${(videoDuration/1000).toFixed(1)} detik.\n(Fitur export penuh tersedia di versi produksi)`); }
 
-function seekTo(percent) {
-  if (isPlaying) togglePlayPause();
-  let newTime = (percent / 100) * videoDuration;
-  currentPlayTime = Math.min(newTime, videoDuration);
-  drawFrame(currentPlayTime);
-}
-
-// Text layer management
-function addTextLayer() {
-  let id = ++layerIdCounter;
-  textLayers.push({
-    id: id, text: `Teks ${id}`, x: 50, y: 30, size: 42, color: '#ffffff',
-    bold: false, shadow: true, anim: 'none'
-  });
-  selectLayer(id);
-  renderLayerList();
-}
-
-function selectLayer(id) {
-  selectedLayerId = id;
-  renderLayerList();
-  let layer = textLayers.find(l=>l.id===id);
-  if(!layer) { $('#textPropPanel').hide(); return; }
-  $('#textPropPanel').show();
-  $('#textContentInput').val(layer.text);
-  $('#textPosX').val(layer.x);
-  $('#textPosY').val(layer.y);
-  $('#textSize').val(layer.size);
-  $('#textColorPicker').val(layer.color);
-  $('[data-style]').removeClass('active');
-  if(layer.bold) $('[data-style="bold"]').addClass('active');
-  if(layer.shadow) $('[data-style="shadow"]').addClass('active');
-  $('[data-anim]').removeClass('active');
-  $(`[data-anim="${layer.anim}"]`).addClass('active');
-}
-
-function renderLayerList() {
-  let container = $('#layerListContainer');
-  if(textLayers.length===0){
-    container.html('<div class="text-center text-muted py-3" style="font-size:0.7rem;"><i class="fas fa-plus-circle"></i> Klik + untuk tambah teks</div>');
-    return;
-  }
-  container.html(textLayers.map(l=>`
-    <div class="layer-item ${l.id===selectedLayerId?'active':''}" onclick="selectLayer(${l.id})">
-      <span><i class="fas fa-font mr-2"></i>${l.text.substring(0,18)}</span>
-      <i class="fas fa-trash-alt text-muted" style="cursor:pointer;" onclick="event.stopPropagation();deleteLayer(${l.id})"></i>
-    </div>
-  `).join(''));
-}
-
-function deleteLayer(id){
-  textLayers = textLayers.filter(l=>l.id!==id);
-  if(selectedLayerId===id) selectedLayerId = textLayers.length?textLayers[0].id:null;
-  if(selectedLayerId) selectLayer(selectedLayerId);
-  else $('#textPropPanel').hide();
-  renderLayerList();
-  drawFrame(currentPlayTime);
-}
-
-function updateCurrentLayer(){
-  let layer = textLayers.find(l=>l.id===selectedLayerId);
-  if(!layer) return;
-  layer.text = $('#textContentInput').val();
-  layer.size = parseInt($('#textSize').val());
-  layer.color = $('#textColorPicker').val();
-  layer.x = parseInt($('#textPosX').val());
-  layer.y = parseInt($('#textPosY').val());
-  drawFrame(currentPlayTime);
-}
-
-function toggleTextStyle(style){
-  let layer = textLayers.find(l=>l.id===selectedLayerId);
-  if(layer){ layer[style] = !layer[style]; drawFrame(currentPlayTime); }
-}
-
-function setTextAnim(anim){
-  let layer = textLayers.find(l=>l.id===selectedLayerId);
-  if(layer){ layer.anim = anim; drawFrame(currentPlayTime); }
-}
-
-// Upload image
-function handleImageUpload(file){
-  if(!file) return;
-  let reader = new FileReader();
-  reader.onload = (e)=>{
-    let imgEl = new Image();
-    imgEl.onload = ()=>{
-      uploadedImg = imgEl;
-      stopPreview();
-      initParticles();
-      drawFrame(0);
-    };
-    imgEl.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
-}
-
-// Export dummy (recording simulation)
-async function exportVideo(){
-  if(!uploadedImg){ alert("Upload foto dulu"); return; }
-  alert("🎬 Fitur export: Video akan disimulasikan. Di versi asli menggunakan MediaRecorder. Demo ini sudah mendukung preview stabil.");
-  // Untuk user experience, memberikan info bahwa export siap diimplementasi penuh.
-  // Karena keterbatasan, ini memberikan demo interaktif tanpa blocking.
-}
-
-// Event binding
+// EVENT LISTENERS & INIT
 $(document).ready(function(){
-  setRatio('9:16');
-  videoDuration = 6000;
-  $('#durationSlider').val(6);
-  $('#durationValDisplay').text('6.0 s');
-  
+  setRatio('9:16'); videoDuration = 6000; $('#durationSlider').val(6); $('#durationValDisplay').text('6.0 s');
   $('#uploadBtn').click(()=>{ let input = $('<input type="file" accept="image/*">'); input.on('change',(e)=>handleImageUpload(e.target.files[0])); input.click(); });
+  $('#musicBtn').click(()=>{ closeAllSheets(); $('#musicSheet').addClass('show'); });
   $('#effectsBtn').click(()=>{ closeAllSheets(); $('#effectsSheet').addClass('show'); });
   $('#textBtn').click(()=>{ closeAllSheets(); $('#textSheet').addClass('show'); renderLayerList(); if(selectedLayerId) selectLayer(selectedLayerId); });
   $('#aspectBtn').click(()=>{ closeAllSheets(); $('#aspectSheet').addClass('show'); });
-  $('#exportBtn').click(()=>exportVideo());
+  $('#exportBtn').click(()=>{ closeAllSheets(); $('#exportSheet').addClass('show'); });
   $('#playPauseBtn').click(togglePlayPause);
   $('#stopBtn').click(stopPreview);
-  $('#timelineSlider').on('input', function(){ let val = $(this).val(); seekTo(val); });
+  $('#timelineSlider').on('input', function(){ seekTo($(this).val()); });
   $('#durationSlider').on('input', function(){ let dur = parseFloat($(this).val()); videoDuration = dur * 1000; $('#durationValDisplay').text(dur.toFixed(1)+' s'); if(!isPlaying) drawFrame(currentPlayTime); $('#totalDurationLabel').text('/ '+dur.toFixed(1)+'s'); });
   $('#bgColorPicker').on('input',()=>drawFrame(currentPlayTime));
   $('#particleRange').on('input',function(){ $('#particleVal').text($(this).val()); initParticles(); drawFrame(currentPlayTime); });
   $('#addTextLayerBtn').click(()=>{ addTextLayer(); });
-  
-  // FX selector
   $('[data-fx]').click(function(){ $('[data-fx]').removeClass('active'); $(this).addClass('active'); selectedEffect = $(this).data('fx'); initParticles(); drawFrame(currentPlayTime); });
   $('[data-tr]').click(function(){ $('[data-tr]').removeClass('active'); $(this).addClass('active'); selectedTransition = $(this).data('tr'); drawFrame(currentPlayTime); });
   $('[data-ratio]').click(function(){ setRatio($(this).data('ratio')); drawFrame(currentPlayTime); });
   $('[data-style]').click(function(){ let style = $(this).data('style'); toggleTextStyle(style); $(this).toggleClass('active'); });
   $('[data-anim]').click(function(){ let anim = $(this).data('anim'); setTextAnim(anim); $('[data-anim]').removeClass('active'); $(this).addClass('active'); });
-  
+  $('[data-quality]').click(function(){ $('[data-quality]').removeClass('active'); $(this).addClass('active'); exportQuality = $(this).data('quality'); });
+  $('#startExportBtn').click(startExport);
   $('#textContentInput, #textPosX, #textPosY, #textSize, #textColorPicker').on('input', updateCurrentLayer);
+  $('#musicVolume').on('input', function(){ musicVolume = $(this).val()/100; if(isPlaying && audioSource && audioContext){ stopAudio(); startAudioSync(); } });
+  $('#removeMusicBtn').click(()=>{ audioBuffer = null; $('#musicInfo').hide(); stopAudio(); });
+  $('#uploadMusicBtn').click(()=>{ $('#musicFileInput').click(); });
+  $('#extractVideoAudioBtn').click(()=>{ let input = $('<input type="file" accept="video/*">'); input.on('change',(e)=>{ if(e.target.files[0]) extractAudioFromVideo(e.target.files[0]); }); input.click(); });
+  $('#musicFileInput').on('change', function(e){ if(e.target.files[0]){ let file = e.target.files[0]; const reader = new FileReader(); reader.onload = async (ev)=>{ const blob = new Blob([ev.target.result], {type: 'audio/mpeg'}); await loadAudioFromBlob(blob, file.name); }; reader.readAsArrayBuffer(file); } });
+  $('#musicStartTrim, #musicEndTrim').on('input', function(){ let start = parseFloat($('#musicStartTrim').val()); let end = parseFloat($('#musicEndTrim').val()); if(start>=end) { alert("Start harus kurang dari End"); return; } musicStartTrim = start; musicEndTrim = end; updateTrimSliders(); if(isPlaying){ stopAudio(); startAudioSync(); } });
   
-  // default active
-  $('[data-fx="flowers"]').addClass('active');
-  $('[data-tr="zoom"]').addClass('active');
-  initParticles();
-  drawFrame(0);
+  function handleImageUpload(file){ if(!file) return; let reader = new FileReader(); reader.onload = (e)=>{ let imgEl = new Image(); imgEl.onload = ()=>{ uploadedImg = imgEl; stopPreview(); initParticles(); drawFrame(0); }; imgEl.src = e.target.result; }; reader.readAsDataURL(file); }
+  $('[data-fx="flowers"]').addClass('active'); $('[data-tr="zoom"]').addClass('active'); $('[data-quality="hd"]').addClass('active'); initParticles(); drawFrame(0);
 });
-
 function closeAllSheets(){ $('.bottom-sheet').removeClass('show'); }
 </script>
 </body>
