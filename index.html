@@ -2,11 +2,17 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VidioFoto ✨ — FFmpeg Export</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>VidioFoto ✨ — Light & Fast</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
 :root {
   --bg: #f4f4f8;
   --surface: #ffffff;
@@ -15,12 +21,11 @@
   --border2: rgba(0,0,0,.13);
   --accent: #7c3aed;
   --accent2: #db2777;
-  --accent3: #2563eb;
   --text: #18181b;
   --muted: #71717a;
   --success: #16a34a;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
+
 body {
   background: var(--bg);
   color: var(--text);
@@ -28,407 +33,446 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
+
+/* Header ringan */
 header {
-  padding: 1rem 2rem;
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(255,255,255,.85);
-  backdrop-filter: blur(12px);
+  background: rgba(255,255,255,.95);
+  backdrop-filter: blur(8px);
   position: sticky;
   top: 0;
   z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
+
 header .logo {
   font-family: 'Syne', sans-serif;
   font-weight: 800;
-  font-size: 1.1rem;
+  font-size: 1rem;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
-header .hint {
-  font-size: .75rem;
-  color: var(--muted);
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 20px;
-  padding: 4px 12px;
-}
-.workspace {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 280px 1fr 260px;
-  gap: 0;
-  height: calc(100vh - 57px);
-  overflow: hidden;
-}
-.panel {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0,0,0,.15) transparent;
-}
-.panel:last-child { border-right: none; border-left: 1px solid var(--border); }
-.panel-title {
-  font-family: 'Syne', sans-serif;
-  font-size: .7rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--muted);
-  padding: .9rem 1.1rem .5rem;
-}
-.section { padding: .75rem 1.1rem; border-bottom: 1px solid var(--border); }
-.upload-zone {
-  border: 1.5px dashed var(--border2);
-  border-radius: 10px;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: .2s;
-  position: relative;
-  overflow: hidden;
-  background: var(--surface2);
-}
-.upload-zone:hover { border-color: var(--accent); background: rgba(176,106,255,.06); }
-.upload-zone.has-img { padding: 0; height: 110px; }
-.upload-zone.has-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-.upload-zone .overlay-btn {
-  position: absolute; inset: 0; background: rgba(0,0,0,.5);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: .2s; border-radius: 8px; font-size: .8rem; color: #fff;
-}
-.upload-zone.has-img:hover .overlay-btn { opacity: 1; }
-.up-ico { font-size: 1.8rem; margin-bottom: .4rem; }
-.up-txt { font-size: .78rem; color: var(--muted); }
-.lbl { font-size: .72rem; color: var(--muted); margin-bottom: 5px; margin-top: 10px; }
-.lbl:first-child { margin-top: 0; }
-input[type=text], textarea, select {
-  width: 100%;
-  background: var(--surface2);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 7px 10px;
-  font-size: .8rem;
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  transition: .15s;
-}
-input[type=text]:focus, textarea:focus { border-color: var(--accent); }
-textarea { resize: none; height: 52px; line-height: 1.4; }
-input[type=range] {
-  -webkit-appearance: none;
-  width: 100%; height: 3px;
-  background: var(--border2);
-  border-radius: 3px; outline: none; cursor: pointer;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  background: var(--accent);
-  cursor: pointer;
-}
-.sl-row { display: flex; align-items: center; gap: 8px; }
-.sl-row input[type=range] { flex: 1; }
-.sl-val { font-size: .75rem; font-weight: 500; color: var(--text); min-width: 30px; text-align: right; }
-input[type=color] {
-  width: 32px; height: 26px;
-  border: 1px solid var(--border2); border-radius: 6px;
-  cursor: pointer; padding: 2px; background: var(--surface2);
-}
-.chips { display: flex; flex-wrap: wrap; gap: 5px; }
-.chip {
-  font-size: .72rem; padding: 4px 10px; border-radius: 20px; cursor: pointer;
-  border: 1px solid var(--border2); background: var(--surface2); color: var(--muted);
-  transition: .15s; user-select: none;
-}
-.chip:hover { border-color: var(--accent); color: var(--text); }
-.chip.on { background: rgba(124,58,237,.1); color: var(--accent); border-color: rgba(124,58,237,.35); }
-.layer-list { display: flex; flex-direction: column; gap: 6px; }
-.layer-item {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 8px 10px;
-  cursor: pointer;
-  transition: .15s;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-.layer-item:hover { border-color: var(--border2); }
-.layer-item.active { border-color: rgba(124,58,237,.4); background: rgba(124,58,237,.06); }
-.layer-name { font-size: .78rem; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.layer-del {
-  width: 20px; height: 20px; border-radius: 4px;
-  background: rgba(255,100,100,.1); color: #ff6464;
-  border: none; cursor: pointer; font-size: .7rem; display: flex; align-items: center; justify-content: center;
-  transition: .15s; flex-shrink: 0;
-}
-.layer-del:hover { background: rgba(255,100,100,.25); }
-.btn {
-  padding: 7px 14px; border-radius: 8px; font-size: .78rem; cursor: pointer;
-  border: 1px solid var(--border2); background: transparent; color: var(--text);
-  transition: .15s; font-family: 'DM Sans', sans-serif; font-weight: 400;
-}
-.btn:hover { background: var(--surface2); border-color: var(--border2); }
-.btn:active { transform: scale(.97); }
-.btn-accent {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-color: transparent; color: #fff; font-weight: 500;
-}
-.btn-accent:hover { opacity: .88; background: linear-gradient(135deg, var(--accent), var(--accent2)); }
-.btn-export {
-  background: linear-gradient(135deg, #1a8f52, #0f6b3c);
-  border-color: transparent; color: #fff; font-weight: 500;
-}
-.btn-export:hover { opacity: .88; }
-.btn-sm { padding: 5px 10px; font-size: .72rem; }
-.btns-row { display: flex; gap: 6px; flex-wrap: wrap; }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-.canvas-area {
-  background: #e8e8f0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  gap: 1rem;
-  position: relative;
-  overflow: hidden;
-}
-.canvas-area::before {
-  content: '';
-  position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 30% 50%, rgba(124,58,237,.07) 0%, transparent 60%),
-              radial-gradient(ellipse at 70% 50%, rgba(219,39,119,.05) 0%, transparent 60%);
-  pointer-events: none;
-}
-.canvas-wrap {
-  position: relative;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 0 0 1px var(--border2), 0 20px 60px rgba(0,0,0,.6);
-  flex-shrink: 0;
-}
-canvas { display: block; cursor: default; }
-.canvas-controls {
-  display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
-  z-index: 1;
-}
-.prog-wrap {
-  width: 100%; max-width: 640px; z-index: 1;
-}
-.prog-track {
-  height: 3px; background: var(--border2); border-radius: 3px; overflow: hidden;
-}
-.prog-fill {
-  height: 100%; width: 0%;
-  background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 3px; transition: width .08s linear;
-}
-.time-display {
-  font-size: .72rem; color: var(--muted); text-align: center; margin-top: 4px;
-  font-variant-numeric: tabular-nums;
-}
-#status {
-  font-size: .75rem; color: var(--muted);
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  padding: 4px 10px;
-  max-width: 260px;
-  text-align: center;
-}
-.drag-hint {
-  position: absolute;
-  bottom: 8px; left: 50%; transform: translateX(-50%);
-  font-size: .7rem; color: rgba(255,255,255,.4);
-  pointer-events: none;
-  white-space: nowrap;
-}
-.style-btns { display: flex; gap: 4px; }
-.style-btn {
-  width: 28px; height: 26px; border-radius: 6px;
-  border: 1px solid var(--border2); background: var(--surface2);
-  color: var(--text); cursor: pointer; font-size: .72rem;
-  display: flex; align-items: center; justify-content: center;
-  transition: .15s;
-}
-.style-btn.on { background: rgba(124,58,237,.12); border-color: rgba(124,58,237,.45); color: var(--accent); }
-.align-btns { display: flex; gap: 4px; }
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: rgba(0,0,0,.15); border-radius: 4px; }
-.anim-badge {
-  display: inline-block;
-  font-size: .65rem;
-  padding: 2px 7px;
-  border-radius: 20px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--muted);
-  cursor: pointer;
-  transition: .15s;
-}
-.anim-badge.on { background: rgba(37,99,235,.1); color: var(--accent3); border-color: rgba(37,99,235,.35); }
-.ratio-toggle {
-  display: flex;
-  gap: 0;
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  overflow: hidden;
-}
-.ratio-btn {
-  flex: 1;
-  padding: 6px 10px;
-  border: none;
-  background: var(--surface2);
-  color: var(--muted);
-  font-family: 'DM Sans', sans-serif;
-  font-size: .75rem;
-  cursor: pointer;
-  transition: .15s;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3px;
-}
-.ratio-btn .ratio-icon {
-  display: block;
-  background: var(--border2);
-  border-radius: 2px;
-}
-.ratio-btn.active {
-  background: rgba(124,58,237,.12);
-  color: var(--accent);
-}
-.ratio-btn:first-child { border-right: 1px solid var(--border2); }
+
 .hd-badge {
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  font-size: .65rem;
+  font-size: 0.65rem;
   background: rgba(37,99,235,.1);
   color: var(--accent3);
-  border: 1px solid rgba(37,99,235,.25);
   border-radius: 20px;
-  padding: 2px 8px;
-  font-weight: 600;
+  padding: 4px 10px;
 }
 
-/* ─── Export Modal ─────────────────────────────── */
-#exportModal {
-  display: none;
-  position: fixed; inset: 0;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(6px);
-  z-index: 9999;
-  align-items: center;
-  justify-content: center;
-}
-#exportModal.show { display: flex; }
-.modal-box {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 2rem;
-  width: 360px;
-  box-shadow: 0 32px 80px rgba(0,0,0,.4);
+/* Layout Mobile First */
+.workspace {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  flex: 1;
+  gap: 0;
 }
-.modal-title {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: 1rem;
+
+/* Panel kiri - bisa collapse di mobile */
+.panel-left {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
 }
-.modal-sub {
-  font-size: .78rem;
-  color: var(--muted);
-  line-height: 1.5;
+
+.panel-left.open {
+  max-height: 80vh;
+  overflow-y: auto;
 }
-.exp-prog-track {
-  height: 8px;
-  background: var(--surface2);
-  border-radius: 8px;
+
+.panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+.panel-toggle span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-icon {
+  transition: transform 0.2s;
+}
+
+.panel-left.open .toggle-icon {
+  transform: rotate(180deg);
+}
+
+/* Canvas area - pusat */
+.canvas-area {
+  background: #1a1a2e;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  gap: 0.75rem;
+  min-height: 60vh;
+}
+
+.canvas-wrap {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,.3);
+  max-width: 100%;
+}
+
+canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: default;
+}
+
+/* Controls bar */
+.canvas-controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  z-index: 1;
+}
+
+.prog-wrap {
+  width: 100%;
+  max-width: 500px;
+}
+
+.prog-track {
+  height: 3px;
+  background: rgba(255,255,255,.2);
+  border-radius: 3px;
   overflow: hidden;
 }
-.exp-prog-fill {
+
+.prog-fill {
   height: 100%;
   width: 0%;
   background: linear-gradient(90deg, var(--accent), var(--accent2));
-  border-radius: 8px;
-  transition: width .12s linear;
+  border-radius: 3px;
+  transition: width 0.05s linear;
 }
-.exp-step {
-  font-size: .75rem;
-  color: var(--muted);
-  font-variant-numeric: tabular-nums;
-}
-.exp-cancel {
-  font-size: .75rem;
-  color: var(--muted);
-  background: none;
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 6px 14px;
-  cursor: pointer;
-  font-family: 'DM Sans', sans-serif;
-  align-self: flex-start;
-}
-.exp-cancel:hover { background: var(--surface2); }
-.quality-row {
-  display: flex; gap: 6px;
-}
-.quality-opt {
-  flex: 1;
-  padding: 8px 6px;
-  border-radius: 8px;
-  border: 1.5px solid var(--border2);
-  background: var(--surface2);
-  cursor: pointer;
+
+.time-display {
+  font-size: 0.7rem;
+  color: rgba(255,255,255,.6);
   text-align: center;
-  transition: .15s;
+  margin-top: 4px;
 }
-.quality-opt.sel {
-  border-color: rgba(124,58,237,.5);
+
+/* Panel kanan - bottom sheet di mobile */
+.panel-right {
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  border-radius: 20px 20px 0 0;
+  max-height: 45vh;
+  overflow-y: auto;
+  transition: max-height 0.3s ease;
+}
+
+.panel-right.collapsed {
+  max-height: 48px;
+  overflow: hidden;
+}
+
+.right-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.right-content {
+  padding: 0.75rem;
+}
+
+/* Section styling ringan */
+.section {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.lbl {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* Form elements ringan */
+input, select, textarea {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.8rem;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 3px;
+  background: var(--border2);
+  border-radius: 3px;
+  padding: 0;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent);
+  cursor: pointer;
+}
+
+/* Chips ringan */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  font-size: 0.7rem;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border2);
+  cursor: pointer;
+  transition: all 0.1s;
+}
+
+.chip.on {
+  background: rgba(124,58,237,.15);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  transition: all 0.1s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  color: white;
+}
+
+.btn-export {
+  background: linear-gradient(135deg, #1a8f52, #0f6b3c);
+  border: none;
+  color: white;
+}
+
+/* Layer list */
+.layer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.layer-item {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.layer-item.active {
+  border-left: 3px solid var(--accent);
   background: rgba(124,58,237,.08);
 }
-.quality-opt .q-label {
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
-  font-size: .78rem;
-  color: var(--text);
+
+/* Modal export */
+#exportModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.7);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
 }
-.quality-opt .q-sub {
-  font-size: .65rem;
+
+#exportModal.show {
+  display: flex;
+}
+
+.modal-box {
+  background: var(--surface);
+  border-radius: 20px;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+/* Status */
+#status {
+  font-size: 0.7rem;
   color: var(--muted);
-  margin-top: 2px;
-}
-.fps-row { display: flex; align-items: center; gap: 8px; }
-.fps-chip {
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(4px);
   padding: 4px 10px;
   border-radius: 20px;
-  font-size: .72rem;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--muted);
-  cursor: pointer;
-  transition: .15s;
+  color: white;
 }
-.fps-chip.sel {
-  background: rgba(124,58,237,.1);
-  color: var(--accent);
-  border-color: rgba(124,58,237,.35);
+
+/* Desktop layout */
+@media (min-width: 768px) {
+  .workspace {
+    display: grid;
+    grid-template-columns: 280px 1fr 300px;
+    height: calc(100vh - 57px);
+  }
+  
+  .panel-left {
+    max-height: none !important;
+    overflow-y: auto;
+    border-right: 1px solid var(--border);
+  }
+  
+  .panel-toggle {
+    display: none;
+  }
+  
+  .panel-right {
+    max-height: none !important;
+    border-left: 1px solid var(--border);
+    border-radius: 0;
+    overflow-y: auto;
+  }
+  
+  .right-header {
+    display: none;
+  }
+  
+  .right-content {
+    padding: 1rem;
+  }
+  
+  .canvas-area {
+    padding: 1.5rem;
+  }
+}
+
+/* Utility */
+.sl-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sl-val {
+  font-size: 0.7rem;
+  min-width: 35px;
+  text-align: right;
+}
+
+.row2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.btns-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+#uploadZone {
+  border: 1.5px dashed var(--border2);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  background: var(--surface2);
+}
+
+#uploadZone.has-img {
+  padding: 0;
+  height: 100px;
+}
+
+#uploadZone.has-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.upload-zone .overlay-btn {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  border-radius: 10px;
+  color: white;
+  font-size: 0.75rem;
+}
+
+.upload-zone.has-img:hover .overlay-btn {
+  opacity: 1;
 }
 </style>
 </head>
@@ -436,98 +480,76 @@ canvas { display: block; cursor: default; }
 
 <header>
   <div class="logo">✦ VidioFoto</div>
-  <div style="display:flex;align-items:center;gap:8px">
-    <span class="hd-badge">MP4 H.264</span>
-    <div class="hint">Geser teks langsung di canvas</div>
-  </div>
+  <div class="hd-badge">MP4 H.264</div>
 </header>
 
-<!-- Export Modal -->
-<div id="exportModal">
-  <div class="modal-box" id="modalContent">
-    <!-- diisi JS -->
-  </div>
-</div>
-
 <div class="workspace">
-
-  <!-- LEFT PANEL -->
-  <div class="panel">
-    <div class="panel-title">Media & Efek</div>
-
-    <div class="section">
-      <div class="lbl">Rasio Aspek</div>
-      <div class="ratio-toggle">
-        <button class="ratio-btn active" id="ratio169" onclick="setRatio('16:9')">
-          <span class="ratio-icon" style="width:28px;height:16px"></span>
-          16:9
-          <span style="font-size:.6rem;color:var(--muted)">YouTube</span>
-        </button>
-        <button class="ratio-btn" id="ratio916" onclick="setRatio('9:16')">
-          <span class="ratio-icon" style="width:16px;height:28px"></span>
-          9:16
-          <span style="font-size:.6rem;color:var(--muted)">Reels</span>
-        </button>
-      </div>
-      <div class="lbl" style="margin-top:8px;font-size:.65rem;color:var(--muted);font-style:italic" id="resInfo">Output: 1920 × 1080 px (Full HD)</div>
+  <!-- LEFT PANEL - Collapsible di mobile -->
+  <div class="panel-left" id="panelLeft">
+    <div class="panel-toggle" onclick="toggleLeftPanel()">
+      <span>📷 Media & Efek</span>
+      <span class="toggle-icon">▼</span>
     </div>
+    <div class="right-content">
+      <div class="section">
+        <div class="lbl">Rasio</div>
+        <div class="chips">
+          <span class="chip on" data-ratio="16:9" onclick="setRatio('16:9')">16:9 (Landscape)</span>
+          <span class="chip" data-ratio="9:16" onclick="setRatio('9:16')">9:16 (Reels)</span>
+        </div>
+      </div>
 
-    <div class="section">
-      <div class="lbl">Foto</div>
-      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fi').click()">
-        <div class="up-ico">📷</div>
-        <div class="up-txt">Klik atau seret foto ke sini</div>
-        <div class="overlay-btn">Ganti Foto</div>
+      <div class="section">
+        <div class="lbl">Foto</div>
+        <div class="upload-zone" id="uploadZone" onclick="document.getElementById('fi').click()">
+          <div>📷</div>
+          <div style="font-size:0.7rem">Klik atau seret foto</div>
+          <div class="overlay-btn">Ganti</div>
+        </div>
+        <input type="file" id="fi" accept="image/*" style="display:none">
       </div>
-      <input type="file" id="fi" accept="image/*" style="display:none">
-    </div>
 
-    <div class="section">
-      <div class="lbl">Efek Partikel</div>
-      <div class="chips" id="fxChips">
-        <span class="chip on" data-fx="flowers">🌸 Bunga</span>
-        <span class="chip" data-fx="hearts">❤️ Hati</span>
-        <span class="chip" data-fx="stars">✨ Bintang</span>
-        <span class="chip" data-fx="bubbles">🫧 Gelembung</span>
-        <span class="chip" data-fx="snow">❄️ Salju</span>
-        <span class="chip" data-fx="confetti">🎊 Confetti</span>
-        <span class="chip" data-fx="petals">🍂 Daun</span>
-        <span class="chip" data-fx="none">○ Off</span>
+      <div class="section">
+        <div class="lbl">Efek Partikel</div>
+        <div class="chips" id="fxChips">
+          <span class="chip on" data-fx="flowers">🌸</span>
+          <span class="chip" data-fx="hearts">❤️</span>
+          <span class="chip" data-fx="stars">✨</span>
+          <span class="chip" data-fx="snow">❄️</span>
+          <span class="chip" data-fx="none">Off</span>
+        </div>
+        <div class="lbl" style="margin-top:8px">Jumlah</div>
+        <div class="sl-row">
+          <input type="range" min="0" max="40" value="25" id="pCount">
+          <span class="sl-val" id="pcV">25</span>
+        </div>
       </div>
-      <div class="lbl" style="margin-top:10px">Jumlah Partikel</div>
-      <div class="sl-row">
-        <input type="range" min="5" max="80" value="35" id="pCount" step="1" oninput="sv('pcV',this.value)">
-        <span class="sl-val" id="pcV">35</span>
-      </div>
-    </div>
 
-    <div class="section">
-      <div class="lbl">Animasi Foto</div>
-      <div class="chips" id="trChips">
-        <span class="chip on" data-tr="zoom">🔍 Zoom</span>
-        <span class="chip" data-tr="slide">→ Slide</span>
-        <span class="chip" data-tr="fade">≈ Fade</span>
-        <span class="chip" data-tr="rotate">↻ Putar</span>
-        <span class="chip" data-tr="ken">⬛ Ken Burns</span>
+      <div class="section">
+        <div class="lbl">Animasi Foto</div>
+        <div class="chips">
+          <span class="chip on" data-tr="zoom">Zoom</span>
+          <span class="chip" data-tr="slide">Slide</span>
+          <span class="chip" data-tr="fade">Fade</span>
+        </div>
       </div>
-    </div>
 
-    <div class="section">
-      <div class="lbl">Durasi Video</div>
-      <div class="sl-row">
-        <input type="range" min="5" max="30" value="7" step="1" id="dur" oninput="sv('durV',this.value+'s')">
-        <span class="sl-val" id="durV">7s</span>
+      <div class="section">
+        <div class="lbl">Durasi (detik)</div>
+        <div class="sl-row">
+          <input type="range" min="5" max="20" value="7" id="dur">
+          <span class="sl-val" id="durV">7s</span>
+        </div>
+        <div class="lbl">Latar</div>
+        <input type="color" id="bgCol" value="#1a1a2e">
       </div>
-      <div class="lbl" style="margin-top:10px">Warna Latar</div>
-      <input type="color" id="bgCol" value="#f0f0f8">
     </div>
   </div>
 
-  <!-- CENTER: Canvas -->
-  <div class="canvas-area" id="canvasArea">
-    <div class="canvas-wrap" id="canvasWrap">
+  <!-- CANVAS AREA -->
+  <div class="canvas-area">
+    <div class="canvas-wrap">
       <canvas id="cv"></canvas>
-      <div class="drag-hint" id="dragHint">Klik teks di canvas untuk memilih, lalu seret</div>
     </div>
 
     <div class="prog-wrap">
@@ -536,1125 +558,658 @@ canvas { display: block; cursor: default; }
     </div>
 
     <div class="canvas-controls">
-      <button class="btn btn-accent" onclick="startPrev()">▶ Preview</button>
-      <button class="btn" onclick="stopPrev()">■ Stop</button>
-      <button class="btn btn-sm" onclick="resetTime()">⏮ Reset</button>
-      <div id="status">Upload foto untuk mulai</div>
-      <button class="btn btn-export" onclick="showExportModal()">⬇ Export MP4</button>
+      <button class="btn btn-accent" onclick="startPreview()">▶ Preview</button>
+      <button class="btn" onclick="stopPreview()">■ Stop</button>
+      <div id="status">Upload foto</div>
+      <button class="btn btn-export" onclick="showExportModal()">⬇ Export</button>
     </div>
   </div>
 
-  <!-- RIGHT PANEL -->
-  <div class="panel">
-    <div class="panel-title">Teks & Layer</div>
-
-    <div class="section">
-      <div class="btns-row">
-        <button class="btn btn-accent btn-sm" onclick="addTextLayer()" style="flex:1">+ Tambah Teks</button>
-      </div>
-      <div class="lbl" style="margin-top:10px">Layer Teks</div>
-      <div class="layer-list" id="layerList">
-        <div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>
-      </div>
+  <!-- RIGHT PANEL - Bottom sheet di mobile -->
+  <div class="panel-right" id="panelRight">
+    <div class="right-header" onclick="toggleRightPanel()">
+      <span>✏️ Teks & Layer</span>
+      <span class="toggle-icon">▲</span>
     </div>
+    <div class="right-content">
+      <div class="btns-row">
+        <button class="btn btn-accent" style="flex:1" onclick="addTextLayer()">+ Tambah Teks</button>
+      </div>
+      <div class="lbl" style="margin-top:10px">Layer</div>
+      <div class="layer-list" id="layerList">
+        <div style="font-size:0.7rem;color:var(--muted);text-align:center;padding:0.5rem">Belum ada teks</div>
+      </div>
 
-    <div class="section" id="txtProps" style="display:none">
-      <div class="lbl">Isi Teks</div>
-      <textarea id="txtContent" onchange="updateLayer()" oninput="updateLayer()" placeholder="Ketik teks..."></textarea>
+      <div id="txtProps" style="display:none; margin-top:12px">
+        <div class="lbl">Teks</div>
+        <textarea id="txtContent" rows="2" placeholder="Tulis teks..."></textarea>
 
-      <div class="lbl">Posisi X / Y</div>
-      <div class="row2">
-        <div>
-          <div class="sl-row">
-            <span style="font-size:.7rem;color:var(--muted);min-width:10px">X</span>
-            <input type="range" min="0" max="1920" value="960" id="posX" oninput="updateLayerPos()">
-            <span class="sl-val" id="posXV">960</span>
+        <div class="row2">
+          <div>
+            <div class="lbl">X</div>
+            <input type="range" min="0" max="100" value="50" id="posXp">
+          </div>
+          <div>
+            <div class="lbl">Y</div>
+            <input type="range" min="0" max="100" value="20" id="posYp">
           </div>
         </div>
-        <div>
-          <div class="sl-row">
-            <span style="font-size:.7rem;color:var(--muted);min-width:10px">Y</span>
-            <input type="range" min="0" max="1080" value="100" id="posY" oninput="updateLayerPos()">
-            <span class="sl-val" id="posYV">100</span>
+
+        <div class="row2">
+          <div>
+            <div class="lbl">Ukuran</div>
+            <input type="range" min="24" max="120" value="48" id="txtSize">
+          </div>
+          <div>
+            <div class="lbl">Warna</div>
+            <input type="color" id="txtColor" value="#ffffff">
           </div>
         </div>
-      </div>
 
-      <div class="lbl">Ukuran & Warna</div>
-      <div class="row2">
-        <div>
-          <div class="sl-row">
-            <input type="range" min="20" max="200" value="80" id="txtSize" oninput="sv('tsV',this.value+'px');updateLayer()">
-            <span class="sl-val" id="tsV">80px</span>
-          </div>
+        <div class="lbl">Gaya</div>
+        <div class="chips">
+          <span class="chip" data-style="bold" onclick="toggleTextStyle('bold')">Bold</span>
+          <span class="chip" data-style="shadow" onclick="toggleTextStyle('shadow')">Shadow</span>
         </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <input type="color" id="txtColor" value="#ffffff" onchange="updateLayer()" oninput="updateLayer()">
-          <span style="font-size:.7rem;color:var(--muted)">Warna</span>
+
+        <div class="lbl">Animasi</div>
+        <div class="chips">
+          <span class="chip on" data-anim="none">Diam</span>
+          <span class="chip" data-anim="fadein">Fade</span>
+          <span class="chip" data-anim="slideup">Slide</span>
+          <span class="chip" data-anim="pulse">Pulse</span>
         </div>
-      </div>
-
-      <div class="lbl">Gaya</div>
-      <div class="style-btns">
-        <button class="style-btn" data-s="bold" onclick="toggleStyle(this,'bold')" title="Bold"><b>B</b></button>
-        <button class="style-btn" data-s="italic" onclick="toggleStyle(this,'italic')" title="Italic"><i>I</i></button>
-        <button class="style-btn" data-s="shadow" onclick="toggleStyle(this,'shadow')" title="Shadow">◑</button>
-        <button class="style-btn" data-s="outline" onclick="toggleStyle(this,'outline')" title="Outline">○</button>
-        <button class="style-btn" data-s="bg" onclick="toggleStyle(this,'bg')" title="Kotak Latar">▬</button>
-      </div>
-
-      <div class="lbl" style="margin-top:8px">Warna latar teks</div>
-      <input type="color" id="txtBgColor" value="#000000" onchange="updateLayer()" oninput="updateLayer()">
-
-      <div class="lbl" style="margin-top:8px">Align</div>
-      <div class="align-btns">
-        <button class="style-btn on" data-a="left" onclick="setAlign(this,'left')">≡L</button>
-        <button class="style-btn" data-a="center" onclick="setAlign(this,'center')">≡C</button>
-        <button class="style-btn" data-a="right" onclick="setAlign(this,'right')">≡R</button>
-      </div>
-
-      <div class="lbl" style="margin-top:8px">Animasi Teks</div>
-      <div class="chips">
-        <span class="anim-badge on" data-anim="none" onclick="setTextAnim(this,'none')">Diam</span>
-        <span class="anim-badge" data-anim="fadein" onclick="setTextAnim(this,'fadein')">Fade In</span>
-        <span class="anim-badge" data-anim="slideup" onclick="setTextAnim(this,'slideup')">Slide Up</span>
-        <span class="anim-badge" data-anim="bounce" onclick="setTextAnim(this,'bounce')">Bounce</span>
-        <span class="anim-badge" data-anim="typewriter" onclick="setTextAnim(this,'typewriter')">Ketik</span>
-        <span class="anim-badge" data-anim="pulse" onclick="setTextAnim(this,'pulse')">Pulse</span>
-      </div>
-
-      <div class="lbl" style="margin-top:8px">Rotasi</div>
-      <div class="sl-row">
-        <input type="range" min="-180" max="180" value="0" id="txtRot" oninput="sv('rotV',this.value+'°');updateLayer()">
-        <span class="sl-val" id="rotV">0°</span>
-      </div>
-
-      <div class="lbl" style="margin-top:8px">Opacity</div>
-      <div class="sl-row">
-        <input type="range" min="10" max="100" value="100" id="txtOpacity" oninput="sv('opV',this.value+'%');updateLayer()">
-        <span class="sl-val" id="opV">100%</span>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════ -->
-<!-- FFmpeg.wasm via CDN (v0.12 — stable, SharedArrayBuffer -->
-<!-- tidak diperlukan di versi ini)                         -->
-<!-- ═══════════════════════════════════════════════════════ -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/ffmpeg/0.11.6/ffmpeg.min.js"></script>
+<!-- EXPORT MODAL -->
+<div id="exportModal">
+  <div class="modal-box" id="modalContent"></div>
+</div>
 
 <script>
-// ─── Dimensi HD ───────────────────────────────────────────
-const RATIOS = {
-  '16:9': { W: 1920, H: 1080, dispW: 580, dispH: 326 },
-  '9:16': { W: 1080, H: 1920, dispW: 270, dispH: 480 }
-};
+// ==================== KONFIGURASI ====================
+let W = 1280, H = 720;  // Default HD (ringan)
 let currentRatio = '16:9';
-let W = 1920, H = 1080;
-let DISP_W = 580, DISP_H = 326;
+let img = null;
+let animationId = null;
+let currentTime = 0;
+let isPlaying = false;
+let selFx = 'flowers';
+let selTr = 'zoom';
+let particles = [];
+let textLayers = [];
+let selectedLayerId = null;
+let layerIdCounter = 0;
+let dragState = null;
 
+// DOM elements
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
 
-// Render canvas untuk export (tidak ditampilkan, ukuran sesuai output)
-const offCv = document.createElement('canvas');
-const offCtx = offCv.getContext('2d');
-
+// ==================== RESOLUSI ADAPTIF ====================
 function setRatio(ratio) {
   currentRatio = ratio;
-  const r = RATIOS[ratio];
-  W = r.W; H = r.H; DISP_W = r.dispW; DISP_H = r.dispH;
-  cv.width = W; cv.height = H;
-  cv.style.width = DISP_W + 'px';
-  cv.style.height = DISP_H + 'px';
-  document.getElementById('posX').max = W;
-  document.getElementById('posY').max = H;
-  document.getElementById('posX').value = Math.round(W / 2);
-  document.getElementById('posY').value = Math.round(H * 0.08);
-  sv('posXV', Math.round(W / 2));
-  sv('posYV', Math.round(H * 0.08));
-  document.getElementById('resInfo').textContent = ratio === '16:9'
-    ? 'Output: 1920 × 1080 px (Full HD)'
-    : 'Output: 1080 × 1920 px (Full HD Reels)';
-  document.getElementById('ratio169').classList.toggle('active', ratio === '16:9');
-  document.getElementById('ratio916').classList.toggle('active', ratio === '9:16');
-  initParts();
+  if (ratio === '16:9') {
+    W = 1280; H = 720;
+  } else {
+    W = 720; H = 1280;
+  }
+  
+  cv.width = W;
+  cv.height = H;
+  cv.style.width = '100%';
+  cv.style.height = 'auto';
+  
+  // Update slider bounds
+  document.querySelectorAll('[data-ratio]').forEach(c => c.classList.remove('on'));
+  document.querySelector(`[data-ratio="${ratio}"]`).classList.add('on');
+  
+  initParticles();
   drawFrame(0);
 }
 
-// ─── State ─────────────────────────────────────────────────
-let img = null;
-let animId = null;
-let isPaused = true;
-let t0 = null;
-let selFx = 'flowers', selTr = 'zoom';
-let parts = [];
-let layers = [];
-let selLayerId = null;
-let layerIdCounter = 0;
-let dragState = null;
-let exportCancelled = false;
-
-// FFmpeg instance
-let ffmpegReady = false;
-let ffmpegLoading = false;
-let ffmpegInstance = null;
-
-cv.width = W; cv.height = H;
-cv.style.width = DISP_W + 'px';
-cv.style.height = DISP_H + 'px';
-
-// ─── Helpers ───────────────────────────────────────────────
-function sv(id, val) { document.getElementById(id).textContent = val; }
-function el(id) { return document.getElementById(id); }
-
-// ─── File Upload ───────────────────────────────────────────
-el('fi').addEventListener('change', e => {
-  const f = e.target.files[0]; if (!f) return;
-  const r = new FileReader();
-  r.onload = ev => {
-    const i = new Image();
-    i.onload = () => {
-      img = i;
-      const uz = el('uploadZone');
-      uz.classList.add('has-img');
-      uz.innerHTML = `<img src="${ev.target.result}"><div class="overlay-btn">Ganti Foto</div>`;
-      uz.onclick = () => el('fi').click();
-      initParts(); startPrev();
-    };
-    i.src = ev.target.result;
-  };
-  r.readAsDataURL(f);
-});
-
-const uz = el('uploadZone');
-uz.addEventListener('dragover', e => { e.preventDefault(); uz.style.borderColor = 'var(--accent)'; });
-uz.addEventListener('dragleave', () => { uz.style.borderColor = ''; });
-uz.addEventListener('drop', e => {
-  e.preventDefault(); uz.style.borderColor = '';
-  const f = e.dataTransfer.files[0]; if (!f || !f.type.startsWith('image/')) return;
-  const inp = el('fi');
-  const dt = new DataTransfer(); dt.items.add(f); inp.files = dt.files;
-  inp.dispatchEvent(new Event('change'));
-});
-
-// ─── Chips ─────────────────────────────────────────────────
-el('fxChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-  document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
-  c.classList.add('on'); selFx = c.dataset.fx; initParts();
-}));
-el('trChips').querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-  document.querySelectorAll('[data-tr]').forEach(x => x.classList.remove('on'));
-  c.classList.add('on'); selTr = c.dataset.tr;
-}));
-
-// ─── Particles ─────────────────────────────────────────────
-const FXD = {
-  flowers: { chars: ['🌸','🌺','🌼','💮'], cols: ['#ffb7c5','#ff69b4','#ffd1dc','#ff85a1'] },
-  hearts:  { chars: ['❤️','💕','💖','💗','💓'], cols: ['#ff4d6d','#ff8fa3','#ff6b81'] },
-  stars:   { chars: ['✨','⭐','💫','🌟'], cols: ['#ffe066','#ffd700','#fff9c4','#ffec6e'] },
-  bubbles: { chars: ['●','○','◉'], cols: ['#7ecfff','#48b8ff','#b3e5ff'] },
-  snow:    { chars: ['❄','·','*','✦'], cols: ['#e8f4fd','#cce7ff','#ffffff'] },
-  confetti:{ chars: ['■','▲','●','◆','★'], cols: ['#ff6b6b','#4ecdc4','#ffe66d','#a29bfe','#fd79a8'] },
-  petals:  { chars: ['🍂','🍁','🌿','🍃'], cols: ['#d4a017','#c0392b','#27ae60','#e67e22'] },
-  none:    { chars: [], cols: [] }
+// ==================== PARTIKEL RINGAN ====================
+const FX_LIST = {
+  flowers: { chars: ['🌸','🌺','🌼'], speed: 0.8 },
+  hearts: { chars: ['❤️','💕','💖'], speed: 0.9 },
+  stars: { chars: ['✨','⭐','💫'], speed: 0.7 },
+  snow: { chars: ['❄','·','❅'], speed: 0.5 },
+  none: { chars: [], speed: 0 }
 };
 
-function initParts() {
-  parts = [];
-  const n = parseInt(el('pCount').value);
-  const d = FXD[selFx]; if (!d || !d.chars.length) return;
-  for (let i = 0; i < n; i++) parts.push(mkPart(false));
+function initParticles() {
+  particles = [];
+  const count = parseInt(document.getElementById('pCount').value);
+  const fx = FX_LIST[selFx];
+  if (!fx.chars.length) return;
+  
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vy: 0.5 + Math.random() * 1.5,
+      ch: fx.chars[Math.floor(Math.random() * fx.chars.length)],
+      size: 16 + Math.random() * 20,
+      alpha: 0.5 + Math.random() * 0.5
+    });
+  }
 }
 
-function mkPart(top = false) {
-  const d = FXD[selFx]; if (!d.chars.length) return { dead: true };
-  return {
-    x: Math.random() * W, y: top ? -60 : Math.random() * H,
-    vy: (0.45 + Math.random() * 1.3) * (H / 360),
-    vx: (Math.random() - .5) * .9 * (W / 640),
-    size: (14 + Math.random() * 18) * (H / 360),
-    ch: d.chars[Math.floor(Math.random() * d.chars.length)],
-    col: d.cols[Math.floor(Math.random() * d.cols.length)],
-    a: 0.45 + Math.random() * .55,
-    rot: Math.random() * 360, rv: (Math.random() - .5) * 2.8,
-    wb: Math.random() * Math.PI * 2, ws: .022 + Math.random() * .04
-  };
+function updateParticles() {
+  for (let p of particles) {
+    p.y += p.vy;
+    if (p.y > H + 50) {
+      p.y = -50;
+      p.x = Math.random() * W;
+    }
+  }
 }
 
-initParts();
-
-// ─── Text Layers ───────────────────────────────────────────
+// ==================== TEXT LAYERS ====================
 function addTextLayer() {
   const id = ++layerIdCounter;
-  const layer = {
-    id, text: 'Teks ' + id,
-    x: W / 2, y: 100 + (layers.length * 180),
-    size: 80, color: '#ffffff', bgColor: '#000000',
-    bold: false, italic: false, shadow: true, outline: false, bg: false,
-    align: 'left', rot: 0, opacity: 1, anim: 'none'
-  };
-  layers.push(layer);
+  textLayers.push({
+    id: id,
+    text: `Teks ${id}`,
+    x: 50, y: 20, // percentage
+    size: 48,
+    color: '#ffffff',
+    bold: false,
+    shadow: true,
+    anim: 'none'
+  });
   selectLayer(id);
   renderLayerList();
 }
 
 function selectLayer(id) {
-  selLayerId = id;
+  selectedLayerId = id;
   renderLayerList();
-  const layer = layers.find(l => l.id === id);
-  if (!layer) { el('txtProps').style.display = 'none'; return; }
-  el('txtProps').style.display = 'block';
-  el('txtContent').value = layer.text;
-  el('posX').max = W; el('posY').max = H;
-  el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-  el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
-  el('txtSize').value = layer.size; sv('tsV', layer.size + 'px');
-  el('txtColor').value = layer.color;
-  el('txtBgColor').value = layer.bgColor;
-  el('txtRot').value = layer.rot; sv('rotV', layer.rot + '°');
-  el('txtOpacity').value = Math.round(layer.opacity * 100); sv('opV', Math.round(layer.opacity * 100) + '%');
-  document.querySelectorAll('[data-s]').forEach(b => b.classList.toggle('on', !!layer[b.dataset.s]));
-  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === layer.align));
-  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === layer.anim));
-  el('dragHint').textContent = 'Seret teks "' + layer.text.substring(0, 20) + '" di canvas';
+  const layer = textLayers.find(l => l.id === id);
+  if (!layer) {
+    document.getElementById('txtProps').style.display = 'none';
+    return;
+  }
+  
+  document.getElementById('txtProps').style.display = 'block';
+  document.getElementById('txtContent').value = layer.text;
+  document.getElementById('posXp').value = layer.x;
+  document.getElementById('posYp').value = layer.y;
+  document.getElementById('txtSize').value = layer.size;
+  document.getElementById('txtColor').value = layer.color;
+  
+  // Update style chips
+  document.querySelectorAll('[data-style]').forEach(c => {
+    c.classList.toggle('on', layer[c.dataset.style]);
+  });
+  
+  document.querySelectorAll('[data-anim]').forEach(c => {
+    c.classList.toggle('on', c.dataset.anim === layer.anim);
+  });
 }
 
 function renderLayerList() {
-  const list = el('layerList');
-  if (layers.length === 0) {
-    list.innerHTML = '<div style="font-size:.75rem;color:var(--muted);text-align:center;padding:.5rem 0">Belum ada teks</div>';
+  const list = document.getElementById('layerList');
+  if (textLayers.length === 0) {
+    list.innerHTML = '<div style="font-size:0.7rem;color:var(--muted);text-align:center;padding:0.5rem">Belum ada teks</div>';
     return;
   }
-  list.innerHTML = layers.map(l => `
-    <div class="layer-item ${l.id === selLayerId ? 'active' : ''}" onclick="selectLayer(${l.id})">
-      <span class="layer-name" title="${l.text}">${l.text || '(kosong)'}</span>
-      <button class="layer-del" onclick="event.stopPropagation();deleteLayer(${l.id})" title="Hapus">✕</button>
+  
+  list.innerHTML = textLayers.map(l => `
+    <div class="layer-item ${l.id === selectedLayerId ? 'active' : ''}" onclick="selectLayer(${l.id})">
+      <span>${l.text.substring(0, 20)}</span>
+      <span style="color:#ff6464;cursor:pointer" onclick="event.stopPropagation();deleteLayer(${l.id})">✕</span>
     </div>
   `).join('');
 }
 
 function deleteLayer(id) {
-  layers = layers.filter(l => l.id !== id);
-  if (selLayerId === id) {
-    selLayerId = layers.length ? layers[layers.length - 1].id : null;
-    if (selLayerId) selectLayer(selLayerId);
-    else { el('txtProps').style.display = 'none'; el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret'; }
+  textLayers = textLayers.filter(l => l.id !== id);
+  if (selectedLayerId === id) {
+    selectedLayerId = textLayers.length ? textLayers[0].id : null;
+    if (selectedLayerId) selectLayer(selectedLayerId);
+    else document.getElementById('txtProps').style.display = 'none';
   }
   renderLayerList();
 }
 
 function updateLayer() {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.text = el('txtContent').value;
-  layer.size = parseInt(el('txtSize').value);
-  layer.color = el('txtColor').value;
-  layer.bgColor = el('txtBgColor').value;
-  layer.rot = parseInt(el('txtRot').value);
-  layer.opacity = parseInt(el('txtOpacity').value) / 100;
-  renderLayerList();
+  const layer = textLayers.find(l => l.id === selectedLayerId);
+  if (!layer) return;
+  layer.text = document.getElementById('txtContent').value;
+  layer.size = parseInt(document.getElementById('txtSize').value);
+  layer.color = document.getElementById('txtColor').value;
 }
 
 function updateLayerPos() {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.x = parseInt(el('posX').value);
-  layer.y = parseInt(el('posY').value);
-  sv('posXV', layer.x); sv('posYV', layer.y);
+  const layer = textLayers.find(l => l.id === selectedLayerId);
+  if (!layer) return;
+  layer.x = parseInt(document.getElementById('posXp').value);
+  layer.y = parseInt(document.getElementById('posYp').value);
 }
 
-function toggleStyle(btn, style) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+function toggleTextStyle(style) {
+  const layer = textLayers.find(l => l.id === selectedLayerId);
+  if (!layer) return;
   layer[style] = !layer[style];
-  btn.classList.toggle('on', layer[style]);
+  document.querySelector(`[data-style="${style}"]`).classList.toggle('on', layer[style]);
 }
 
-function setAlign(btn, align) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
-  layer.align = align;
-  document.querySelectorAll('[data-a]').forEach(b => b.classList.toggle('on', b.dataset.a === align));
-}
-
-function setTextAnim(badge, anim) {
-  const layer = layers.find(l => l.id === selLayerId); if (!layer) return;
+function setTextAnim(anim) {
+  const layer = textLayers.find(l => l.id === selectedLayerId);
+  if (!layer) return;
   layer.anim = anim;
-  document.querySelectorAll('[data-anim]').forEach(b => b.classList.toggle('on', b.dataset.anim === anim));
+  document.querySelectorAll('[data-anim]').forEach(c => {
+    c.classList.toggle('on', c.dataset.anim === anim);
+  });
 }
 
-// ─── Canvas Drag ───────────────────────────────────────────
-function getCanvasPos(e) {
-  const rect = cv.getBoundingClientRect();
-  const scaleX = W / rect.width, scaleY = H / rect.height;
-  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
-}
+// Attach event listeners
+document.getElementById('txtContent')?.addEventListener('input', updateLayer);
+document.getElementById('txtSize')?.addEventListener('input', updateLayer);
+document.getElementById('txtColor')?.addEventListener('input', updateLayer);
+document.getElementById('posXp')?.addEventListener('input', updateLayerPos);
+document.getElementById('posYp')?.addEventListener('input', updateLayerPos);
 
-function hitTest(mx, my) {
-  for (let i = layers.length - 1; i >= 0; i--) {
-    const l = layers[i];
-    ctx.font = (l.bold ? '700 ' : '400 ') + l.size + 'px Syne, sans-serif';
-    const tw = ctx.measureText(l.text).width;
-    const th = l.size * 1.4;
-    let tx = l.x, ty = l.y;
-    if (l.align === 'center') tx -= tw / 2;
-    if (l.align === 'right') tx -= tw;
-    const pad = 20;
-    if (mx >= tx - pad && mx <= tx + tw + pad && my >= ty - pad && my <= ty + th + pad) return l.id;
+// ==================== DRAWING (OPTIMIZED) ====================
+function drawTextLayer(ctx, layer, progress, time) {
+  if (!layer.text) return;
+  
+  let alpha = 1;
+  let offsetY = 0;
+  
+  switch(layer.anim) {
+    case 'fadein': alpha = Math.min(progress * 3, 1); break;
+    case 'slideup': offsetY = (1 - Math.min(progress * 2, 1)) * 50; alpha = Math.min(progress * 2, 1); break;
+    case 'pulse': alpha = 0.7 + Math.sin(time / 200) * 0.3; break;
   }
-  return null;
+  
+  ctx.save();
+  ctx.globalAlpha = alpha * 0.95;
+  
+  const x = (layer.x / 100) * W;
+  const y = (layer.y / 100) * H + offsetY;
+  
+  const fontStyle = layer.bold ? 'bold ' : '';
+  ctx.font = `${fontStyle}${layer.size}px 'Syne', sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  
+  if (layer.shadow) {
+    ctx.shadowColor = 'rgba(0,0,0,0.7)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+  }
+  
+  ctx.fillStyle = layer.color;
+  ctx.fillText(layer.text, x, y);
+  
+  ctx.shadowBlur = 0;
+  ctx.restore();
 }
 
-cv.addEventListener('mousedown', e => {
-  const { x, y } = getCanvasPos(e);
-  const hit = hitTest(x, y);
-  if (hit !== null) {
-    selectLayer(hit);
-    const layer = layers.find(l => l.id === hit);
-    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
-    cv.style.cursor = 'grabbing';
-  } else {
-    selLayerId = null; el('txtProps').style.display = 'none';
-    renderLayerList();
-    el('dragHint').textContent = 'Klik teks di canvas untuk memilih, lalu seret';
+function drawFrame(t) {
+  const duration = parseInt(document.getElementById('dur').value) * 1000;
+  const progress = Math.min(t / duration, 1);
+  
+  // Clear
+  ctx.fillStyle = document.getElementById('bgCol').value;
+  ctx.fillRect(0, 0, W, H);
+  
+  // Draw image
+  if (img) {
+    ctx.save();
+    
+    // Simple zoom animation
+    if (selTr === 'zoom') {
+      const scale = 1 + progress * 0.1;
+      const dx = (W - W * scale) / 2;
+      const dy = (H - H * scale) / 2;
+      ctx.translate(dx, dy);
+      ctx.scale(scale, scale);
+    } else if (selTr === 'slide') {
+      ctx.translate(-progress * 40, 0);
+    } else if (selTr === 'fade') {
+      ctx.globalAlpha = 0.6 + progress * 0.4;
+    }
+    
+    // Cover image
+    const imgRatio = img.width / img.height;
+    const canvasRatio = W / H;
+    let drawW, drawH, drawX, drawY;
+    
+    if (imgRatio > canvasRatio) {
+      drawH = H;
+      drawW = drawH * imgRatio;
+      drawX = (W - drawW) / 2;
+      drawY = 0;
+    } else {
+      drawW = W;
+      drawH = drawW / imgRatio;
+      drawX = 0;
+      drawY = (H - drawH) / 2;
+    }
+    
+    ctx.drawImage(img, drawX, drawY, drawW, drawH);
+    ctx.restore();
+    
+    // Simple vignette
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(0, 0, W, H);
   }
-});
+  
+  // Draw particles (optimized)
+  const fx = FX_LIST[selFx];
+  if (fx.chars.length && particles.length) {
+    for (let p of particles) {
+      ctx.font = `${p.size}px "Segoe UI Emoji"`;
+      ctx.fillStyle = `rgba(255,255,255,${p.alpha})`;
+      ctx.fillText(p.ch, p.x, p.y);
+    }
+    updateParticles();
+  }
+  
+  // Draw text layers
+  for (const layer of textLayers) {
+    drawTextLayer(ctx, layer, progress, t);
+  }
+  
+  // Progress bar
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillRect(0, H - 4, W, 4);
+  ctx.fillStyle = 'rgba(124,58,237,0.8)';
+  ctx.fillRect(0, H - 4, W * progress, 4);
+  
+  // Update UI
+  document.getElementById('progFill').style.width = (progress * 100) + '%';
+  document.getElementById('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + document.getElementById('dur').value + '.0s';
+}
 
-cv.addEventListener('mousemove', e => {
-  if (!dragState) {
-    const { x, y } = getCanvasPos(e);
-    cv.style.cursor = hitTest(x, y) !== null ? 'grab' : 'default';
+// ==================== PREVIEW LOOP ====================
+function startPreview() {
+  if (!img) {
+    document.getElementById('status').textContent = 'Upload foto dulu';
     return;
   }
-  const { x, y } = getCanvasPos(e);
-  const layer = layers.find(l => l.id === dragState.layerId);
-  if (layer) {
-    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
-    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
-    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
+  stopPreview();
+  isPlaying = true;
+  const startTime = performance.now();
+  const duration = parseInt(document.getElementById('dur').value) * 1000;
+  
+  function loop(now) {
+    if (!isPlaying) return;
+    const elapsed = (now - startTime) % duration;
+    drawFrame(elapsed);
+    animationId = requestAnimationFrame(loop);
   }
-});
-
-cv.addEventListener('mouseup', () => { dragState = null; cv.style.cursor = 'default'; });
-cv.addEventListener('mouseleave', () => { dragState = null; });
-
-cv.addEventListener('touchstart', e => {
-  e.preventDefault();
-  const t = e.touches[0];
-  const { x, y } = getCanvasPos(t);
-  const hit = hitTest(x, y);
-  if (hit !== null) {
-    selectLayer(hit);
-    const layer = layers.find(l => l.id === hit);
-    dragState = { layerId: hit, offX: x - layer.x, offY: y - layer.y };
-  }
-}, { passive: false });
-
-cv.addEventListener('touchmove', e => {
-  e.preventDefault();
-  if (!dragState) return;
-  const t = e.touches[0];
-  const { x, y } = getCanvasPos(t);
-  const layer = layers.find(l => l.id === dragState.layerId);
-  if (layer) {
-    layer.x = Math.max(0, Math.min(W, x - dragState.offX));
-    layer.y = Math.max(0, Math.min(H, y - dragState.offY));
-    el('posX').value = Math.round(layer.x); sv('posXV', Math.round(layer.x));
-    el('posY').value = Math.round(layer.y); sv('posYV', Math.round(layer.y));
-  }
-}, { passive: false });
-
-cv.addEventListener('touchend', () => { dragState = null; });
-
-// ─── Draw Frame ─────────────────────────────────────────────
-// targetCtx & targetW/H untuk support offscreen render saat export
-function drawFrameOnCtx(targetCtx, targetW, targetH, t, isExporting) {
-  const dur = parseInt(el('dur').value) * 1000;
-  const prog = Math.min(t / dur, 1);
-  const bg = el('bgCol').value;
-
-  targetCtx.clearRect(0, 0, targetW, targetH);
-  targetCtx.fillStyle = bg;
-  targetCtx.fillRect(0, 0, targetW, targetH);
-
-  if (img) {
-    targetCtx.save();
-    const tr = selTr;
-    if (tr === 'zoom') {
-      const s = 1 + prog * .14;
-      targetCtx.translate(targetW/2, targetH/2); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
-    } else if (tr === 'slide') {
-      targetCtx.translate(-prog * 80, 0);
-    } else if (tr === 'fade') {
-      targetCtx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
-    } else if (tr === 'rotate') {
-      const s = 1 + prog * .08;
-      targetCtx.translate(targetW/2, targetH/2); targetCtx.rotate(prog * .035); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
-    } else if (tr === 'ken') {
-      const s = 1 + prog * .12;
-      const ox = -prog * 60;
-      targetCtx.translate(targetW/2 + ox, targetH/2); targetCtx.scale(s, s); targetCtx.translate(-targetW/2, -targetH/2);
-    }
-    const ir = img.width / img.height, cr = targetW / targetH;
-    let dw, dh, dx, dy;
-    if (ir > cr) { dh = targetH; dw = dh * ir; dx = (targetW - dw) / 2; dy = 0; }
-    else { dw = targetW; dh = dw / ir; dx = 0; dy = (targetH - dh) / 2; }
-    targetCtx.drawImage(img, dx, dy, dw, dh);
-    targetCtx.restore();
-
-    // vignette
-    const gr = targetCtx.createRadialGradient(targetW/2, targetH/2, targetH*.2, targetW/2, targetH/2, targetH*.85);
-    gr.addColorStop(0, 'rgba(0,0,0,0)');
-    gr.addColorStop(1, 'rgba(0,0,0,.5)');
-    targetCtx.fillStyle = gr; targetCtx.fillRect(0, 0, targetW, targetH);
-    const grv = targetCtx.createLinearGradient(0, 0, 0, targetH);
-    grv.addColorStop(0, 'rgba(0,0,0,.35)');
-    grv.addColorStop(.4, 'rgba(0,0,0,.0)');
-    grv.addColorStop(1, 'rgba(0,0,0,.4)');
-    targetCtx.fillStyle = grv; targetCtx.fillRect(0, 0, targetW, targetH);
-  }
-
-  // Partikel
-  const d = FXD[selFx];
-  if (d && d.chars.length) {
-    targetCtx.save();
-    for (let p of parts) {
-      if (p.dead) continue;
-      targetCtx.save();
-      targetCtx.globalAlpha = p.a;
-      targetCtx.font = p.size + 'px serif';
-      targetCtx.fillStyle = p.col;
-      targetCtx.translate(p.x, p.y);
-      targetCtx.rotate(p.rot * Math.PI / 180);
-      targetCtx.fillText(p.ch, -p.size / 2, -p.size / 2);
-      targetCtx.restore();
-      // hanya update posisi saat preview (bukan export — export punya loop sendiri)
-      if (!isExporting) {
-        p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
-        p.wb += p.ws; p.rot += p.rv;
-        if (p.y > targetH + 80) Object.assign(p, mkPart(true));
-      }
-    }
-    targetCtx.restore();
-  }
-
-  for (const layer of layers) {
-    drawTextLayerOnCtx(targetCtx, targetW, targetH, layer, prog, t);
-  }
-
-  if (!isExporting && selLayerId !== null) {
-    const layer = layers.find(l => l.id === selLayerId);
-    if (layer) drawSelBoxOnCtx(targetCtx, layer);
-  }
-
-  // progress bar kecil
-  targetCtx.fillStyle = 'rgba(255,255,255,.1)'; targetCtx.fillRect(0, targetH - 8, targetW, 8);
-  targetCtx.fillStyle = 'rgba(255,255,255,.5)'; targetCtx.fillRect(0, targetH - 8, targetW * prog, 8);
+  
+  animationId = requestAnimationFrame(loop);
+  document.getElementById('status').textContent = '▶ Playing';
 }
 
-// Wrapper untuk canvas preview utama
-function drawFrame(t) {
-  drawFrameOnCtx(ctx, W, H, t, false);
-  const dur = parseInt(el('dur').value) * 1000;
-  const prog = Math.min(t / dur, 1);
-  el('progFill').style.width = (prog * 100) + '%';
-  el('timeDisp').textContent = (t / 1000).toFixed(1) + 's / ' + el('dur').value + '.0s';
-}
-
-function drawTextLayerOnCtx(tCtx, tW, tH, layer, prog, t) {
-  if (!layer.text) return;
-  let alpha = layer.opacity;
-  let offY = 0, scale = 1;
-
-  switch (layer.anim) {
-    case 'fadein': alpha *= Math.min(prog * 4, 1); break;
-    case 'slideup':
-      offY = (1 - Math.min(prog * 3, 1)) * 120;
-      alpha *= Math.min(prog * 3, 1);
-      break;
-    case 'bounce':
-      offY = Math.abs(Math.sin(t / 400)) * -22;
-      break;
-    case 'typewriter': {
-      const chars = Math.floor(prog * layer.text.length * 3);
-      layer._visText = layer.text.substring(0, Math.min(chars, layer.text.length));
-      break;
-    }
-    case 'pulse':
-      scale = 1 + Math.sin(t / 300) * .06;
-      break;
+function stopPreview() {
+  if (animationId) {
+    cancelAnimationFrame(animationId);
+    animationId = null;
   }
-
-  const txt = layer.anim === 'typewriter' ? (layer._visText || '') : layer.text;
-
-  tCtx.save();
-  tCtx.globalAlpha = alpha;
-  tCtx.translate(layer.x, layer.y + offY);
-  tCtx.rotate(layer.rot * Math.PI / 180);
-  if (scale !== 1) tCtx.scale(scale, scale);
-
-  const fontStyle = layer.italic ? 'italic ' : '';
-  const fontWeight = layer.bold ? '700' : '400';
-  tCtx.font = `${fontStyle}${fontWeight} ${layer.size}px Syne, sans-serif`;
-  tCtx.textAlign = layer.align === 'center' ? 'center' : layer.align === 'right' ? 'right' : 'left';
-  tCtx.textBaseline = 'top';
-
-  const tw = tCtx.measureText(txt).width;
-  const th = layer.size * 1.2;
-  const pad = 20;
-  let bx = 0;
-  if (layer.align === 'center') bx = -tw / 2;
-  if (layer.align === 'right') bx = -tw;
-
-  if (layer.bg) {
-    tCtx.fillStyle = layer.bgColor + 'cc';
-    tCtx.beginPath();
-    tCtx.roundRect(bx - pad, -pad / 2, tw + pad * 2, th + pad, 12);
-    tCtx.fill();
-  }
-
-  if (layer.shadow) {
-    tCtx.shadowColor = 'rgba(0,0,0,.85)';
-    tCtx.shadowBlur = 30;
-    tCtx.shadowOffsetX = 2; tCtx.shadowOffsetY = 2;
-  }
-
-  if (layer.outline) {
-    tCtx.strokeStyle = 'rgba(0,0,0,.9)'; tCtx.lineWidth = 6;
-    tCtx.strokeText(txt, 0, 0);
-  }
-
-  tCtx.fillStyle = layer.color;
-  tCtx.fillText(txt, 0, 0);
-  tCtx.shadowBlur = 0; tCtx.shadowOffsetX = 0; tCtx.shadowOffsetY = 0;
-  tCtx.restore();
+  isPlaying = false;
+  drawFrame(0);
+  document.getElementById('status').textContent = '■ Stopped';
 }
 
-function drawSelBoxOnCtx(tCtx, layer) {
-  tCtx.save();
-  tCtx.font = (layer.bold ? '700' : '400') + ' ' + layer.size + 'px Syne, sans-serif';
-  const tw = tCtx.measureText(layer.text).width;
-  const th = layer.size * 1.2;
-  const pad = 16;
-  tCtx.translate(layer.x, layer.y);
-  tCtx.rotate(layer.rot * Math.PI / 180);
-  let bx = 0;
-  if (layer.align === 'center') bx = -tw / 2;
-  if (layer.align === 'right') bx = -tw;
-  tCtx.strokeStyle = 'rgba(124,58,237,.8)';
-  tCtx.lineWidth = 3;
-  tCtx.setLineDash([12, 6]);
-  tCtx.strokeRect(bx - pad, -pad, tw + pad * 2, th + pad * 2);
-  tCtx.setLineDash([]);
-  tCtx.fillStyle = 'rgba(124,58,237,.9)';
-  const hs = 10;
-  tCtx.fillRect(bx - pad - hs/2, -pad - hs/2, hs, hs);
-  tCtx.fillRect(bx + tw + pad - hs/2, -pad - hs/2, hs, hs);
-  tCtx.fillRect(bx - pad - hs/2, th + pad - hs/2, hs, hs);
-  tCtx.fillRect(bx + tw + pad - hs/2, th + pad - hs/2, hs, hs);
-  tCtx.restore();
+// ==================== FFMPEG EXPORT (LAZY LOAD) ====================
+let ffmpegInstance = null;
+let exportCancelled = false;
+
+async function loadFFmpeg() {
+  if (ffmpegInstance) return ffmpegInstance;
+  
+  // Dynamic import for FFmpeg
+  const { createFFmpeg, fetchFile } = await import('https://unpkg.com/@ffmpeg/ffmpeg@0.12.0/dist/ffmpeg.min.js');
+  
+  ffmpegInstance = createFFmpeg({
+    log: false,
+    corePath: 'https://unpkg.com/@ffmpeg/core@0.12.0/dist/ffmpeg-core.js',
+  });
+  
+  await ffmpegInstance.load();
+  window.fetchFile = fetchFile;
+  return ffmpegInstance;
 }
 
-// ─── Preview Loop ──────────────────────────────────────────
-function startPrev() {
-  stopPrev();
-  isPaused = false;
-  initParts();
-  t0 = null;
-  const durMs = parseInt(el('dur').value) * 1000;
-  function loop(ts) {
-    if (!t0) t0 = ts;
-    const t = ts - t0;
-    drawFrame(t);
-    if (t < durMs + 200) animId = requestAnimationFrame(loop);
-    else { t0 = null; animId = requestAnimationFrame(loop); }
-  }
-  animId = requestAnimationFrame(loop);
-  setStatus('⏵ Preview — HD ' + (currentRatio === '16:9' ? '1920×1080' : '1080×1920'));
-}
-
-function stopPrev() {
-  if (animId) { cancelAnimationFrame(animId); animId = null; }
-  isPaused = true;
-  setStatus('■ Dihentikan');
-  el('progFill').style.width = '0%';
-}
-
-function resetTime() {
-  stopPrev(); drawFrame(0);
-  el('timeDisp').textContent = '0.0s / ' + el('dur').value + '.0s';
-}
-
-function setStatus(msg) { el('status').textContent = msg; }
-
-el('pCount').addEventListener('input', initParts);
-
-// ═══════════════════════════════════════════════════════════
-// ─── FFmpeg.wasm Export ────────────────────────────────────
-// ═══════════════════════════════════════════════════════════
-
-// Pilihan kualitas & FPS dari modal
-let expFps = 30;
-let expQuality = 'hd'; // 'hd' | 'fhd' | '4k'
-
-// Ukuran output sesuai kualitas
-const QUALITY_MAP = {
-  'hd':  { label: 'HD',     suffix: '1280x720',  scaleW: currentRatio === '16:9' ? 1280 : 720,  scaleH: currentRatio === '16:9' ? 720  : 1280 },
-  'fhd': { label: 'Full HD',suffix: '1920x1080', scaleW: currentRatio === '16:9' ? 1920 : 1080, scaleH: currentRatio === '16:9' ? 1080 : 1920 },
-};
-
-function showExportModal() {
-  if (!img) { alert('Upload foto dulu ya!'); return; }
-  stopPrev();
-
-  const modal = el('exportModal');
-  const box = el('modalContent');
-
-  box.innerHTML = `
-    <div class="modal-title">⬇ Export Video MP4</div>
-    <div class="modal-sub">File hasil akan dalam format <b>MP4 H.264</b> — kompatibel langsung dengan Instagram Reels, TikTok, YouTube, dan WhatsApp Status.</div>
-
-    <div>
-      <div class="lbl">Resolusi Output</div>
-      <div class="quality-row" id="qualityRow">
-        <div class="quality-opt sel" data-q="hd" onclick="selectQuality('hd')">
-          <div class="q-label">HD</div>
-          <div class="q-sub">${currentRatio === '16:9' ? '1280×720' : '720×1280'}</div>
-          <div class="q-sub" style="margin-top:2px;color:var(--success);font-weight:600">Cepat</div>
-        </div>
-        <div class="quality-opt" data-q="fhd" onclick="selectQuality('fhd')">
-          <div class="q-label">Full HD</div>
-          <div class="q-sub">${currentRatio === '16:9' ? '1920×1080' : '1080×1920'}</div>
-          <div class="q-sub" style="margin-top:2px;color:var(--accent3);font-weight:600">Lebih lama</div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="lbl">Frame Rate</div>
-      <div class="fps-row">
-        <span class="fps-chip" data-fps="24" onclick="selectFps(24)">24 fps</span>
-        <span class="fps-chip sel" data-fps="30" onclick="selectFps(30)">30 fps</span>
-        <span class="fps-chip" data-fps="60" onclick="selectFps(60)">60 fps</span>
-      </div>
-    </div>
-
-    <div style="font-size:.72rem;color:var(--muted);background:var(--surface2);padding:8px 12px;border-radius:8px;line-height:1.6;">
-      ⏱ Estimasi waktu render: <b id="estTime">~${estimateRenderTime('hd', 30)}</b>
-      <br>📦 FFmpeg akan diunduh sekali (~7 MB) dan di-cache browser.
-    </div>
-
-    <div style="display:flex;gap:8px;margin-top:.25rem">
-      <button class="btn btn-export" style="flex:1" onclick="doExportFFmpeg()">🎬 Mulai Export</button>
-      <button class="exp-cancel" onclick="closeExportModal()">Batal</button>
-    </div>
-  `;
-
-  expFps = 30; expQuality = 'hd';
-  modal.classList.add('show');
-}
-
-function closeExportModal() {
-  el('exportModal').classList.remove('show');
-  exportCancelled = true;
-  setTimeout(() => startPrev(), 300);
-}
-
-function estimateRenderTime(q, fps) {
-  const dur = parseInt(el('dur').value);
-  const totalFrames = dur * fps;
-  // Estimasi kasar: ~30ms per frame untuk HD, 60ms untuk FHD
-  const msPerFrame = q === 'hd' ? 30 : 60;
-  const encMs = totalFrames * msPerFrame;
-  const secs = Math.round(encMs / 1000 + dur * 2); // +2x durasi untuk FFmpeg encode
-  if (secs < 60) return secs + ' detik';
-  return Math.round(secs / 60) + ' menit ' + (secs % 60) + ' detik';
-}
-
-function selectQuality(q) {
-  expQuality = q;
-  document.querySelectorAll('[data-q]').forEach(el2 => el2.classList.toggle('sel', el2.dataset.q === q));
-  el('estTime').textContent = '~' + estimateRenderTime(q, expFps);
-}
-
-function selectFps(fps) {
-  expFps = fps;
-  document.querySelectorAll('[data-fps]').forEach(el2 => el2.classList.toggle('sel', parseInt(el2.dataset.fps) === fps));
-  el('estTime').textContent = '~' + estimateRenderTime(expQuality, fps);
-}
-
-// ─── Core FFmpeg Export ────────────────────────────────────
-async function doExportFFmpeg() {
+async function doExport() {
   exportCancelled = false;
-  const box = el('modalContent');
-  const dur = parseInt(el('dur').value);
-  const fps = expFps;
-  const totalFrames = dur * fps;
-
-  // Tentukan ukuran output
-  const outW = expQuality === 'fhd'
-    ? (currentRatio === '16:9' ? 1920 : 1080)
-    : (currentRatio === '16:9' ? 1280 : 720);
-  const outH = expQuality === 'fhd'
-    ? (currentRatio === '16:9' ? 1080 : 1920)
-    : (currentRatio === '16:9' ? 720 : 1280);
-
-  // UI loading
-  box.innerHTML = `
-    <div class="modal-title">🎬 Memproses Video...</div>
-    <div id="expPhase" class="modal-sub">Mempersiapkan render frame...</div>
-    <div class="exp-prog-track" style="margin:.5rem 0">
-      <div class="exp-prog-fill" id="expProg"></div>
+  const modal = document.getElementById('modalContent');
+  const duration = parseInt(document.getElementById('dur').value);
+  const fps = 24; // Fixed 24fps untuk performa
+  const totalFrames = duration * fps;
+  
+  modal.innerHTML = `
+    <div style="font-weight:600">🎬 Export Video</div>
+    <div id="expStatus" style="font-size:0.75rem;color:var(--muted);margin:12px 0">Mempersiapkan...</div>
+    <div style="height:4px;background:var(--border2);border-radius:4px;overflow:hidden">
+      <div id="expProg" style="width:0%;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width 0.1s"></div>
     </div>
-    <div class="exp-step" id="expStep">Frame 0 / ${totalFrames}</div>
-    <div class="exp-step" id="expExtra" style="margin-top:4px;font-size:.7rem"></div>
-    <button class="exp-cancel" onclick="cancelExport()">✕ Batalkan</button>
+    <div id="expStep" style="font-size:0.7rem;color:var(--muted);margin-top:8px">Frame 0/${totalFrames}</div>
+    <button class="btn" style="margin-top:12px" onclick="cancelExport()">Batal</button>
   `;
-
-  function setPhase(msg) { el('expPhase').textContent = msg; }
-  function setProg(pct) { el('expProg').style.width = pct + '%'; }
-  function setStep(msg) { el('expStep').textContent = msg; }
-  function setExtra(msg) { el('expExtra').textContent = msg; }
-
-  // ── 1. Render semua frame ke offscreen canvas & kumpulkan PNG ──
-  setPhase('🖼 Rendering frame...');
-
-  // Reset partikel dengan seed deterministik
-  initParts();
-  // Buat snapshot posisi partikel awal
-  const partsSnapshot = parts.map(p => ({ ...p }));
-
-  const frameBlobs = [];
-  const frameDurMs = (dur * 1000) / totalFrames;
-
-  // Offscreen canvas ukuran output
-  const expCv = document.createElement('canvas');
-  expCv.width = outW; expCv.height = outH;
-  const expCtx = expCv.getContext('2d');
-
-  // Faktor skala partikel dari HD ke output
-  const scaleX = outW / W;
-  const scaleY = outH / H;
-
-  // Clone partikel untuk simulasi deterministik
-  let simParts = partsSnapshot.map(p => ({
-    ...p,
-    x: p.x * scaleX, y: p.y * scaleY,
-    vy: p.vy * scaleY, vx: p.vx * scaleX,
-    size: p.size * ((scaleX + scaleY) / 2)
-  }));
-
-  for (let f = 0; f < totalFrames; f++) {
-    if (exportCancelled) { setPhase('❌ Dibatalkan'); return; }
-
-    const t = f * frameDurMs;
-    const prog = Math.min(t / (dur * 1000), 1);
-
-    // Render frame di ukuran output
-    expCtx.clearRect(0, 0, outW, outH);
-    expCtx.fillStyle = el('bgCol').value;
-    expCtx.fillRect(0, 0, outW, outH);
-
-    // Foto + animasi
-    if (img) {
-      expCtx.save();
-      const tr = selTr;
-      if (tr === 'zoom') {
-        const s = 1 + prog * .14;
-        expCtx.translate(outW/2, outH/2); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
-      } else if (tr === 'slide') {
-        expCtx.translate(-prog * 80 * scaleX, 0);
-      } else if (tr === 'fade') {
-        expCtx.globalAlpha = .25 + .75 * Math.min(prog * 2, 1);
-      } else if (tr === 'rotate') {
-        const s = 1 + prog * .08;
-        expCtx.translate(outW/2, outH/2); expCtx.rotate(prog * .035); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
-      } else if (tr === 'ken') {
-        const s = 1 + prog * .12;
-        const ox = -prog * 60 * scaleX;
-        expCtx.translate(outW/2 + ox, outH/2); expCtx.scale(s, s); expCtx.translate(-outW/2, -outH/2);
-      }
-      const ir = img.width / img.height, cr = outW / outH;
-      let dw, dh, dx, dy;
-      if (ir > cr) { dh = outH; dw = dh * ir; dx = (outW - dw) / 2; dy = 0; }
-      else { dw = outW; dh = dw / ir; dx = 0; dy = (outH - dh) / 2; }
-      expCtx.drawImage(img, dx, dy, dw, dh);
-      expCtx.restore();
-
-      // vignette
-      const gr = expCtx.createRadialGradient(outW/2, outH/2, outH*.2, outW/2, outH/2, outH*.85);
-      gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.5)');
-      expCtx.fillStyle = gr; expCtx.fillRect(0, 0, outW, outH);
-      const grv = expCtx.createLinearGradient(0, 0, 0, outH);
-      grv.addColorStop(0, 'rgba(0,0,0,.35)'); grv.addColorStop(.4, 'rgba(0,0,0,0)'); grv.addColorStop(1, 'rgba(0,0,0,.4)');
-      expCtx.fillStyle = grv; expCtx.fillRect(0, 0, outW, outH);
-    }
-
-    // Partikel
-    const d = FXD[selFx];
-    if (d && d.chars.length) {
-      expCtx.save();
-      for (let p of simParts) {
-        if (p.dead) continue;
-        expCtx.save();
-        expCtx.globalAlpha = p.a;
-        expCtx.font = p.size + 'px serif';
-        expCtx.fillStyle = p.col;
-        expCtx.translate(p.x, p.y);
-        expCtx.rotate(p.rot * Math.PI / 180);
-        expCtx.fillText(p.ch, -p.size / 2, -p.size / 2);
-        expCtx.restore();
-        p.y += p.vy; p.x += p.vx + Math.sin(p.wb) * 1.5;
-        p.wb += p.ws; p.rot += p.rv;
-        if (p.y > outH + 80) {
-          const fresh = mkPart(true);
-          Object.assign(p, {
-            ...fresh,
-            x: fresh.x * scaleX, y: -60,
-            vy: fresh.vy * scaleY, vx: fresh.vx * scaleX,
-            size: fresh.size * ((scaleX + scaleY) / 2)
-          });
+  
+  try {
+    // Render frames
+    document.getElementById('expStatus').textContent = 'Membuat frame...';
+    const offCanvas = document.createElement('canvas');
+    offCanvas.width = W;
+    offCanvas.height = H;
+    const offCtx = offCanvas.getContext('2d');
+    const frameBlobs = [];
+    
+    for (let f = 0; f < totalFrames; f++) {
+      if (exportCancelled) throw new Error('Dibatalkan');
+      
+      const t = (f / fps) * 1000;
+      const progress = t / (duration * 1000);
+      
+      // Render ke offscreen
+      offCtx.fillStyle = document.getElementById('bgCol').value;
+      offCtx.fillRect(0, 0, W, H);
+      
+      if (img) {
+        offCtx.save();
+        if (selTr === 'zoom') {
+          const scale = 1 + progress * 0.1;
+          const dx = (W - W * scale) / 2;
+          const dy = (H - H * scale) / 2;
+          offCtx.translate(dx, dy);
+          offCtx.scale(scale, scale);
         }
+        const imgRatio = img.width / img.height;
+        const canvasRatio = W / H;
+        let drawW, drawH, drawX, drawY;
+        if (imgRatio > canvasRatio) {
+          drawH = H;
+          drawW = drawH * imgRatio;
+          drawX = (W - drawW) / 2;
+          drawY = 0;
+        } else {
+          drawW = W;
+          drawH = drawW / imgRatio;
+          drawX = 0;
+          drawY = (H - drawH) / 2;
+        }
+        offCtx.drawImage(img, drawX, drawY, drawW, drawH);
+        offCtx.restore();
       }
-      expCtx.restore();
+      
+      // Text layers
+      for (const layer of textLayers) {
+        offCtx.save();
+        const x = (layer.x / 100) * W;
+        const y = (layer.y / 100) * H;
+        offCtx.font = `${layer.bold ? 'bold ' : ''}${layer.size}px 'Syne'`;
+        offCtx.textAlign = 'center';
+        offCtx.fillStyle = layer.color;
+        offCtx.shadowBlur = layer.shadow ? 8 : 0;
+        offCtx.fillText(layer.text, x, y);
+        offCtx.restore();
+      }
+      
+      const blob = await new Promise(res => offCanvas.toBlob(res, 'image/png'));
+      frameBlobs.push(blob);
+      
+      const pct = Math.round((f + 1) / totalFrames * 100);
+      document.getElementById('expProg').style.width = pct + '%';
+      document.getElementById('expStep').textContent = `Frame ${f + 1}/${totalFrames}`;
+      
+      if (f % 5 === 0) await new Promise(r => setTimeout(r, 0));
     }
-
-    // Teks (skala koordinat ke output)
-    for (const layer of layers) {
-      const scaledLayer = {
-        ...layer,
-        x: layer.x * scaleX,
-        y: layer.y * scaleY,
-        size: Math.round(layer.size * ((scaleX + scaleY) / 2))
-      };
-      drawTextLayerOnCtx(expCtx, outW, outH, scaledLayer, prog, t);
+    
+    // Load & encode with FFmpeg
+    document.getElementById('expStatus').textContent = 'Memuat encoder...';
+    const ffmpeg = await loadFFmpeg();
+    
+    if (exportCancelled) throw new Error('Dibatalkan');
+    
+    document.getElementById('expStatus').textContent = 'Encoding video...';
+    
+    // Write frames
+    for (let i = 0; i < frameBlobs.length; i++) {
+      ffmpeg.FS('writeFile', `frame${i.toString().padStart(5, '0')}.png`, await window.fetchFile(frameBlobs[i]));
     }
-
-    // Progress bar
-    expCtx.fillStyle = 'rgba(255,255,255,.1)'; expCtx.fillRect(0, outH - 8, outW, 8);
-    expCtx.fillStyle = 'rgba(255,255,255,.5)'; expCtx.fillRect(0, outH - 8, outW * prog, 8);
-
-    // Ambil PNG blob
-    const blob = await new Promise(res => expCv.toBlob(res, 'image/png'));
-    frameBlobs.push(blob);
-
-    const pct = Math.round(((f + 1) / totalFrames) * 60);
-    setProg(pct);
-    setStep(`Frame ${f + 1} / ${totalFrames}`);
-
-    // Yield ke event loop tiap 5 frame supaya UI tidak hang
-    if (f % 5 === 0) await new Promise(r => setTimeout(r, 0));
-  }
-
-  if (exportCancelled) return;
-
- // ── 2. Load FFmpeg ──
-setPhase('⚙️ Memuat FFmpeg encoder...');
-setStep('Menyiapkan engine video...');
-setProg(62);
-
-let ffmpeg = null;
-
-async function loadFFmpeg(box) {
-  try {
-    if (!ffmpeg) {
-      const { createFFmpeg, fetchFile } = FFmpeg;
-
-      ffmpeg = createFFmpeg({
-        log: false,
-        corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js",
-      });
-
-      await ffmpeg.load();
-
-      window.fetchFileFF = fetchFile;
-    }
-
-    return ffmpeg;
-
-  } catch (err) {
-    console.error(err);
-
-    if (box) {
-      box.innerHTML = `
-        <div class="modal-title">❌ Gagal Load FFmpeg</div>
-        <div class="modal-sub">
-          ${err.message}
-        </div>
-        <button onclick="closeExportModal()">Tutup</button>
-      `;
-    }
-
-    return null;
-  }
-}
-  if (exportCancelled) return;
-
-  // ── 3. Tulis frame ke FS virtual FFmpeg ──
-  setPhase('📁 Memuat frame ke FFmpeg...');
-  setProg(65);
-
-  const { fetchFile } = FFmpeg;
-  for (let i = 0; i < frameBlobs.length; i++) {
-    if (exportCancelled) return;
-    const fname = `frame${String(i).padStart(5, '0')}.png`;
-    ffmpeg.FS('writeFile', fname, await fetchFile(frameBlobs[i]));
-    if (i % 10 === 0) {
-      const pct = 65 + Math.round((i / frameBlobs.length) * 15);
-      setProg(pct);
-      setStep(`Upload frame ${i + 1} / ${frameBlobs.length}`);
-      await new Promise(r => setTimeout(r, 0));
-    }
-  }
-
-  if (exportCancelled) return;
-
-  // ── 4. Encode dengan FFmpeg ──
-  setPhase('🎬 Encoding MP4 H.264...');
-  setExtra('Ini mungkin butuh beberapa detik...');
-  setProg(80);
-  setStep('Running FFmpeg encoder...');
-
-  try {
+    
+    // Run FFmpeg
     await ffmpeg.run(
       '-framerate', String(fps),
       '-i', 'frame%05d.png',
       '-c:v', 'libx264',
-      '-preset', 'fast',
-      '-crf', '23',
-      '-pix_fmt', 'yuv420p',    // kompatibel semua player & sosmed
-      '-movflags', '+faststart', // streaming ready
-      '-vf', `scale=${outW}:${outH}`,
+      '-preset', 'ultrafast',
+      '-crf', '28',
+      '-pix_fmt', 'yuv420p',
       'output.mp4'
     );
-  } catch (encErr) {
-    box.innerHTML = `
-      <div class="modal-title">❌ Encoding Gagal</div>
-      <div class="modal-sub">FFmpeg error: ${encErr.message || encErr}<br><br>Coba kurangi durasi atau pilih resolusi HD.</div>
-      <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
+    
+    // Download
+    const data = ffmpeg.FS('readFile', 'output.mp4');
+    const blob = new Blob([data.buffer], { type: 'video/mp4' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `videofoto_${Date.now()}.mp4`;
+    a.click();
+    URL.revokeObjectURL(url);
+    
+    // Cleanup
+    for (let i = 0; i < frameBlobs.length; i++) {
+      try { ffmpeg.FS('unlink', `frame${i.toString().padStart(5, '0')}.png`); } catch(e) {}
+    }
+    
+    modal.innerHTML = `
+      <div style="font-weight:600">✅ Selesai!</div>
+      <div style="font-size:0.75rem;margin:12px 0">Video MP4 berhasil diekspor.</div>
+      <button class="btn btn-accent" onclick="closeExportModal()">Tutup</button>
     `;
+    
+  } catch(err) {
+    if (err.message !== 'Dibatalkan') {
+      modal.innerHTML = `
+        <div style="font-weight:600">❌ Gagal</div>
+        <div style="font-size:0.75rem;margin:12px 0">${err.message || 'Error saat export'}</div>
+        <button class="btn" onclick="closeExportModal()">Tutup</button>
+      `;
+    }
+  }
+}
+
+function showExportModal() {
+  if (!img) {
+    alert('Upload foto terlebih dahulu');
     return;
   }
+  stopPreview();
+  document.getElementById('exportModal').classList.add('show');
+  doExport();
+}
 
-  if (exportCancelled) return;
-
-  // ── 5. Ambil hasil & download ──
-  setPhase('✅ Selesai! Mengunduh...');
-  setProg(98);
-
-  let data;
-  try {
-    data = ffmpeg.FS('readFile', 'output.mp4');
-  } catch (e) {
-    box.innerHTML = `
-      <div class="modal-title">❌ File Tidak Ditemukan</div>
-      <div class="modal-sub">FFmpeg selesai tapi file output tidak terbaca. Coba lagi.</div>
-      <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
-    `;
-    return;
-  }
-
-  const blob = new Blob([data.buffer], { type: 'video/mp4' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  const ratio = currentRatio.replace(':', 'x');
-  const q = expQuality.toUpperCase();
-  a.href = url;
-  a.download = `videofoto-${ratio}-${q}-${fps}fps-${Date.now()}.mp4`;
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-
-  // Bersihkan FS virtual
-  for (let i = 0; i < frameBlobs.length; i++) {
-    try { ffmpeg.FS('unlink', `frame${String(i).padStart(5, '0')}.png`); } catch {}
-  }
-  try { ffmpeg.FS('unlink', 'output.mp4'); } catch {}
-
-  setProg(100);
-  const sizeMB = (blob.size / 1024 / 1024).toFixed(1);
-
-  box.innerHTML = `
-    <div class="modal-title">🎉 Video Berhasil Diexport!</div>
-    <div class="modal-sub">
-      File MP4 H.264 telah diunduh.<br><br>
-      📐 Resolusi: <b>${outW} × ${outH}</b><br>
-      🎞 Frame Rate: <b>${fps} fps</b><br>
-      📦 Ukuran File: <b>${sizeMB} MB</b><br><br>
-      ✅ Siap upload ke <b>Instagram Reels, TikTok, YouTube, WhatsApp Status</b> dan platform lainnya.
-    </div>
-    <div style="display:flex;gap:8px;margin-top:.25rem">
-      <button class="btn btn-export" style="flex:1" onclick="showExportModal()">Export Lagi</button>
-      <button class="exp-cancel" onclick="closeExportModal()">Selesai</button>
-    </div>
-  `;
-
-  setStatus('✅ Video MP4 berhasil diekspor! (' + outW + '×' + outH + ' · ' + fps + 'fps · ' + sizeMB + ' MB)');
+function closeExportModal() {
+  document.getElementById('exportModal').classList.remove('show');
+  exportCancelled = true;
 }
 
 function cancelExport() {
   exportCancelled = true;
-  el('expPhase').textContent = '❌ Dibatalkan';
-  setTimeout(() => closeExportModal(), 800);
 }
 
-// ─── Tutup modal dengan klik luar ─────────────────────────
-el('exportModal').addEventListener('click', e => {
-  if (e.target === el('exportModal')) closeExportModal();
+// ==================== UI HELPERS ====================
+function toggleLeftPanel() {
+  document.getElementById('panelLeft').classList.toggle('open');
+}
+
+function toggleRightPanel() {
+  document.getElementById('panelRight').classList.toggle('collapsed');
+}
+
+// File upload
+document.getElementById('fi').addEventListener('change', e => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const imgEl = new Image();
+    imgEl.onload = () => {
+      img = imgEl;
+      const zone = document.getElementById('uploadZone');
+      zone.classList.add('has-img');
+      zone.innerHTML = `<img src="${ev.target.result}"><div class="overlay-btn">Ganti</div>`;
+      initParticles();
+      startPreview();
+    };
+    imgEl.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
 });
 
-// ─── Init ──────────────────────────────────────────────────
+// Event listeners
+document.getElementById('pCount').addEventListener('input', (e) => {
+  document.getElementById('pcV').textContent = e.target.value;
+  initParticles();
+});
+
+document.getElementById('dur').addEventListener('input', (e) => {
+  document.getElementById('durV').textContent = e.target.value + 's';
+  if (!isPlaying) drawFrame(0);
+});
+
+document.querySelectorAll('[data-fx]').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('[data-fx]').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    selFx = c.dataset.fx;
+    initParticles();
+  });
+});
+
+document.querySelectorAll('[data-tr]').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('[data-tr]').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    selTr = c.dataset.tr;
+  });
+});
+
+document.querySelectorAll('[data-anim]').forEach(c => {
+  c.addEventListener('click', () => setTextAnim(c.dataset.anim));
+});
+
+document.getElementById('exportModal').addEventListener('click', e => {
+  if (e.target === document.getElementById('exportModal')) closeExportModal();
+});
+
+// Initialize
+setRatio('16:9');
 drawFrame(0);
 </script>
-  <script>
-    
-let ffmpegInstance = null;
-let fetchFileFF = null;
-
-async function loadFFmpeg(box) {
-  let ffmpeg;
-
-  try {
-    if (!ffmpegInstance) {
-      const FFmpeg = await import("https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js");
-
-      const createFFmpeg = FFmpeg.createFFmpeg;
-      const fetchFile = FFmpeg.fetchFile;
-
-      ffmpeg = createFFmpeg({
-        log: false,
-        corePath: "https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js",
-      });
-
-      await ffmpeg.load();
-
-      ffmpegInstance = ffmpeg;
-      fetchFileFF = fetchFile;
-
-    } else {
-      ffmpeg = ffmpegInstance;
-    }
-
-    return ffmpeg;
-
-  } catch (err) {
-    console.error(err);
-
-    if (box) {
-      box.innerHTML = `
-        <div class="modal-title">❌ Gagal Load FFmpeg</div>
-        <div class="modal-sub">
-          ${err.message}<br><br>
-          Coba pakai Chrome terbaru / koneksi stabil.
-        </div>
-        <button class="exp-cancel" onclick="closeExportModal()">Tutup</button>
-      `;
-    }
-
-    return null;
-  }
-}
-
-  </script>
-  <script src="coi-serviceworker.js"></script>
-
 </body>
 </html>
