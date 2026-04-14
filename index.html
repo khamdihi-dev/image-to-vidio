@@ -23,7 +23,6 @@
   --accent2: #db2777;
   --text: #18181b;
   --muted: #71717a;
-  --success: #16a34a;
 }
 
 body {
@@ -74,7 +73,6 @@ header .logo {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 0;
 }
 
 .panel-left {
@@ -142,7 +140,6 @@ canvas {
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
-  z-index: 1;
 }
 
 .prog-wrap {
@@ -460,7 +457,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 <header>
   <div class="logo">✦ VidioFoto</div>
-  <div class="hd-badge">MP4 H.264</div>
+  <div class="hd-badge">WebM/MP4 via MediaRecorder</div>
 </header>
 
 <div class="workspace">
@@ -516,11 +513,19 @@ input[type="range"]::-webkit-slider-thumb {
       <div class="section">
         <div class="lbl">Durasi (detik)</div>
         <div class="sl-row">
-          <input type="range" min="5" max="15" value="7" id="dur">
-          <span class="sl-val" id="durV">7s</span>
+          <input type="range" min="3" max="12" value="6" id="dur">
+          <span class="sl-val" id="durV">6s</span>
         </div>
         <div class="lbl">Latar</div>
         <input type="color" id="bgCol" value="#1a1a2e">
+      </div>
+      
+      <div class="section">
+        <div class="lbl">Format Export</div>
+        <div class="chips">
+          <span class="chip on" data-format="webm">WebM (Ringan)</span>
+          <span class="chip" data-format="mp4">MP4 (H.264)</span>
+        </div>
       </div>
     </div>
   </div>
@@ -532,7 +537,7 @@ input[type="range"]::-webkit-slider-thumb {
 
     <div class="prog-wrap">
       <div class="prog-track"><div class="prog-fill" id="progFill"></div></div>
-      <div class="time-display" id="timeDisp">0.0s / 7.0s</div>
+      <div class="time-display" id="timeDisp">0.0s / 6.0s</div>
     </div>
 
     <div class="canvas-controls">
@@ -610,7 +615,6 @@ let W = 1280, H = 720;
 let currentRatio = '16:9';
 let img = null;
 let animationId = null;
-let currentTime = 0;
 let isPlaying = false;
 let selFx = 'flowers';
 let selTr = 'zoom';
@@ -618,6 +622,7 @@ let particles = [];
 let textLayers = [];
 let selectedLayerId = null;
 let layerIdCounter = 0;
+let exportFormat = 'webm';
 
 const cv = document.getElementById('cv');
 const ctx = cv.getContext('2d');
@@ -778,6 +783,15 @@ function setTextAnim(anim) {
   });
 }
 
+// Format export
+document.querySelectorAll('[data-format]').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('[data-format]').forEach(x => x.classList.remove('on'));
+    c.classList.add('on');
+    exportFormat = c.dataset.format;
+  });
+});
+
 document.getElementById('txtContent')?.addEventListener('input', updateLayer);
 document.getElementById('txtSize')?.addEventListener('input', updateLayer);
 document.getElementById('txtColor')?.addEventListener('input', updateLayer);
@@ -921,7 +935,7 @@ function stopPreview() {
   document.getElementById('status').textContent = '■ Stopped';
 }
 
-// ==================== FFMPEG EXPORT (pakai CDN langsung) ====================
+// ==================== EXPORT MENGGUNAKAN MediaRecorder ====================
 let exportCancelled = false;
 
 async function doExport() {
@@ -942,130 +956,86 @@ async function doExport() {
   `;
   
   try {
-    // Render frames
-    document.getElementById('expStatus').textContent = 'Membuat frame...';
-    const offCanvas = document.createElement('canvas');
-    offCanvas.width = W;
-    offCanvas.height = H;
-    const offCtx = offCanvas.getContext('2d');
-    const frameBlobs = [];
+    document.getElementById('expStatus').textContent = 'Membuat video...';
     
-    for (let f = 0; f < totalFrames; f++) {
-      if (exportCancelled) throw new Error('Dibatalkan');
-      
-      const t = (f / fps) * 1000;
-      const progress = t / (duration * 1000);
-      
-      offCtx.fillStyle = document.getElementById('bgCol').value;
-      offCtx.fillRect(0, 0, W, H);
-      
-      if (img) {
-        offCtx.save();
-        if (selTr === 'zoom') {
-          const scale = 1 + progress * 0.1;
-          const dx = (W - W * scale) / 2;
-          const dy = (H - H * scale) / 2;
-          offCtx.translate(dx, dy);
-          offCtx.scale(scale, scale);
-        }
-        const imgRatio = img.width / img.height;
-        const canvasRatio = W / H;
-        let drawW, drawH, drawX, drawY;
-        if (imgRatio > canvasRatio) {
-          drawH = H;
-          drawW = drawH * imgRatio;
-          drawX = (W - drawW) / 2;
-          drawY = 0;
-        } else {
-          drawW = W;
-          drawH = drawW / imgRatio;
-          drawX = 0;
-          drawY = (H - drawH) / 2;
-        }
-        offCtx.drawImage(img, drawX, drawY, drawW, drawH);
-        offCtx.restore();
-      }
-      
-      for (const layer of textLayers) {
-        offCtx.save();
-        const x = (layer.x / 100) * W;
-        const y = (layer.y / 100) * H;
-        offCtx.font = `${layer.bold ? 'bold ' : ''}${layer.size}px 'Syne'`;
-        offCtx.textAlign = 'center';
-        offCtx.fillStyle = layer.color;
-        offCtx.shadowBlur = layer.shadow ? 6 : 0;
-        offCtx.fillText(layer.text, x, y);
-        offCtx.restore();
-      }
-      
-      const blob = await new Promise(res => offCanvas.toBlob(res, 'image/png'));
-      frameBlobs.push(blob);
-      
-      const pct = Math.round((f + 1) / totalFrames * 100);
-      document.getElementById('expProg').style.width = pct + '%';
-      document.getElementById('expStep').textContent = `Frame ${f + 1}/${totalFrames}`;
-      
-      if (f % 5 === 0) await new Promise(r => setTimeout(r, 0));
-    }
-    
-    // Load FFmpeg
-    document.getElementById('expStatus').textContent = 'Memuat encoder...';
-    
-    // Load FFmpeg dari CDN yang benar
-    const script = document.createElement('script');
-    script.src = 'https://unpkg.com/@ffmpeg/ffmpeg@0.11.6/dist/ffmpeg.min.js';
-    await new Promise((resolve, reject) => {
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
+    // Setup MediaRecorder
+    const stream = cv.captureStream(fps);
+    const mediaRecorder = new MediaRecorder(stream, {
+      mimeType: exportFormat === 'webm' ? 'video/webm' : 'video/mp4',
+      videoBitsPerSecond: 2500000 // 2.5 Mbps
     });
     
-    await new Promise(r => setTimeout(r, 100));
+    const chunks = [];
+    mediaRecorder.ondataavailable = (e) => {
+      if (e.data.size > 0) chunks.push(e.data);
+    };
     
-    if (typeof FFmpeg === 'undefined' || !FFmpeg.createFFmpeg) {
-      throw new Error('FFmpeg tidak bisa dimuat');
+    const videoPromise = new Promise((resolve) => {
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(chunks, { type: exportFormat === 'webm' ? 'video/webm' : 'video/mp4' });
+        resolve(blob);
+      };
+    });
+    
+    // Start recording
+    mediaRecorder.start();
+    
+    // Animate and record
+    const startTime = performance.now();
+    const frameInterval = 1000 / fps;
+    let frame = 0;
+    
+    function recordFrame(now) {
+      if (exportCancelled) {
+        mediaRecorder.stop();
+        return;
+      }
+      
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed, duration * 1000);
+      drawFrame(t);
+      
+      frame++;
+      const pct = Math.round((t / (duration * 1000)) * 100);
+      document.getElementById('expProg').style.width = pct + '%';
+      document.getElementById('expStep').textContent = `Frame ${frame}/${totalFrames}`;
+      
+      if (t < duration * 1000) {
+        setTimeout(() => requestAnimationFrame(recordFrame), frameInterval);
+      } else {
+        // Selesai
+        mediaRecorder.stop();
+      }
     }
     
-    const { createFFmpeg, fetchFile } = FFmpeg;
-    const ffmpeg = createFFmpeg({ log: false });
-    await ffmpeg.load();
+    requestAnimationFrame(recordFrame);
+    
+    // Wait for video
+    const videoBlob = await videoPromise;
     
     if (exportCancelled) throw new Error('Dibatalkan');
     
-    document.getElementById('expStatus').textContent = 'Encoding video...';
-    
-    for (let i = 0; i < frameBlobs.length; i++) {
-      ffmpeg.FS('writeFile', `frame${i.toString().padStart(5, '0')}.png`, await fetchFile(frameBlobs[i]));
-    }
-    
-    await ffmpeg.run(
-      '-framerate', String(fps),
-      '-i', 'frame%05d.png',
-      '-c:v', 'libx264',
-      '-preset', 'ultrafast',
-      '-crf', '28',
-      '-pix_fmt', 'yuv420p',
-      'output.mp4'
-    );
-    
-    const data = ffmpeg.FS('readFile', 'output.mp4');
-    const blob = new Blob([data.buffer], { type: 'video/mp4' });
-    const url = URL.createObjectURL(blob);
+    // Download
+    const url = URL.createObjectURL(videoBlob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `videofoto_${Date.now()}.mp4`;
+    a.download = `videofoto_${Date.now()}.${exportFormat === 'webm' ? 'webm' : 'mp4'}`;
     a.click();
     URL.revokeObjectURL(url);
     
-    for (let i = 0; i < frameBlobs.length; i++) {
-      try { ffmpeg.FS('unlink', `frame${i.toString().padStart(5, '0')}.png`); } catch(e) {}
-    }
+    const sizeMB = (videoBlob.size / 1024 / 1024).toFixed(1);
     
     modal.innerHTML = `
       <div style="font-weight:600">✅ Selesai!</div>
-      <div style="font-size:0.75rem;margin:12px 0">Video MP4 berhasil diekspor.</div>
+      <div style="font-size:0.75rem;margin:12px 0">
+        Video berhasil diekspor!<br>
+        Format: ${exportFormat.toUpperCase()}<br>
+        Ukuran: ${sizeMB} MB
+      </div>
       <button class="btn btn-accent" onclick="closeExportModal()">Tutup</button>
     `;
+    
+    document.getElementById('status').textContent = '✅ Export selesai!';
     
   } catch(err) {
     if (err.message !== 'Dibatalkan') {
